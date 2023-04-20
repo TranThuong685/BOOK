@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <!-- css -->
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/2f72a1f7d3.js" crossorigin="anonymous"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+
+<body>
+    <div class="main">
+
+        <head class="header">
+            <div class="header-main">
+                <div class="row d-flex justify-content-between align-items-center px-5">
+                    <div class="col-lg-auto col-auto">
+                        <a href="#" class="navbar-brand">Logo Shop</a>
+                    </div>
+                    <div class="col-lg-auto order-lg-last col-8">
+                        <div class="d-flex float-end">
+                            <a href="" class="header-nav-item ms-4 position-relative">
+                                <i class="fa-solid fa-bell">
+                                </i>
+                                <span class="badge bg-danger position-absolute">3</span>
+                            </a>
+
+                            <div href="" class="header-nav-item header-user ms-4 d-flex">
+                                <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
+                                <p class="">Huy Phan</p>
+                                <div class="header-user__list-option d-flex flex-column">
+                                    <a class="header-user__option" href="./profile.html">
+                                        <p>Tài khoản của tôi</p>
+                                    </a>
+                                    <a class="header-user__option" href="">
+                                        <p>Đăng xuất</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="col-lg-6 col-12">
+                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
+                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
+                            <div class="search-btn" type="submit">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </head>
+
+        <nav class="navbar navbar-vertical">
+            <ul class="navbar-nav">
+                <div class="navbar-option">
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5 active">
+                            <span class="nav-content">Sản phẩm</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Đơn hàng</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Khuyến mãi</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Khách hàng</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Thống kê</span>
+                        </a>
+                    </li>
+                </div>
+
+                <div class="log-out">
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">
+                                Đăng xuất
+                                <i class="fa-solid fa-right-from-bracket ms-2"></i>
+                            </span>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h4 class="my-4">Thêm sản phẩm</h4>
+            <div class="content-body mb-5">
+                <form action="">
+                    <div class="mb-3">
+                        <label for="product-name" class="form-label fw-bold">Tên sản phẩm</label>
+                        <input type="text" class="form-control" name="" id="product-name" aria-describedby="helpId" placeholder="Tên sản phẩm ...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product-description" class="form-label fw-bold">Mô tả sản phẩm</label>
+                        <textarea class="form-control" id="product-description" rows="5" placeholder="Mô tả sản phẩm ..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <label for="" class="form-label m-0 fw-bold">Loại sản phẩm</label>
+                            <div class="add-category">
+                                <div class="d-flex align-items-center gap-1 color-blue">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <p class="m-0">Thêm</p>
+                                </div>
+                            </div>
+                        </div>
+                        <select class="form-select" name="" id="">
+                            <option value="">Áo phông</option>
+                            <option value="">Áo sweater</option>
+                            <option value="">Quần jean</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="product-price-regular" class="form-label fw-bold">Giá thường</label>
+                                <input type="number" class="form-control" name="" id="product-price-regular" aria-describedby="helpId" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="product-price-sale" class="form-label fw-bold">Giảm giá</label>
+                                <input type="number" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="product-price-sale" class="form-label fw-bold">Ảnh sản phẩm</label>
+                                <input type="file" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="Chọn ảnh sản phẩm" multiple>
+                            </div>
+                        </div>
+
+                        <div class="product-variant my-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="me-3 fw-bold">Các phiên bản sản phẩm</div>
+                                <div class="add-variant">
+                                    <div class="d-flex align-items-center gap-1 color-blue">
+                                        <i class="fa-solid fa-plus"></i>
+                                        <p class="m-0">Thêm</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-variant-item row my-3 align-items-center">
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="product-price-sale" class="form-label fw-bold">Màu sắc</label>
+                                                <input type="text" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="product-price-sale" class="form-label fw-bold">Kích cỡ</label>
+                                                <input type="text" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="product-price-sale" class="form-label fw-bold">Số lượng</label>
+                                                <input type="number" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-1 d-flex align-items-center gap-2 mt-3">
+                                    <div class="delete-variant">
+                                        <i class="fa-solid fa-delete-left"></i>
+                                        Xóa
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="image-selector">
+                            <input type="file" id="image-input" accept="image/*" multiple hidden>
+                            <!-- <label for="image-input" class="image-input-label">
+                                <i class="fas fa-folder-open"></i> Chọn ảnh
+                            </label> -->
+                            <div class="image-preview"></div>
+                            <div class="image-drop-zone">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Kéo và thả ảnh vào đây</p>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-3">
+                            <button class="btn btn-min-width">Hủy bỏ</button>
+                            <button class="btn btn-primary">Thêm sản phẩm</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.add-variant').on('click', function () {
+                var newProductVariant = `
+                            <div class="product-variant-item row my-3 align-items-center">
+                                <div class="col-11">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="product-price-sale" class="form-label fw-bold">Màu sắc</label>
+                                                <input type="text" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="product-price-sale" class="form-label fw-bold">Kích cỡ</label>
+                                                <input type="text" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="product-price-sale" class="form-label fw-bold">Số lượng</label>
+                                                <input type="number" class="form-control" name="" id="product-price-sale" aria-describedby="helpId" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-1 d-flex align-items-center gap-2 mt-3">
+                                    <div class="delete-variant">
+                                        <i class="fa-solid fa-delete-left"></i>
+                                        Xóa
+                                    </div>
+                                </div>
+                            </div>`;
+                $('.product-variant').append(newProductVariant);
+                $('.delete-variant').on('click', function () {
+                    $(this).parent().parent().remove();
+                });
+            });
+            $('.delete-variant').on('click', function () {
+                $(this).parent().parent().remove();
+            });
+
+            // Khi chọn tệp ảnh từ dialog
+            $('#image-input').change(function () {
+                readURL(this);
+                addFiles(this.files);
+            });
+
+            // Khi kéo và thả ảnh vào drop zone
+            $('.image-drop-zone').on('dragover', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('dragover');
+            });
+
+            $('.image-drop-zone').on('dragleave', function (e) {
+                $(this).removeClass('dragover');
+            });
+
+            $('.image-drop-zone').on('drop', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('dragover');
+                var files = e.originalEvent.dataTransfer.files;
+                if (files.length > 0) {
+                    var file = files[0];
+                    if (file.type.match(/image.*/)) {
+                        readURL(file);
+                        addFiles(file);
+                    } else {
+                        alert('Vui lòng chọn tệp hình ảnh.');
+                    }
+                }
+            });
+            
+            var imageUrlList =  []
+
+            // Đọc tệp ảnh và hiển thị xem trước
+            function readURL(input) {
+                console.log(input);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    imageUrlList.push(e.target.result);
+                    console.log(imageUrlList);
+                    $('.image-preview').append('<img src="' + e.target.result + '">');
+                    $('.image-preview img').click(function () {
+                        $(this).remove();
+                        const imageUrl = $(this).prop('src');
+                        console.log(imageUrl);
+                        const imageIndex = imageUrlList.findIndex(file => file == imageUrl);
+                        imageUrlList.splice(imageIndex, 1);
+                        removeFile(imageIndex);
+                        console.log(imageUrlList);
+                    })
+                }
+                reader.readAsDataURL(input);
+            }
+
+            // Thêm các tệp vào input để gửi form đi
+            function addFiles(file) {
+                var input = $('#image-input');
+                var existingFiles = input.prop('files');
+                // var newFiles = $.merge([], file);
+                var dataTransfer = new DataTransfer();
+                for (var i = 0; i < existingFiles.length; i++) {
+                    dataTransfer.items.add(existingFiles[i]);
+                }
+                dataTransfer.items.add(file);
+                var fileList = dataTransfer.files;
+                input.prop('files', fileList);
+                console.log('success');
+            }
+            function removeFile(index) {
+                var input = $('#image-input');
+                var existingFiles = input.prop('files');
+                // var newFiles = $.merge([], file);
+                var dataTransfer = new DataTransfer();
+                for (var i = 0; i < existingFiles.length; i++) {
+                    if (i != index) {
+                        dataTransfer.items.add(existingFiles[i]);
+                    }
+                }
+                var fileList = dataTransfer.files;
+                input.prop('files', fileList);
+                console.log(fileList);
+            }
+
+
+        })
+    </script>
+</body>
+
+</html>

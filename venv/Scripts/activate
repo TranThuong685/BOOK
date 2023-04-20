@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="E:\E-commerce\venv"
+VIRTUAL_ENV="D:\Document\Năm 4_ Kì 2\Phát triển HTTMĐT\E-commerce\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

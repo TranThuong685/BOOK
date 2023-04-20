@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- bootstrap css -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+        crossorigin="anonymous" />
+    <!-- css -->
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/2f72a1f7d3.js" crossorigin="anonymous"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-main">
+            <div class="container ps-2">
+                <div class="row d-flex justify-content-between align-items-center">
+                    <div class="col-lg-auto col-4">
+                        <a href="#" class="navbar-brand">Logo Shop</a>
+                    </div>
+                    <div class="col-lg-auto order-lg-last col-8">
+                        <div class="d-flex float-end">
+                            <a href="" class="header-nav-item ms-4 position-relative">
+                                <i class="fa-solid fa-bell">
+                                </i>
+                                <span class="badge bg-danger position-absolute">3</span>
+                            </a>
+                            <a href="" class="header-nav-item ms-4 position-relative">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span class="badge bg-danger position-absolute">5</span>
+
+                                <!-- <span
+                                class="badge position-absolute translate-middle bg-danger start-80"
+                                >5</span
+                              > -->
+                            </a>
+                            <div href="" class="header-nav-item header-user ms-4 d-flex">
+                                <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
+                                <p class="">Huy Phan</p>
+                                <div class="header-user__list-option d-flex flex-column">
+                                    <a class="header-user__option" href="">
+                                        <p>Tài khoản của tôi</p>
+                                    </a>
+                                    <a class="header-user__option" href="">
+                                        <p>Đăng xuất</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="col-lg-6 col-12">
+                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
+                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
+                            <div class="search-btn" type="submit">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container p-0">
+            <button class="navbar-toggler">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5"><span class="nav-content">Trang chủ</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5"><span class="nav-content">Sản phẩm</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5"><span class="nav-content">Đơn hàng</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5"><span class="nav-content">Thanh toán</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5"><span class="nav-content">About</span></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- <ul class="navbar-nav">
+                  <li class="nav-item">Home</li>
+                          <li class="nav-item">Product</li>
+                          <li class="nav-item">Order</li>
+                  <li class="nav-item"></li>
+                </ul> -->
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <div class="card profile-infor">
+                        <div class="card-body">
+                            <div class="profile-infor-generation d-flex align-items-center">
+                                <img src="../assets/image/scene.jpeg" alt="" class="profile-image">
+                                <div class="d-flex flex-column ms-4">
+                                    <h3>Huy Phan</h3>
+                                    <p>Tham gia từ 3 tháng trước</p>
+                                    <div class="d-flex gap-2">
+                                        <a href=""><i class="fa-brands fa-facebook"></i></a>
+                                        <a href=""><i class="fa-brands fa-instagram"></i></a>
+                                        <a href=""></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form class="row g-3 needs-validation" novalidate>
+                              <div class="col-md-4">
+                                <label for="validationCustom01" class="form-label">First name</label>
+                                <input type="text" class="form-control" id="validationCustom01" value="Mark" required>
+                                <div class="valid-feedback">
+                                  Looks good!
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <label for="validationCustom02" class="form-label">Last name</label>
+                                <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                                <div class="valid-feedback">
+                                  Looks good!
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <label for="validationCustomUsername" class="form-label">Username</label>
+                                <div class="input-group">
+                                  <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                  <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                                  <div class="invalid-feedback">
+                                    Please choose a username.
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label for="validationCustom03" class="form-label">City</label>
+                                <input type="text" class="form-control" id="validationCustom03" required>
+                                    <div class="invalid-feedback">
+                                    Please provide a valid city.
+                                    </div>
+                              </div>
+                              <div class="col-md-3">
+                                <label for="validationCustom04" class="form-label">State</label>
+                                <select class="form-select" id="validationCustom04" required>
+                                  <option selected disabled value="">Choose...</option>
+                                  <option>...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                  Please select a valid state.
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <label for="validationCustom05" class="form-label">Zip</label>
+                                <input type="text" class="form-control" id="validationCustom05" required>
+                                <div class="invalid-feedback">
+                                  Please provide a valid zip.
+                                </div>
+                              </div>
+                              <div class="col-12">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                                  <label class="form-check-label" for="invalidCheck">
+                                    Agree to terms and conditions
+                                  </label>
+                                  <div class="invalid-feedback">
+                                    You must agree before submitting.
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-12">
+                                <button class="btn btn-primary" type="submit">Submit form</button>
+                              </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card profile-infor-order">
+                        <div class="card-body">
+                            <h4>Thông tin mua hàng</h4>
+                            <div class="row my-3">
+                                <div class="col-6">Đơn hàng gần nhất</div>
+                                <div class="col-6 text-end">1 tuần trước</div>
+                                
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-6">Tổng số đơn</div>
+                                <div class="col-6 text-end">20</div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-6">Tổng số tiền</div>
+                                <div class="col-6 text-end">1.000.000đ</div>
+                            </div>
+                        </div class="card-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class=" container">
+            <div class="row justify-content-between">
+                <div class="col-4">
+                    <h5>Shop</h5>
+                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias corporis, ratione ullam, obcaecati autem eius quae vero accusantium, tenetur eveniet voluptatum labore minus accusamus asperiores corrupti harum aliquam debitis! Asperiores.</p>
+                </div>
+                <div class="col-auto">
+                    <h5>Về Shop</h5>
+                    <div class="d-flex flex-column">
+                        <a href="">Giới thiệu</a>
+                        <a href="">Điều khoản</a>
+                        <a href="">Chính sách</a>
+                        <a href="">Tuyển dụng</a>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <h5>Liên hệ</h5>
+                    <div class="d-flex flex-column">
+                        <a href=""><i class="fa-brands fa-facebook me-2"></i>Facebook</a>
+                        <a href=""><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
+                        <a href=""><i class="fa-brands fa-tiktok me-2"></i></i>Tiktok</a>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <h5>Chăm sóc khách hàng</h5>
+                    <div class="d-flex flex-column">
+                        <a href="">Trung tâm trợ giúp</a>
+                        <a href="">Hướng dẫn mua hàng</a>
+                        <a href="">Thanh toán</a>
+                        <a href="">Vận chuyển</a>
+                        <a href="">Bảo hành</a>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <h5>Thanh toán</h5>
+                    <div class="d-flex flex-column">
+                        <a href="">Giới thiệu</a>
+                        <a href="">Điều khoản</a>
+                        <a href="">Chính sách</a>
+                        <a href="">Tuyển dụng</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jquery -->
+    <script
+        src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+        crossorigin="anonymous"></script>
+
+    <!-- bootstrap js -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>

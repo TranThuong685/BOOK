@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <!-- css -->
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/2f72a1f7d3.js" crossorigin="anonymous"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="../assets/css/main.css" />
+
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+</head>
+
+<body>
+    <div class="main">
+
+        <head class="header">
+            <div class="header-main">
+                <div class="row d-flex justify-content-between align-items-center px-5">
+                    <div class="col-lg-auto col-4">
+                        <a href="#" class="navbar-brand">Logo Shop</a>
+                    </div>
+                    <div class="col-lg-auto order-lg-last col-8">
+                        <div class="d-flex float-end">
+                            <a href="" class="header-nav-item ms-4 position-relative">
+                                <i class="fa-solid fa-bell">
+                                </i>
+                                <span class="badge bg-danger position-absolute">3</span>
+                            </a>
+
+                            <div href="" class="header-nav-item header-user ms-4 d-flex">
+                                <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
+                                <p class="">Huy Phan</p>
+                                <div class="header-user__list-option d-flex flex-column">
+                                    <a class="header-user__option" href="./profile.html">
+                                        <p>Tài khoản của tôi</p>
+                                    </a>
+                                    <a class="header-user__option" href="">
+                                        <p>Đăng xuất</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="col-lg-6 col-12">
+                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
+                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
+                            <div class="search-btn" type="submit">
+                                <i class="fa fa-search"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </head>
+
+        <nav class="navbar navbar-vertical">
+            <ul class="navbar-nav">
+                <div class="navbar-option">
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5 active">
+                            <span class="nav-content">Sản phẩm</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Đơn hàng</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Khuyến mãi</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Khách hàng</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item .active">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">Thống kê</span>
+                        </a>
+                    </li>
+                </div>
+
+                <div class="log-out">
+                    <li class="nav-item">
+                        <a href="" class="nav-link pe-5">
+                            <span class="nav-content">
+                                Đăng xuất
+                                <i class="fa-solid fa-right-from-bracket ms-2"></i>
+                            </span>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <div class="my-4">
+                <h4 class="my-4">Đơn hàng</h4>
+                <div class="my-4">
+                    <div class="row justify-content-between">
+                        <div class="col-auto d-flex gap-2">
+                            <div class="admin-search">
+                                <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
+                                    <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
+                                    <div class="search-btn" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="dropdown">
+                                <div class="btn dropdown-toggle filter-list" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="filter-choice">Trạng thái</div>
+                                </div>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="#">Giao hàng thành công</a></li>
+                                    <li><a class="dropdown-item" href="#">Đang giao hàng</a></li>
+                                    <li><a class="dropdown-item" href="#">Giao cho vận chuyển</a></li>
+                                    <li><a class="dropdown-item" href="#">Chuẩn bị hàng</a></li>
+                                    <li><a class="dropdown-item" href="#">Xác nhận đơn</a></li>
+                                    <li><a class="dropdown-item" href="#">Hủy đơn</a></li>
+
+                                </ul>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="filter-start-date" class="form-label m-0">Từ</label>
+                                <input type="date" class="form-control" name="" id="filter-start-date" aria-describedby="helpId" placeholder="">
+                            </div>
+                            
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="filter-end-date" class="form-label m-0">Đến</label>
+                                <input type="date" class="form-control" name="" id="filter-end-date" aria-describedby="helpId" placeholder="">
+                            </div>
+                            <button class="btn btn-primary ms-2 d-flex align-items-center px-3"><i class="fa-solid fa-filter me-2"></i>Lọc</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="list">
+                    <div class="orders-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mã đơn</th>
+                                    <th scope="col">Khách hàng</th>
+                                    <th scope="col">Trạng thái</th>
+                                    <th scope="col">Phương thức thanh toán</th>
+                                    <th scope="col">Thành tiền</th>
+                                    <th scope="col">Ngày đặt hàng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="order-item">
+                                    <td><a href="" class="color-blue">#23454</a></td>
+                                    <td>
+                                        <a href="" class="d-flex justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
+                                                <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill badge-success">
+                                            <span class="badge-lable ">Giao hàng thành công</span>
+                                            <i class="fa-solid fa-check"></i>
+                                        </span>
+                                    </td>
+                                    <td>Tiền mặt</td>
+                                    <td>300.000đ</td>
+                                    <td>12:23, 29/10/2023</td>
+                                </tr>
+                                <tr class="order-item">
+                                    <td><a href="" class="color-blue">#23454</a></td>
+                                    <td>
+                                        <a href="" class="d-flex justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
+                                                <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill badge-success">
+                                            <span class="badge-lable ">Giao hàng thành công</span>
+                                            <i class="fa-solid fa-check"></i>
+                                        </span>
+                                    </td>
+                                    <td>Tiền mặt</td>
+                                    <td>300.000đ</td>
+                                    <td>12:23, 29/10/2023</td>
+                                </tr>
+                                <tr class="order-item">
+                                    <td><a href="" class="color-blue">#23454</a></td>
+                                    <td>
+                                        <a href="" class="d-flex justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
+                                                <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill badge-secondary">
+                                            <span class="badge-lable ">Hủy đơn</span>
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </span>
+                                    </td>
+                                    <td>Tiền mặt</td>
+                                    <td>300.000đ</td>
+                                    <td>12:23, 29/10/2023</td>
+                                </tr>
+                                <tr class="order-item">
+                                    <td><a href="" class="color-blue">#23454</a></td>
+                                    <td>
+                                        <a href="" class="d-flex justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
+                                                <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill badge-danger">
+                                            <span class="badge-lable ">Đang gói hàng</span>
+                                            <i class="fa-regular fa-clock"></i>
+                                        </span>
+                                    </td>
+                                    <td>Tiền mặt</td>
+                                    <td>300.000đ</td>
+                                    <td>12:23, 29/10/2023</td>
+                                </tr>
+                                <tr class="order-item">
+                                    <td><a href="" class="color-blue">#23454</a></td>
+                                    <td>
+                                        <a href="" class="d-flex justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
+                                                <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill badge-infor">
+                                            <span class="badge-lable ">Chờ xác nhận</span>
+                                            <i class="fa-regular fa-clock"></i>
+
+                                        </span>
+                                    </td>
+                                    <td>Tiền mặt</td>
+                                    <td>300.000đ</td>
+                                    <td>12:23, 29/10/2023</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="page-controller">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mt-4">
+                            <li class="page-item disabled">
+                                <a class="page-link pre-page" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link next-page" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
