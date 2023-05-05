@@ -28,7 +28,8 @@ class Product(models.Model):
     price = models.FloatField(blank=False, null=False)
     time_created = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
     rating = models.FloatField(default=0, blank=False, null=False)
-    catgory = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, null=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, null=False)
+    total_sold = models.IntegerField(default=0, blank=False, null=False)
 
     def __str__(self):
         return self.name
@@ -102,6 +103,7 @@ class AddressShipping(models.Model):
     address_shipping_id = models.AutoField(primary_key=True, blank=False, null=False)
     receiver = models.CharField(max_length=100, blank=False, null=False)
     phone = models.CharField(max_length=20, blank=False, null=False)
+    address = models.CharField(max_length=255, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
@@ -120,7 +122,7 @@ class Order(models.Model):
     address_shipping = models.ForeignKey(AddressShipping, on_delete=models.CASCADE, blank=False, null=False)
 
 
-class OderItem(models.Model):
+class OrderItem(models.Model):
     oder_item_id = models.AutoField(primary_key=True, blank=False, null=False)
     size = models.CharField(max_length=20, blank=False, null=False)
     color = models.CharField(max_length=20, blank=False, null=False)

@@ -4,7 +4,8 @@ Chung cho các request
 /home:
 -	Danh sách sản phẩm bán nhiều nhất
 -	Danh sách sản phẩm bán chạy nhất trong tháng,
--	Danh sách sản phẩm sale mạnh nhất (lấy tầm 10 sản phẩm/ danh sách)
+-	Danh sách sản phẩm sale mạnh nhất 
+(lấy tầm 10 sản phẩm/ danh sách)
 
 /list-product
 -	Danh sách sản phẩm

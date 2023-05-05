@@ -80,7 +80,7 @@ a {
 
 .btn:hover {
     border-color: var(--dark-blue);
-    color: var(--dark-blue);
+    /* color: var(--dark-blue); */
 }
 
 .btn.active {
@@ -121,6 +121,13 @@ a {
     color: var(--blue);
 }
 
+.header .btn {
+    color: #fff;
+}
+
+.header .btn:hover {
+    color: #fff;
+}
 /* .header-nav-item {
   font-size: 20px;
 } */
@@ -278,7 +285,7 @@ a {
     /* gap: 20px; */
 }
 .navbar {
-    padding: 4px 0;
+    padding: 8px 0;
     background-color: var(--blue);
 }
 
@@ -322,10 +329,10 @@ a {
 }
 
 .carousel-inner {
-    border-radius: 8px;
+    
 }
 .carousel-item {
-    height: 400px;
+    height: 500px;
     border-radius: 5px;
 }
 
