@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +76,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'e_commerce',
         'USER': 'root',
-        'PASSWORD': 'phuy2712',
+        'PASSWORD': 'khanhnvtb',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
@@ -104,6 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
+
+AUTH_USER_MODEL = 'app.User'
 
 LANGUAGE_CODE = 'en-us'
 
