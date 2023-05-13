@@ -7,418 +7,291 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"/>
     <!-- css -->
     <!-- Font awesome -->
     <script src="https://kit.fontawesome.com/2f72a1f7d3.js" crossorigin="anonymous"></script>
     <!-- jquery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <!-- bootstrap js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css"/>
 
-    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <link rel="stylesheet" href="../assets/css/admin.css"/>
 </head>
 
 <body>
-    <div class="main">
+<div class="main">
 
-        <head class="header">
-            <div class="header-main">
-                <div class="row d-flex justify-content-between align-items-center px-5">
-                    <div class="col-lg-auto col-4">
-                        <a href="#" class="navbar-brand">Logo Shop</a>
-                    </div>
-                    <div class="col-lg-auto order-lg-last col-8">
-                        <div class="d-flex float-end">
-                            <a href="" class="header-nav-item ms-4 position-relative">
-                                <i class="fa-solid fa-bell">
-                                </i>
-                                <span class="badge bg-danger position-absolute">3</span>
-                            </a>
+    <head class="header">
+        <div class="header-main">
+            <div class="row d-flex justify-content-between align-items-center px-5">
+                <div class="col-lg-auto col-4">
+                    <a href="#" class="navbar-brand">Logo Shop</a>
+                </div>
+                <div class="col-lg-auto order-lg-last col-8">
+                    <div class="d-flex float-end">
+                        <a href="" class="header-nav-item ms-4 position-relative">
+                            <i class="fa-solid fa-bell">
+                            </i>
+                            <span class="badge bg-danger position-absolute">3</span>
+                        </a>
 
-                            <div href="" class="header-nav-item header-user ms-4 d-flex">
-                                <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
-                                <p class="">Huy Phan</p>
-                                <div class="header-user__list-option d-flex flex-column">
-                                    <a class="header-user__option" href="./profile.html">
-                                        <p>Tài khoản của tôi</p>
-                                    </a>
-                                    <a class="header-user__option" href="">
-                                        <p>Đăng xuất</p>
-                                    </a>
-                                </div>
+                        <div href="" class="header-nav-item header-user ms-4 d-flex">
+                            <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
+                            <p class="">Huy Phan</p>
+                            <div class="header-user__list-option d-flex flex-column">
+                                <a class="header-user__option" href="./profile.html">
+                                    <p>Tài khoản của tôi</p>
+                                </a>
+                                <a class="header-user__option" href="/logout">
+                                    <p>Đăng xuất</p>
+                                </a>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Search -->
-                    <div class="col-lg-6 col-12">
-                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
-                            <div class="search-btn" type="submit">
-                                <i class="fa fa-search"></i>
-                            </div>
-                        </form>
-                    </div>
+                <!-- Search -->
+                <div class="col-lg-6 col-12">
+                    <form action="" class="d-flex position-relative justify-content-center align-items-center"
+                          role="search">
+                        <input type="text" class="form-control shadow-none search-input" type="search"
+                               placeholder="Search"/>
+                        <div class="search-btn" type="submit">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </head>
+        </div>
+    </head>
 
-        <nav class="navbar navbar-vertical">
-            <ul class="navbar-nav">
-                <div class="navbar-option">
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5 active">
-                            <span class="nav-content">Sản phẩm</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Đơn hàng</span>
-                        </a>
-                    </li>
+    <nav class="navbar navbar-vertical">
+        <ul class="navbar-nav">
+            <div class="navbar-option">
+                <li class="nav-item">
+                    <a href="/products" class="nav-link pe-5 active">
+                        <span class="nav-content">Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/orders" class="nav-link pe-5">
+                        <span class="nav-content">Đơn hàng</span>
+                    </a>
+                </li>
 
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Khuyến mãi</span>
-                        </a>
-                    </li>
+                <li class="nav-item .active">
+                    <a href="/coupons" class="nav-link pe-5">
+                        <span class="nav-content">Khuyến mãi</span>
+                    </a>
+                </li>
 
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Khách hàng</span>
-                        </a>
-                    </li>
+                <li class="nav-item .active">
+                    <a href="/customers" class="nav-link pe-5">
+                        <span class="nav-content">Khách hàng</span>
+                    </a>
+                </li>
 
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Thống kê</span>
-                        </a>
-                    </li>
-                </div>
+                <li class="nav-item .active">
+                    <a href="/report" class="nav-link pe-5">
+                        <span class="nav-content">Thống kê</span>
+                    </a>
+                </li>
+            </div>
 
-                <div class="log-out">
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5">
+            <div class="log-out">
+                <li class="nav-item">
+                    <a href="" class="nav-link pe-5">
                             <span class="nav-content">
                                 Đăng xuất
                                 <i class="fa-solid fa-right-from-bracket ms-2"></i>
                             </span>
-                        </a>
-                    </li>
-                </div>
-            </ul>
-        </nav>
+                    </a>
+                </li>
+            </div>
+        </ul>
+    </nav>
 
-        <div class="content">
+    <div class="content">
+        <div class="my-4">
+            <h4 class="my-4">Sản phẩm</h4>
             <div class="my-4">
-                <h4 class="my-4">Sản phẩm</h4>
-                <div class="my-4">
-                    <div class="row justify-content-between">
-                        <div class="col-auto d-flex">
-                            <div class="admin-search">
-                                <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                                    <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
-                                    <div class="search-btn" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </div>
-                                </form>
-                            </div>
-                            
-                            <div class="dropdown">
-                                <div class="btn dropdown-toggle filter-list" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="filter-choice">Loại</div>
-                                </div>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="#">Áo phông</a></li>
-                                    <li><a class="dropdown-item" href="#">Áo sweater</a></li>
-                                    <li><a class="dropdown-item" href="#">Quần jean</a></li>
-                                </ul>
-                            </div>
-                            <div class="dropdown">
-                                <div class="btn dropdown-toggle filter-list" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="filter-choice">Trạng thái</div>
-                                </div>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="#">Còn hàng</a></li>
-                                    <li><a class="dropdown-item" href="#">Hết hàng</a></li>
-                                </ul>
-                            </div>
-                            <button class="btn btn-primary ms-2 d-flex align-items-center px-3"><i class="fa-solid fa-filter me-2"></i>Lọc</button>
-
-                        </div>
-                        <div class="col-auto">
-                            <a href="" class="">
-                                <button class="btn btn-primary ">
-                                    <i class="fa-solid fa-plus"></i>
-                                    Thêm sản phẩm
+                <div class="row justify-content-between">
+                    <div class="col-auto d-flex">
+                        <div class="admin-search">
+                            <form action="/products" method="get"
+                                  class="d-flex position-relative justify-content-center align-items-center"
+                                  role="search">
+                                {% csrf_token %}
+                                <input type="text" class="form-control shadow-none search-input" type="search"
+                                       placeholder="Search" name="keyword" value="{{ keyword }}"/>
+                                <button class="search-btn" type="submit"
+                                        style="background-color: transparent;border: none;">
+                                    <i class="fa fa-search"></i>
                                 </button>
-                            </a>
+                            </form>
+
                         </div>
+
+                        <form action="/products" method="post" id="filter-form">
+                            {% csrf_token %}
+                            <div style="display: flex; align-items: center;">
+                                <div class="dropdown" style="display: inline-block; margin-right: 10px;">
+                                    <div class="btn dropdown-toggle filter-list" type="button" id="dropdownMenuButton1"
+                                         data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="filter-choice" id="category-choice">Loại</div>
+                                    </div>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        {% for category in categories %}
+                                            <li><a class="dropdown-item"
+                                                   onclick="selectCategory('{{ category.name }}')">{{ category.name }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="dropdown" style="display: inline-block; margin-right: 10px;">
+                                    <div class="btn dropdown-toggle filter-list" type="button" id="dropdownMenuButton1"
+                                         data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="filter-choice" id="status-choice">Trạng thái</div>
+                                    </div>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" onclick="selectStatus('Còn hàng')">Còn hàng</a>
+                                        </li>
+                                        <li><a class="dropdown-item" onclick="selectStatus('Hết hàng')">Hết hàng</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" onclick="submitForm()"
+                                        class="btn btn-primary ms-2 d-flex align-items-center px-3"><i
+                                        class="fa-solid fa-filter me-2"></i>Lọc
+                                </button>
+                                <input type="hidden" name="category" id="category-input"
+                                       value="{{ request.GET.category }}">
+                                <input type="hidden" name="status" id="status-input" value="{{ request.GET.status }}">
+                            </div>
+                        </form>
+
+
+                        <script>
+                            function selectCategory(name) {
+                                document.getElementById("category-input").value = name;
+                                document.getElementById("category-choice").textContent = name;
+                            }
+
+                            function selectStatus(name) {
+                                document.getElementById("status-input").value = name;
+                                document.getElementById("status-choice").textContent = name;
+                            }
+
+                            function submitForm() {
+                                document.getElementById("filter-form").submit();
+                            }
+                        </script>
+
+
+                    </div>
+                    <div class="col-auto">
+                        <a href="/add_product" class="">
+                            <button class="btn btn-primary ">
+                                <i class="fa-solid fa-plus"></i>
+                                Thêm sản phẩm
+                            </button>
+                        </a>
                     </div>
                 </div>
-                <div class="list">
-                    <div class="cart-table">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col"><input class="cart-table__select-all form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
-                                    <th scope="col" style="width: 250px;">Sản phẩm</th>
-                                    <th scope="col">Giá</th>
-                                    <th scope="col">Loại</th>
-                                    <th scope="col">Kho</th>
-                                    <th scope="col">Số lượng bán</th>
-                                    <th scope="col">Ngày thêm</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="cart-table-row align-items-center">
-                                    <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
-                                    <th scope="row">
-                                        <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </th>
-                                    <td>
-                                        <a href="">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img" style="width: 64px;" />
-                                                <div class="cart-product-name text-container ms-2 color-blue">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+            </div>
+            <div class="list">
+                <div class="cart-table">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col"><input class="cart-table__select-all form-check-input" type="checkbox"
+                                                   value="" id="flexCheckDefault"></th>
+                            <th scope="col" style="width: 250px;">Sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Loại</th>
+                            <th scope="col">Kho</th>
+                            <th scope="col">Số lượng bán</th>
+                            <th scope="col">Ngày thêm</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in page_obj %}
+                            <tr class="cart-table-row align-items-center">
+                                <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
+                                <th scope="row">
+                                    <input class="cart-table__select-item form-check-input" type="checkbox" value=""
+                                           id="flexCheckDefault">
+                                </th>
+                                <td>
+                                    <a href="">
+                                        <div class="d-flex align-items-center">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img"
+                                                 style="width: 64px;"/>
+                                            <div class="cart-product-name text-container ms-2 color-blue">{{ product.name }}
                                             </div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <div class="">100.000đ</div>
-                                    </td>
-                                    <td>
-                                        <div class="">Áo phông</div>
-                                    </td>
-                                    <td>
-                                        <div class="">100</div>
-                                    </td>
-                                    <td>
-                                        <div class="">542</div>
-                                    </td>
-                                    <td>
-                                        <div class="">29/10/2022</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-product-action">
-                                            <i class="fa-solid fa-trash"></i>
                                         </div>
-                                    </td>
+                                    </a>
+                                </td>
 
-                                </tr>
-                                <tr class="cart-table-row">
-                                    <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
-                                    <th scope="row">
-                                        <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </th>
-                                    <td>
-                                        <a href="">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img" style="width: 64px;" />
-                                                <div class="cart-product-name text-container ms-2 color-blue">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            </div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <div class="">100.000đ</div>
-                                    </td>
-                                    <td>
-                                        <div class="">Áo phông</div>
-                                    </td>
-                                    <td>
-                                        <div class="">100</div>
-                                    </td>
-                                    <td>
-                                        <div class="">542</div>
-                                    </td>
-                                    <td>
-                                        <div class="">29/10/2022</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-product-action">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr class="cart-table-row">
-                                    <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
-                                    <th scope="row">
-                                        <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </th>
-                                    <td>
-                                        <a href="">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img" style="width: 64px;" />
-                                                <div class="cart-product-name text-container ms-2 color-blue">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            </div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <div class="">100.000đ</div>
-                                    </td>
-                                    <td>
-                                        <div class="">Áo phông</div>
-                                    </td>
-                                    <td>
-                                        <div class="">100</div>
-                                    </td>
-                                    <td>
-                                        <div class="">542</div>
-                                    </td>
-                                    <td>
-                                        <div class="">29/10/2022</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-product-action">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr class="cart-table-row">
-                                    <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
-                                    <th scope="row">
-                                        <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </th>
-                                    <td>
-                                        <a href="">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img" style="width: 64px;" />
-                                                <div class="cart-product-name text-container ms-2 color-blue">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            </div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <div class="">100.000đ</div>
-                                    </td>
-                                    <td>
-                                        <div class="">Áo phông</div>
-                                    </td>
-                                    <td>
-                                        <div class="">100</div>
-                                    </td>
-                                    <td>
-                                        <div class="">542</div>
-                                    </td>
-                                    <td>
-                                        <div class="">29/10/2022</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-product-action">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr class="cart-table-row">
-                                    <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
-                                    <th scope="row">
-                                        <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </th>
-                                    <td>
-                                        <a href="">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img" style="width: 64px;" />
-                                                <div class="cart-product-name text-container ms-2 color-blue">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            </div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <div class="">100.000đ</div>
-                                    </td>
-                                    <td>
-                                        <div class="">Áo phông</div>
-                                    </td>
-                                    <td>
-                                        <div class="">100</div>
-                                    </td>
-                                    <td>
-                                        <div class="">542</div>
-                                    </td>
-                                    <td>
-                                        <div class="">29/10/2022</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-product-action">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                <tr class="cart-table-row">
-                                    <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
-                                    <th scope="row">
-                                        <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    </th>
-                                    <td>
-                                        <a href="">
-                                            <div class="d-flex align-items-center">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="cart-product-img" style="width: 64px;" />
-                                                <div class="cart-product-name text-container ms-2 color-blue">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            </div>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <div class="">100.000đ</div>
-                                    </td>
-                                    <td>
-                                        <div class="">Áo phông</div>
-                                    </td>
-                                    <td>
-                                        <div class="">100</div>
-                                    </td>
-                                    <td>
-                                        <div class="">542</div>
-                                    </td>
-                                    <td>
-                                        <div class="">29/10/2022</div>
-                                    </td>
-                                    <td>
-                                        <div class="cart-product-action">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                <td>
+                                    <div class="">{{ product.price }}đ</div>
+                                </td>
+                                <td>
+                                    <div class="">{{ product.category }}</div>
+                                </td>
+                                <td>
+                                    <div class="">{{ product.total_quantity }}</div>
+                                </td>
+                                <td>
+                                    <div class="">{{ product.total_sold }}</div>
+                                </td>
+                                <td>
+                                    <div class="">{{ product.time_created | date:"d/m/Y" }}</div>
+                                </td>
+                                <td>
+                                    <div class="cart-product-action">
+                                        <a href="/delete_product/{{ product.product_id }}"><i
+                                                class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+            </div>
 
-                <!-- Pagination -->
-                <div class="page-controller">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center mt-4">
-                            <li class="page-item disabled">
-                                <a class="page-link pre-page" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link next-page" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+            <!-- Pagination -->
+            <div class="page-controller">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mt-4">
+                        <li class="page-item disabled">
+                            <a class="page-link pre-page" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link next-page" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

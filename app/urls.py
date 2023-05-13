@@ -14,4 +14,12 @@ urlpatterns = [
     path('checkout', views.checkout, name='check-out'),
     # API
     path('filter-product', views.getListProduct, name='list-product'),
+    path('register', views.register, name='register'),
+    # path('admin/orders', views.orders_admin, name='admin_orders'),
+
+    path('coupons', views.couponManager, name='coupons'),
+    path('add_coupon', views.addCoupon, name='add_coupon'),
+    path('add_product', views.addProduct, name='add_product'),
+    path('products', views.productManager, name='products'),
+    path('delete_product/<int:product_id>', views.deleteProduct, name='delete_product'),
 ]
