@@ -100,7 +100,7 @@
 
                 <div class="log-out">
                     <li class="nav-item">
-                        <a href="" class="nav-link pe-5">
+                        <a href="/logout" class="nav-link pe-5">
                             <span class="nav-content">
                                 Đăng xuất
                                 <i class="fa-solid fa-right-from-bracket ms-2"></i>
@@ -115,42 +115,43 @@
             <div class="add-coupon">
                 <h4 class="my-4">Tạo mã giảm giá</h4>
                 <div class="content-body">
-                    <form action="">
+                    <form action="/add_coupon" method="post">
+                        {% csrf_token %}
                         <div class="mb-4">
                             <label for="coupon-code" class="form-label h6">Mã coupon</label>
-                            <input type="text" class="form-control" name="" id="coupon-code" aria-describedby="helpId" placeholder="Tạo mã ...">
+                            <input type="text" class="form-control" name="code" id="coupon-code" aria-describedby="helpId" placeholder="Tạo mã ...">
                         </div>
                         <div class="mb-4">
                             <label for="coupon-discount" class="form-label h6">Giảm giá</label>
-                            <input type="number" class="form-control" name="" id="coupon-discount" aria-describedby="helpId" placeholder="0">
+                            <input type="number" class="form-control" name="discount" id="coupon-discount" aria-describedby="helpId" placeholder="0">
                         </div>
                         <div class="mb-4">
                             <label for="coupon-condition" class="form-label h6">Điều kiện</label>
-                            <input type="number" class="form-control" name="" id="coupon-condition" aria-describedby="helpId" placeholder="0">
+                            <input type="number" class="form-control" name="condition" id="coupon-condition" aria-describedby="helpId" placeholder="0">
                         </div>
                         <div class="mb-4">
                             <label for="coupon-quantity" class="form-label h6">Số lượng</label>
-                            <input type="number" class="form-control" name="" id="coupon-quantity" aria-describedby="helpId" placeholder="0">
+                            <input type="number" class="form-control" name="quantity" id="coupon-quantity" aria-describedby="helpId" placeholder="0">
                         </div>
     
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-4">
                                     <label for="coupon-start-date" class="form-label h6">Ngày bắt đầu</label>
-                                    <input type="date" class="form-control" name="" id="coupon-start-date" aria-describedby="helpId" placeholder="0">
+                                    <input type="date" class="form-control" name="start_date" id="coupon-start-date" aria-describedby="helpId" placeholder="0">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-4">
                                     <label for="coupon-end-date" class="form-label h6">Ngày kết thúc</label>
-                                    <input type="date" class="form-control" name="" id="coupon-end-date" aria-describedby="helpId" placeholder="0">
+                                    <input type="date" class="form-control" name="end_date" id="coupon-end-date" aria-describedby="helpId" placeholder="0">
                                 </div>
                             </div>
                         </div>
     
                         <div class="d-flex justify-content-end gap-3 mt-3">
-                            <button class="btn btn-min-width">Hủy bỏ</button>
-                            <button class="btn btn-primary btn-min-width">Thêm</button>
+                            <button class="btn btn-min-width" formmethod="get">Hủy bỏ</button>
+                            <button class="btn btn-primary btn-min-width" formmethod="post">Thêm</button>
                         </div>
                     </form>
                 </div>

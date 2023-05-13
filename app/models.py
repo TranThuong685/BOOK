@@ -6,6 +6,7 @@ from django.utils import timezone
 # Create your models here.
 class User(AbstractUser):
     name = models.CharField(max_length=100, blank=False, null=False)
+    # avatar = models.ImageField(upload_to='user/')
     dob = models.DateField(blank=False, null=True)
     gender = models.CharField(max_length=50, blank=False, null=False)
     phone = models.CharField(max_length=20, blank=False, null=False)
@@ -37,11 +38,11 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     image_id = models.AutoField(primary_key=True, blank=False, null=False)
-    name = models.CharField(max_length=100, blank=False, null=False)
+    name = models.ImageField(upload_to='product/')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return self.name
+        return self.product.name
 
 
 class ProductDetail(models.Model):
@@ -52,7 +53,7 @@ class ProductDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return f"{self.product} - {self.color}"
+        return f"{self.color} - {self.size} - {self.quantity}"
 
 
 class ProductSale(models.Model):
@@ -63,7 +64,7 @@ class ProductSale(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return self.product
+        return self.product.name
 
 
 class Feedback(models.Model):
@@ -133,7 +134,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
 
-class OderStatus(models.Model):
+class OrderStatus(models.Model):
     order_status_id = models.AutoField(primary_key=True, blank=False, null=False)
     name = models.CharField(max_length=100, blank=False, null=False)
     description = models.CharField(max_length=255, blank=False, null=False)
@@ -143,7 +144,7 @@ class Tracking(models.Model):
     track_id = models.AutoField(primary_key=True, blank=False, null=False)
     date = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=False, null=False)
-    order_status = models.ForeignKey(OderStatus, on_delete=models.CASCADE, blank=False, null=False)
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, blank=False, null=False)
 
 
 class Cart(models.Model):
