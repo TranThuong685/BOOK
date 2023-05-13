@@ -11,6 +11,7 @@
     --light-blue: #5a8afc;
     --background-color: #f5f7fa;
     --border: #e3e6ed;
+    --bs-btn-active-color: #2c6bfc;
 }
 html {
     margin: 0;
@@ -28,6 +29,7 @@ body {
 }
 
 p {
+    white-space: pre-line;
     margin-top: 0;
     margin-bottom: 1rem;
 }
@@ -79,12 +81,23 @@ a {
 }
 
 .btn:hover {
-    border-color: var(--dark-blue);
-    /* color: var(--dark-blue); */
+    border-color: var(--dark-blue) !important;
+    color: var(--dark-blue);
 }
 
-.btn.active {
+.btn:active {
+    border-color: var(--dark-blue);
+    color: var(--dark-blue);
+}
+
+.btn.active,
+.btn.active:active {
     background-color: var(--blue);
+    color: #ffff !important;
+}
+
+.btn.active:hover {
+    background-color: var(--dark-blue);
     color: #ffff;
 }
 
@@ -102,11 +115,25 @@ a {
     background-color: var(--dark-blue);
     color: #fff;
 }
+
+.btn-primary:active {
+    background-color: var(--dark-blue);
+    color: #fff;
+}
 .btn.disable {
     color: var(--border);
     pointer-events: none;
 }
 
+.btn:focus,
+.btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.btn.active:hover {
+    color: #fff;
+}
 .header-main {
     /* height: 56px; */
     background-color: var(--background-color);
@@ -166,12 +193,6 @@ a {
     left: -16px;
     color: #000;
     border-left: 1px solid #afadad;
-}
-
-.btn:focus,
-.btn:active {
-    outline: none !important;
-    box-shadow: none;
 }
 
 .header-nav-item {
@@ -329,7 +350,6 @@ a {
 }
 
 .carousel-inner {
-    
 }
 .carousel-item {
     height: 500px;
@@ -438,6 +458,9 @@ a {
 
 .product-sale-percentage {
     position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 32px;
     font-size: 12px;
     top: 0px;
     right: 0px;
@@ -455,7 +478,7 @@ a {
     position: absolute;
     border-color: transparent #ffce3d;
     border-style: solid;
-    border-width: 0 16px 4px;
+    border-width: 0 16px 4px 16.5px;
 }
 .product:hover .product-card {
     box-shadow: 4px 8px 8px #ccc;
@@ -597,20 +620,17 @@ a {
     margin-right: 16px;
 }
 
-.sort-popular,
-.sort-best-seller {
+.btn-filter {
     border: 1px solid var(--border);
     padding: 6px 16px;
     border-radius: 6px;
     transition: all 0.2s;
 }
-.sort-popular:hover,
-.sort-best-seller:hover {
+.btn-filter:hover {
     border: 1px solid var(--blue);
 }
 
-.sort-popular.active,
-.sort-best-seller.active {
+.btn-filter.active {
     background-color: var(--blue);
     color: #ffff;
 }
@@ -775,7 +795,10 @@ input::-webkit-inner-spin-button {
     color: var(--blue);
     border: 1px solid var(--blue);
 }
-
+.add-cart:hover,
+.add-cart:active {
+    color: var(--dark-blue);
+}
 .buy-now {
     padding: 8px 16px;
     border-radius: 20px;
@@ -936,7 +959,6 @@ table tr td:first-child {
 .border-dash {
     border-right: 1px dashed rgb(138, 148, 173);
 }
-
 
 .timeline-icon {
     border: 1px solid var(--green);

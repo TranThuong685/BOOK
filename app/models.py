@@ -24,7 +24,7 @@ class Category(models.Model):
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True, blank=False, null=False)
     name = models.CharField(max_length=100, blank=False, null=False)
-    description = models.CharField(max_length=1000, blank=False, null=False)
+    description = models.TextField(max_length=5000, blank=False, null=False)
     price = models.FloatField(blank=False, null=False)
     time_created = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
     rating = models.FloatField(default=0, blank=False, null=False)
@@ -37,12 +37,11 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     image_id = models.AutoField(primary_key=True, blank=False, null=False)
-    name = models.CharField(max_length=100, blank=False, null=False)
+    name = models.ImageField(upload_to='images/', blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
         return self.name
-
 
 class ProductDetail(models.Model):
     detail_id = models.AutoField(primary_key=True, blank=False, null=False)
@@ -53,8 +52,7 @@ class ProductDetail(models.Model):
 
     def __str__(self):
         return f"{self.product} - {self.color}"
-
-
+    
 class ProductSale(models.Model):
     sale_id = models.AutoField(primary_key=True, blank=False, null=False)
     price = models.FloatField(default=0, blank=False, null=False)
@@ -63,7 +61,7 @@ class ProductSale(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return self.product
+        return f'{self.product} - {self.price}'
 
 
 class Feedback(models.Model):
@@ -75,7 +73,7 @@ class Feedback(models.Model):
     dislike = models.IntegerField(default=0, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
-
+    
     def __str__(self):
         return f"{self.product} - {self.customer}"
 
@@ -174,3 +172,4 @@ class Notification(models.Model):
     notification_id = models.AutoField(primary_key=True, blank=False, null=False)
     content = models.CharField(max_length=255, blank=False, null=False)
     create_at = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)

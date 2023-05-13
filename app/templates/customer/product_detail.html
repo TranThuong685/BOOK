@@ -1,774 +1,876 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'customer/base.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+{% block content%}
+<!-- Content -->
+<div class="py-4">
+    <div class="product-detail">
+        <div class="container">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/home">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="">Áo phông</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Library</li>
+                </ol>
+            </nav>
 
-    <!-- bootstrap css -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-        crossorigin="anonymous" />
-    <!-- css -->
-    <!-- Font awesome -->
-    <script src="https://kit.fontawesome.com/2f72a1f7d3.js" crossorigin="anonymous"></script>
-
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-
-</head>
-
-<body>
-    <div class="header">
-        <div class="header-main">
-            <div class="container ps-2">
-                <div class="row d-flex justify-content-between align-items-center">
-                    <div class="col-lg-auto col-4">
-                        <a href="#" class="navbar-brand">Logo Shop</a>
-                    </div>
-                    <div class="col-lg-auto order-lg-last col-8">
-                        <div class="d-flex float-end">
-                            <a href="" class="header-nav-item ms-4">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <!-- <span
-                            class="badge position-absolute translate-middle bg-danger start-80"
-                            >5</span
-                          > -->
-                            </a>
-                            <a href="" class="header-nav-item ms-4">
-                                <i class="fa-regular fa-user"></i>
-                            </a>
+            <div class="row product-information p-4">
+                <div class="col-6">
+                    <div class="product-image d-flex flex-column">
+                        <div class="product-image-primary d-flex justify-content-center">
+                            <img src="{{ product.productimage_set.first.name.url }}" alt="">
                         </div>
-                    </div>
-
-                    <!-- Search -->
-                    <div class="col-lg-6 col-12">
-                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
-                            <div class="search-btn" type="submit">
-                                <i class="fa fa-search"></i>
+                        <div class="swiper-theme-container">
+                            <div class="swiper swiper-1">
+                                <div class="swiper-wrapper d-flex ">
+                                    <div class="swiper-slide">
+                                        <img src="../assets/image/shirt.jpg">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="../assets/image/light_30.png">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="../assets/image/shirt.jpg">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="../assets/image/shirt.jpg">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="../assets/image/shirt.jpg">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img src="../assets/image/shirt.jpg">
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                            <div class="swiper-nav">
+                                <div class="swiper-button-prev swiper-button-prev-1">
+                                    <i class="swiper-button-icon fa-solid fa-angle-left"></i>
+                                </div>
+                                <div class="swiper-button-next swiper-button-next-1">
+                                    <i class="swiper-button-icon fa-solid fa-angle-right"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container p-0">
-            <button class="navbar-toggler">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="navbar-collapse collapse">
-                <ul class="navbar-nav">
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Trang chủ</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Sản phẩm</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Đơn hàng</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Thanh toán</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">About</span></a>
-                    </li>
-                </ul>
-            </div>
-            <!-- <ul class="navbar-nav">
-                  <li class="nav-item">Home</li>
-                          <li class="nav-item">Product</li>
-                          <li class="nav-item">Order</li>
-                  <li class="nav-item"></li>
-                </ul> -->
-        </div>
-    </nav>
-
-    <!-- Content -->
-    <div class="py-4">
-        <div class="product-detail">
-            <div class="container">
-                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Loại</a></li>
-                        <li class="breadcrumb-item"><a href="#">Áo phông</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Library</li>
-                    </ol>
-                </nav>
-
-                <div class="row product-information p-4">
-                    <div class="col-6">
-                        <div class="product-image d-flex flex-column">
-                            <div class="product-image-primary d-flex justify-content-center">
-                                <img src="../assets/image/shirt.jpg" alt="">
-                            </div>
-                            <div class="swiper-theme-container">
-                                <div class="swiper swiper-1">
-                                    <div class="swiper-wrapper d-flex ">
-                                        <div class="swiper-slide">
-                                            <img src="../assets/image/shirt.jpg">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="../assets/image/light_30.png">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="../assets/image/shirt.jpg">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="../assets/image/shirt.jpg">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="../assets/image/shirt.jpg">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="../assets/image/shirt.jpg">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="swiper-nav">
-                                    <div class="swiper-button-prev swiper-button-prev-1">
-                                        <i class="swiper-button-icon fa-solid fa-angle-left"></i>
-                                    </div>
-                                    <div class="swiper-button-next swiper-button-next-1">
-                                        <i class="swiper-button-icon fa-solid fa-angle-right"></i>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="col-6">
+                    <div class="d-flex flex-column gap-3">
+                        <div>
+                            <h3>{{ product.name }}</h3>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="d-flex flex-column gap-3">
+                        <div class="d-flex">
                             <div>
-                                <h3>Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</h3>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                {{ product.rating}}
                             </div>
-                            <div class="d-flex">
-                                <div>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                </div>
-                                <div class="rate-quantity"><span>100</span> đánh giá</div>
-                                <div class="sold-quantity"><span>500</span> đã bán</div>
-                            </div>
-                            <div class="price d-flex align-items-center gx-2">
-                                <div class="text-decoration-line-through">150.000đ</div>
-                                <h2 class="sale-price m-0">100.000đ</h2>
-                                <div class="sale-percent">
-                                    30% giảm
-                                </div>
-                            </div>
-                            <p class="m-0 unde">Còn hàng</p>
-                            <div class="color my-2">
-                                <div class="row">
-                                    <div class="col-2 d-flex align-items-center">Màu sắc</div>
-                                    <div class="col-10">
-                                        <button class="btn active" data-color="trắng">Trắng</button>
-                                        <button class="btn" data-color="đen">Đen</button>
-                                        <button class="btn" data-color="xám">Xám</button>
-                                        <button class="btn" data-color="vàng">Vàng</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="size my-2">
-                                <div class="row">
-                                    <div class="col-2 d-flex align-items-center">Kích cỡ</div>
-                                    <div class="col-10">
-                                        <button class="btn active" data-size="s">S</button>
-                                        <button class="btn disable" data-size="m">M</button>
-                                        <button class="btn" data-size="l">L</button>
-                                        <button class="btn" data-size="xl">XL</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="quantity mt-2">
-                                <div class="row">
-                                    <div class="col-2 d-flex align-items-center">Số lượng</div>
-                                    <div class="col-10 d-flex">
-                                        <button class="btn btn-quantity">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </button>
-                                        <input type="number" class="form-control input-quantity" min="1" value="1">
-                                        <button class="btn btn-quantity">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
-                                        <div class="quantity-available d-flex align-items-center color-gray ms-3">10 sản phẩm có sẵn</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="buy d-flex gap-4 mt-4">
-                                <button class="add-cart btn">
-                                    <i class="fa-sharp fa-solid fa-cart-plus me-2"></i>
-                                    Thêm vào giỏ hàng
-                                </button>
-                                <button class="buy-now btn btn-primary">Mua ngay</button>
+                            <div class="rate-quantity"><span>{{ num_feedbacks}}</span> đánh giá</div>
+                            <div class="sold-quantity"><span>{{ product.total_sold }}</span> đã bán</div>
+                        </div>
+                        {% load humanize %}
+                        <div class="price d-flex align-items-center gx-2">
+                            <div class="text-decoration-line-through">{{product.price|floatformat:0|intcomma}}đ</div>
+                            <h2 class="sale-price m-0">{{ product.productsale_set.first.price|floatformat:0|intcomma }}đ</h2>
+                            <div class="sale-percent">
+                                30% giảm
                             </div>
                         </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="product-more-infor">
-            <div class="container">
-                <ul class="nav nav-pills my-3" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="true">Thông tin</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-feedback-tab" data-bs-toggle="pill" data-bs-target="#pills-feedback" type="button" role="tab" aria-controls="pills-feedback" aria-selected="false">Đánh giá</button>
-                    </li>
-                </ul>
-                <div class="tab-content bg-white p-3" id="pills-tabContent">
-                    <div class="tab-pane fade  show active" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab">
-                        <p>👩 MÔ TẢ SẢN PHẨM
-                            - Áo thun nam nữ oversize sử dụng chất vải cotton 65/35 co giãn 4 chiều. Là loại vải có đặc điểm mềm mịn, độ co giãn cao, khả năng thấm hút tốt và được dệt hoàn toàn từ sợi cây bông tự nhiên. Chất vải cotton cực kỳ thân thiện với làn da.
-                            - Áo thun nam nữ form rộng cổ tròn thoải mái
-                            - Áo phông unisex form rộng dễ phối đồ. Bạn có thể phối với quần jean, chân váy, … kết hợp với một đôi sneaker cho bạn tự tin xuống phố
-
-                            📣 HƯỚNG DẪN BẢO QUẢN ÁO PHÔNG NAM NỮ OVERSIZE VENDER Shop
-                            - Lộn trái áo thun nam nữ tay ngắn khi giặt, không giặt chung áo thun unisex trắng với quần áo tối màu.
-                            - Sử dụng xà phòng trung tính, không sử dụng xà phòng có chất tẩy mạnh cho áo thun nam nữ oversize.
-                            - Không sử dụng chất tẩy, không ngâm áo phông unisex.
-                            - Phơi ngang, không treo móc khi áo thun unisex ướt, không phơi trực tiếp dưới ánh nắng mặt trời.
-
-                            ️🎯 Giao hàng đúng size, lỗi 1 đổi 1
-                            ️🎯 Giao COD toàn quốc
-                            ️🎯 Hỗ trợ đổi size và đổi màu trong vòng 7 ngày kể từ khi nhận hàng, sản phẩm đổi phải còn nguyên tem mac và chưa qua sử dụng.
-                            ⚠️ LƯU Ý: Khi mở sản phẩm, khách yêu vui lòng quay lại video quá trình mở sản phẩm để được đảm bảo 100% đổi lại sản phẩm mới nếu Áo thun VENDER giao bị lỗi.</p>
-                    </div>
-                    <div class="tab-pane fade " id="pills-feedback" role="tabpanel" aria-labelledby="pills-feedback-tab">
-                        <div class="product-rating-overview">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <h2 class="rating-number m-0">
-                                    4.7
-                                    <span class="fs-5">/5</span>
-                                </h2>
-                                <div class="">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star-half-stroke"></i>
-                                </div>
-                                <div>100 đánh giá</div>
-                            </div>
-                        </div>
-                        <div class="product-rating__list">
-                            <div class="product-rating__item">
-                                <div class="d-flex mt-4">
-                                    <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
-                                    <div class="d-flex flex-column ms-3">
-                                        <div class="">Huy Phan</div>
-                                        <div class="color-gray">23 Oct, 12:09 PM</div>
-                                        <div class="mt-1">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <div class=" image-feedback-list d-flex mt-3">
-                                            <div class="image-feedback-item">
-                                                <img src="../assets/image/shirt.jpg" alt="">
-                                            </div>
-                                            <div class="image-feedback-item">
-                                                <img src="../assets/image/shirt.jpg" alt="">
-                                            </div>
-                                            <div class="image-feedback-item">
-                                                <img src="../assets/image/shirt.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
-                                        <div class="d-flex align-items-center mt-3">
-                                            <button class="btn btn-like active">10 <i class="fa-solid fa-thumbs-up active"></i></button>
-                                            <button class="btn ms-2 btn-dislike">2 <i class="fa-solid fa-thumbs-down"></i></button>
-                                        </div>
-                                        <div class="response d-flex mt-3 align-items-start">
-                                            <i class="fa-solid fa-reply fa-rotate-180"></i>
-                                            <div class="ms-3">
-                                                <h5 class="m-0">Phản hồi của người bán</h5>
-                                                <div class="color-gray">23 Oct, 12:30 PM</div>
-                                                <div class="mt-1">Cảm ơn bạn đã tin tưởng và lựa chọn sản phẩm của Shop. Hi vọng trong tương lai tiếp tục được sự ủng hộ và đồng hành của bạn. Cảm ơn bạn rất nhiều ❤</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="product-rating__item">
-                                <div class="d-flex mt-4">
-                                    <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
-                                    <div class="d-flex flex-column ms-3">
-                                        <div class="">Huy Phan</div>
-                                        <div class="color-gray">23 Oct, 12:09 PM</div>
-                                        <div class="mt-1">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                        </div>
-                                        <div class=" image-feedback-list d-flex mt-3">
-                                            <div class="image-feedback-item">
-                                                <img src="../assets/image/shirt.jpg" alt="">
-                                            </div>
-                                            <div class="image-feedback-item">
-                                                <img src="../assets/image/shirt.jpg" alt="">
-                                            </div>
-                                            <div class="image-feedback-item">
-                                                <img src="../assets/image/shirt.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
-                                        <div class="d-flex align-items-center mt-3">
-                                            <button class="btn active btn-like">0 <i class="fa-solid fa-thumbs-up "></i></button>
-                                            <button class="btn ms-2  btn-dislike">0 <i class="fa-solid fa-thumbs-down"></i></button>
-                                        </div>
-                                    </div>
+                        <p class="m-0 color-red h5">Còn hàng</p>
+                        <div class="color my-2">
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center">Màu sắc</div>
+                                <div class="col-10 color-option">
+                                    <button class="btn" data-color="trắng">Trắng</button>
+                                    <button class="btn" data-color="đen">Đen</button>
+                                    <button class="btn" data-color="xám">Xám</button>
+                                    <button class="btn" data-color="vàng">Vàng</button>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="page-controller">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center mt-5">
-                                    <li class="page-item disabled">
-                                        <a class="page-link pre-page" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link next-page" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                        <div class="size my-2">
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center">Kích cỡ</div>
+                                <div class="col-10 size-option">
+                                    <button class="btn" data-size="s">S</button>
+                                    <button class="btn  " data-size="m">M</button>
+                                    <button class="btn" data-size="l">L</button>
+                                    <button class="btn" data-size="xl">XL</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quantity mt-2">
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center">Số lượng</div>
+                                <div class="col-10 d-flex">
+                                    <button class="btn btn-quantity btn-minus disable">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="form-control input-quantity" name='quantity' min="1" value="1">
+                                    <button class="btn btn-quantity btn-plus disable">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                    <div class="quantity-available d-flex align-items-center color-gray ms-3">10 sản phẩm có sẵn</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buy d-flex gap-4 mt-4">
+                            <button class="add-cart btn" data-action='add-cart'>
+                                <i class="fa-sharp fa-solid fa-cart-plus me-2"></i>
+                                Thêm vào giỏ hàng
+                            </button>
+                            <button class="buy-now btn btn-primary" data-action='buy-now'>Mua ngay</button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
-        <div class="similar-product">
-            <div class="container">
-                <div class="products-slider mt-3 p-3">
-                    <div class="d-flex justify-content-between">
-                        <h4>Sản phẩm liên quan</h4>
-                        <a href="" class="product-more">
-                            Xem thêm
-                            <i class="fa-solid fa-angles-right"></i>
-                        </a>
+    </div>
+
+    <div class="product-more-infor">
+        <div class="container">
+            <ul class="nav nav-pills my-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-information-tab" data-bs-toggle="pill" data-bs-target="#pills-information" type="button" role="tab" aria-controls="pills-information" aria-selected="true">Thông tin</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-feedback-tab" data-bs-toggle="pill" data-bs-target="#pills-feedback" type="button" role="tab" aria-controls="pills-feedback" aria-selected="false">Đánh giá</button>
+                </li>
+            </ul>
+            <div class="tab-content bg-white p-3" id="pills-tabContent">
+                <div class="tab-pane fade  show active" id="pills-information" role="tabpanel" aria-labelledby="pills-information-tab">
+                    <p>
+                        {{ product.description }}
+                    </p>
+                </div>
+                <div class="tab-pane fade " id="pills-feedback" role="tabpanel" aria-labelledby="pills-feedback-tab">
+                    <div class="product-rating-overview">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <h2 class="rating-number m-0">
+                                {{ product.rating }}
+                                <span class="fs-5">/5</span>
+                            </h2>
+                            <div class="">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <div>{{num_feedbacks}} đánh giá</div>
+                        </div>
                     </div>
-                    <div class="swiper-theme-container">
-                        <div class="swiper swiper-2">
-                            <!-- Additional required wrapper -->
-                            <div class="swiper-wrapper d-flex">
-                                <!-- Slides -->
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
+                    <div class="product-rating__list">
+                        {% for feedback in feedbacks %}
+                        <div class="product-rating__item">
+                            <div class="d-flex mt-4">
+                                <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
+                                <div class="d-flex flex-column ms-3">
+                                    <div class="">{{feedback.customer.name}}</div>
+                                    <div class="color-gray">{{feedback.date}}</div>
+                                    <div class="mt-1">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <div class=" image-feedback-list d-flex mt-3">
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
                                         </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
                                         </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
                                         </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
+                                    </div>
+                                    <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <button class="btn btn-like active">10 <i class="fa-solid fa-thumbs-up active"></i></button>
+                                        <button class="btn ms-2 btn-dislike">2 <i class="fa-solid fa-thumbs-down"></i></button>
+                                    </div>
+                                    <div class="response d-flex mt-3 align-items-start">
+                                        <i class="fa-solid fa-reply fa-rotate-180"></i>
+                                        <div class="ms-3">
+                                            <h5 class="m-0">Phản hồi của người bán</h5>
+                                            <div class="color-gray">23 Oct, 12:30 PM</div>
+                                            <div class="mt-1">Cảm ơn bạn đã tin tưởng và lựa chọn sản phẩm của Shop. Hi vọng trong tương lai tiếp tục được sự ủng hộ và đồng hành của bạn. Cảm ơn bạn rất nhiều ❤</div>
                                         </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <div class="swiper-slide">
-                                    <a class="product" href="">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                                <div class="product-sale-percentage">30%</div>
-                                            </div>
-                                            <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">150.000đ</div>
-                                                <div class="product-price-sale">100.000đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                            </div>
-                                        </div>
-                                    </a>
-
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="swiper-nav">
-                            <div class="swiper-button-prev swiper-button-prev-2">
-                                <i class="swiper-button-icon fa-solid fa-angle-left"></i>
+                        {% endfor %}
+                        <div class="product-rating__item">
+                            <div class="d-flex mt-4">
+                                <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
+                                <div class="d-flex flex-column ms-3">
+                                    <div class="">Huy Phan</div>
+                                    <div class="color-gray">23 Oct, 12:09 PM</div>
+                                    <div class="mt-1">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <div class=" image-feedback-list d-flex mt-3">
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
+                                        </div>
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
+                                        </div>
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <button class="btn btn-like active">10 <i class="fa-solid fa-thumbs-up active"></i></button>
+                                        <button class="btn ms-2 btn-dislike">2 <i class="fa-solid fa-thumbs-down"></i></button>
+                                    </div>
+                                    <div class="response d-flex mt-3 align-items-start">
+                                        <i class="fa-solid fa-reply fa-rotate-180"></i>
+                                        <div class="ms-3">
+                                            <h5 class="m-0">Phản hồi của người bán</h5>
+                                            <div class="color-gray">23 Oct, 12:30 PM</div>
+                                            <div class="mt-1">Cảm ơn bạn đã tin tưởng và lựa chọn sản phẩm của Shop. Hi vọng trong tương lai tiếp tục được sự ủng hộ và đồng hành của bạn. Cảm ơn bạn rất nhiều ❤</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="swiper-button-next swiper-button-next-2">
-                                <i class="swiper-button-icon fa-solid fa-angle-right"></i>
+                        </div>
+
+                        <div class="product-rating__item">
+                            <div class="d-flex mt-4">
+                                <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
+                                <div class="d-flex flex-column ms-3">
+                                    <div class="">Huy Phan</div>
+                                    <div class="color-gray">23 Oct, 12:09 PM</div>
+                                    <div class="mt-1">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <div class=" image-feedback-list d-flex mt-3">
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
+                                        </div>
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
+                                        </div>
+                                        <div class="image-feedback-item">
+                                            <img src="../assets/image/shirt.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
+                                    <div class="d-flex align-items-center mt-3">
+                                        <button class="btn active btn-like">0 <i class="fa-solid fa-thumbs-up "></i></button>
+                                        <button class="btn ms-2  btn-dislike">0 <i class="fa-solid fa-thumbs-down"></i></button>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="page-controller">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mt-5">
+                                <li class="page-item disabled">
+                                    <a class="page-link pre-page" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link next-page" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="similar-product">
+        <div class="container">
+            <div class="products-slider mt-3 p-3">
+                <div class="d-flex justify-content-between">
+                    <h4>Sản phẩm liên quan</h4>
+                    <a href="" class="product-more">
+                        Xem thêm
+                        <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                </div>
+                <div class="swiper-theme-container">
+                    <div class="swiper swiper-2">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper d-flex">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <div class="swiper-slide">
+                                <a class="product" href="">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
+                                            <div class="product-sale-percentage">30%</div>
+                                        </div>
+                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-price d-flex align-items-center">
+                                            <div class="product-price-original">150.000đ</div>
+                                            <div class="product-price-sale">100.000đ</div>
+                                        </div>
+                                        <div class="product-rate d-flex align-items-center">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-nav">
+                        <div class="swiper-button-prev swiper-button-prev-2">
+                            <i class="swiper-button-icon fa-solid fa-angle-left"></i>
+                        </div>
+                        <div class="swiper-button-next swiper-button-next-2">
+                            <i class="swiper-button-icon fa-solid fa-angle-right"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <div class=" container">
-            <div class="row justify-content-between">
-                <div class="col-4">
-                    <h5>Shop</h5>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias corporis, ratione ullam, obcaecati autem eius quae vero accusantium, tenetur eveniet voluptatum labore minus accusamus asperiores corrupti harum aliquam debitis! Asperiores.</p>
-                </div>
-                <div class="col-auto">
-                    <h5>Về Shop</h5>
-                    <div class="d-flex flex-column">
-                        <a href="">Giới thiệu</a>
-                        <a href="">Điều khoản</a>
-                        <a href="">Chính sách</a>
-                        <a href="">Tuyển dụng</a>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <h5>Liên hệ</h5>
-                    <div class="d-flex flex-column">
-                        <a href=""><i class="fa-brands fa-facebook me-2"></i>Facebook</a>
-                        <a href=""><i class="fa-brands fa-instagram me-2"></i>Instagram</a>
-                        <a href=""><i class="fa-brands fa-tiktok me-2"></i></i>Tiktok</a>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <h5>Chăm sóc khách hàng</h5>
-                    <div class="d-flex flex-column">
-                        <a href="">Trung tâm trợ giúp</a>
-                        <a href="">Hướng dẫn mua hàng</a>
-                        <a href="">Thanh toán</a>
-                        <a href="">Vận chuyển</a>
-                        <a href="">Bảo hành</a>
-                    </div>
-                </div>
-                <div class="col-auto">
-                    <h5>Thanh toán</h5>
-                    <div class="d-flex flex-column">
-                        <a href="">Giới thiệu</a>
-                        <a href="">Điều khoản</a>
-                        <a href="">Chính sách</a>
-                        <a href="">Tuyển dụng</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+    $(document).ready(() => {
 
 
-    <!-- jquery -->
-    <script
-        src="https://code.jquery.com/jquery-3.6.4.js"
-        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-        crossorigin="anonymous"></script>
+        var mySwiper = new Swiper('.swiper-1', {
+            slidesPerView: 4,
+            slidePerGroup: 1,
+            spaceBetween: 30,
+            loop: false,
 
-    <!-- bootstrap js -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next-1',
+                prevEl: '.swiper-button-prev-1',
+            },
+        });
 
-    <script> 
-        $(document).ready(() => {
-            var mySwiper = new Swiper('.swiper-1', {
-                slidesPerView: 4,
-                slidePerGroup: 1,
-                spaceBetween: 30,
-                loop: false,
-
-                // Navigation arrows
-                navigation: {
-                    nextEl: '.swiper-button-next-1',
-                    prevEl: '.swiper-button-prev-1',
-                },
-            });
-
-            $('.product-image .swiper-slide').click(function () {
-                var imgSrc = $(this).find('img').attr('src');
-                $('.product-image-primary').find('img').attr('src', imgSrc);
-            })
-
-            var mySwiper = new Swiper('.swiper-2', {
-                slidesPerView: 5,
-                slidePerGroup: 1,
-                spaceBetween: 30,
-                loop: false,
-
-                // Navigation arrows
-                navigation: {
-                    nextEl: '.swiper-button-next-2',
-                    prevEl: '.swiper-button-prev-2',
-                },
-            });
-
-            var list_products = [
-                { color: 'trắng', size: 's', quantity: 10 },
-                { color: 'vàng', size: 's', quantity: 10 },
-                { color: 'đen', size: 'l', quantity: 10 },
-                { color: 'đen', size: 'xl', quantity: 10 },
-            ]
-
-            $('.color .btn').click(function () {
-                if ($(this).hasClass('active')) {
-                    $(this).removeClass('active');
-                    if ($('.size .btn').hasClass('active')) {
-                        size = $('.size .btn.active').attr('data-size');
-                        console.log(size);
-                        const totalProducts = list_products.reduce((total, product) => {
-                            if (product.size === size) {
-                                return total + product.quantity;
-                            }
-                            return total;
-                        }, 0);
-                        console.log(totalProducts);
-                    }
-                    else {
-                        $('.size .btn').removeClass('disable');
-                    }
-                }
-                else {
-                    $('.color .btn').removeClass('active');
-                    $(this).addClass('active');
-                    if ($('.size .btn').hasClass('active')) {
-                        color = $(this).attr('data-color');
-                        console.log(color);
-                        size = $('.size .btn.active').attr('data-size');
-                        console.log(size);
-                        const totalProducts = list_products.reduce((total, product) => {
-                            if ( product.color === color && product.size === size) {
-                                return total + product.quantity;
-                            }
-                            return total;
-                        }, 0);    
-                        console.log(totalProducts);
-                    }
-                    else {
-                        color = $(this).attr('data-color');
-                        $('.size .btn').each(function() {
-                            size = $(this).attr('data-size');
-                            var result = list_products.find(product => product.color === color && product.size === size)
-                            if(!result) $(this).addClass('disable');
-                        })
-                    }
-                }
-            })
-
-            $('.size .btn').click(function () {
-                if ($(this).hasClass('active')) {
-                    $(this).removeClass('active');
-                    if ($('.color .btn').hasClass('active')) {
-                        size = $('.color .btn.active').attr('data-color');
-                        console.log(size);
-                        const totalProducts = list_products.reduce((total, product) => {
-                            if (product.color === color) {
-                                return total + product.quantity;
-                            }
-                            return total;
-                        }, 0);
-                        console.log(totalProducts);
-                    }
-                    else {
-                        $('.color .btn').removeClass('disable');
-                    }
-                }
-                else {
-                    $('.size .btn').removeClass('active');
-                    $(this).addClass('active');
-                    if ($('.color .btn').hasClass('active')) {
-                        size = $(this).attr('data-size');
-                        console.log(color);
-                        color = $('.color .btn.active').attr('data-color');
-                        console.log(size);
-                        const totalProducts = list_products.reduce((total, product) => {
-                            if (product.color === color && product.size === size) {
-                                return total + product.quantity;
-                            }
-                            return total;
-                        }, 0);
-                        console.log(totalProducts);
-                    }
-                    else {
-                        size = $(this).attr('data-size');
-                        $('.color .btn').each(function () {
-                            color = $(this).attr('data-color');
-                            var result = list_products.find(product => product.color === color && product.size === size)
-                            if (!result) $(this).addClass('disable');
-                        })
-                    }
-                }
-            })
-
-
-            $('.btn-like').click(function () {
-                console.log(1);
-                $(this).toggleClass('active');
-                $('.btn-dislike').removeClass('active');
-            })
-            $('.btn-dislike').click(function () {
-                $(this).toggleClass('active');
-                $('.btn-like').removeClass('active');
-            })
+        $('.product-image .swiper-slide').click(function() {
+            var imgSrc = $(this).find('img').attr('src');
+            $('.product-image-primary').find('img').attr('src', imgSrc);
         })
-    </script>
-</body>
+
+        var mySwiper = new Swiper('.swiper-2', {
+            slidesPerView: 5,
+            slidePerGroup: 1,
+            spaceBetween: 30,
+            loop: false,
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next-2',
+                prevEl: '.swiper-button-prev-2',
+            },
+        });
+
+        var variantProducts = []
+        {% for variant in product.productdetail_set.all %}
+        variantProducts.push({
+            color: "{{ variant.color|title }}",
+            size: "{{ variant.size|upper }}",
+            quantity: parseInt("{{ variant.quantity }}")
+        })
+        {% endfor %}
+        console.log( variantProducts)
+
+        var colors = {};
+        var sizes = {};
+
+        for (var i = 0; i < variantProducts.length; i++) {
+            var product = variantProducts[i];
+            var color = product.color;
+            var size = product.size;
+            var quantity = product.quantity;
+            if (!colors[color]) {
+                colors[color] = quantity;
+            } else {
+                colors[color] += quantity;
+            }
+            if (!sizes[size]) {
+                sizes[size] = quantity;
+            } else {
+                sizes[size] += quantity;
+            }
+        }
+
+        var color_option = []
+        for (var color in colors) {
+            color_option.push(`<button class="btn me-2" data-color="${color}">${color}</button>`)
+        }
+        $('.color-option').html(color_option.join(''));
+
+        var size_option = []
+        for (var size in sizes) {
+            size_option.push(`<button class="btn me-2" data-size="${size}">${size}</button>`)
+        }
+        $('.size-option').html(size_option.join(''));
+
+
+        var outOfStockColor = []
+        var outOfStockSize = []
+        for (var color in colors) {
+            if (colors[color] === 0) {
+                outOfStockColor.push(color);
+            }
+        }
+        for (var size in sizes) {
+            if (sizes[size] === 0) {
+                outOfStockSize.push(size);
+            }
+        }
+        console.log(outOfStockColor);
+        console.log(outOfStockSize);
+
+
+        function removeOutOfStock() {
+            $('.color .btn').each(function() {
+                color = $(this).attr('data-color');
+                if (outOfStockColor.includes(color)) {
+                    $(this).addClass('disable');
+                }
+            })
+            $('.size .btn').each(function() {
+                size = $(this).attr('data-size');
+                if (outOfStockSize.includes(size)) {
+                    $(this).addClass('disable');
+                }
+            })
+        }
+
+        function removeVariation() {
+            $('.color .btn').each(function() {
+                color = $(this).attr('data-color');
+                var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                if (!result) $(this).addClass('disable');
+            })
+        }
+
+        removeOutOfStock();
+
+
+        $('.color .btn').click(function() {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                $('.color .btn').removeClass('disable')
+                $('.btn-plus, .btn-minus').addClass('disable')
+                
+                if ($('.size .btn').hasClass('active')) {
+                    $('.size .btn').removeClass('disable');
+                    $('.size .btn').each(function() {
+                        size = $(this).attr('data-size');
+                        if (outOfStockSize.includes(size)) {
+                            $(this).addClass('disable');
+                        }
+                    })
+                    size = $('.size .btn.active').attr('data-size');
+                    const totalProducts = variantProducts.reduce((total, product) => {
+                        if (product.size === size) {
+                            return total + product.quantity;
+                        }
+                        return total;
+                    }, 0);
+                    $('.color .btn').each(function() {
+                        color = $(this).attr('data-color');
+                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                        if (!result) $(this).addClass('disable');
+                    })
+                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                    if(totalProducts < parseInt(inputQuantity.val())) {
+                        $('.btn-plus').addClass('disable')
+                        inputQuantity.val(totalProducts)
+                    }
+                    
+                } else {
+                    $('.size .btn').removeClass('disable');
+                    $('.color .btn').removeClass('disable');
+
+                    removeOutOfStock();
+                }
+            } else {
+                anyColorSelected = $('.color .btn').hasClass('active');
+
+                $('.color .btn').removeClass('active');
+                $(this).addClass('active');
+                $('.size .btn').removeClass('disable')
+                if ($('.size .btn').hasClass('active')) {
+                    color = $(this).attr('data-color');
+                    console.log(color);
+                    size = $('.size .btn.active').attr('data-size');
+                    console.log(size);
+                    const totalProducts = variantProducts.reduce((total, product) => {
+                        if (product.color === color && product.size === size) {
+                            return total + product.quantity;
+                        }
+                        return total;
+                    }, 0);
+                    $('.size .btn').each(function() {
+                        size = $(this).attr('data-size');
+                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                        if (!result) $(this).addClass('disable');
+                    })
+                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                    $('.btn-plus, .btn-minus').removeClass('disable')
+                    if(totalProducts < parseInt(inputQuantity.val())) {
+                        $('.btn-plus').addClass('disable')
+                        inputQuantity.val(totalProducts)
+                    }
+                    console.log(totalProducts);
+                } else {
+                    $('.size .btn').removeClass('disable');
+                    color = $(this).attr('data-color');
+                    $('.size .btn').each(function() {
+                        size = $(this).attr('data-size');
+                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                        if (!result) $(this).addClass('disable');
+                    })
+                    const totalProducts = variantProducts.reduce((total, product) => {
+                        if (product.color === color) {
+                            return total + product.quantity;
+                        }
+                        return total;
+                    }, 0);
+                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                    console.log(totalProducts)
+                }
+            }
+        })
+
+        $('.size .btn').click(function() {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                $('.size .btn').removeClass('disable');
+                $('.btn-plus, .btn-minus').addClass('disable');
+
+                if ($('.color .btn').hasClass('active')) {
+                    $('.color .btn').removeClass('disable');
+                    $('.color .btn').each(function() {
+                        color = $(this).attr('data-color');
+                        if (outOfStockColor.includes(color)) {
+                            $(this).addClass('disable');
+                        }
+                    })
+                    color = $('.color .btn.active').attr('data-color');
+
+                    console.log(color);
+                    const totalProducts = variantProducts.reduce((total, product) => {
+                        if (product.color === color) {
+                            return total + product.quantity;
+                        }
+                        return total;
+                    }, 0);
+                    $('.size .btn').each(function() {
+                        size = $(this).attr('data-size');
+                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                        if (!result) $(this).addClass('disable');
+                    })
+                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                    if(totalProducts < parseInt(inputQuantity.val())) {
+                        $('.btn-plus').addClass('disable')
+                        inputQuantity.val(totalProducts)
+                    }
+                } else {
+                    $('.color .btn').removeClass('disable');
+                    $('.size .btn').removeClass('disable');
+                    removeOutOfStock();
+                }
+            } else {
+                anySizeSelected = $('.size .btn').hasClass('active');
+
+                $('.size .btn').removeClass('active');
+                $(this).addClass('active');
+                $('.color .btn').removeClass('disable')
+                if ($('.color .btn').hasClass('active')) {
+                    size = $(this).attr('data-size');
+                    color = $('.color .btn.active').attr('data-color');
+
+                    const totalProducts = variantProducts.reduce((total, product) => {
+                        if (product.color === color && product.size === size) {
+                            return total + product.quantity;
+                        }
+                        return total;
+                    }, 0);
+                    $('.color .btn').each(function() {
+                        color = $(this).attr('data-color');
+                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                        if (!result) $(this).addClass('disable');
+                    })
+                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                    $('.btn-plus, .btn-minus').removeClass('disable')
+                    if(totalProducts < parseInt(inputQuantity.val())) {
+                        $('.btn-plus').addClass('disable')
+                        inputQuantity.val(totalProducts)
+                    }
+                    console.log(totalProducts);
+                } else {
+                    $('.color .btn').removeClass('disable')
+                    size = $(this).attr('data-size');
+                    $('.color .btn').each(function() {
+                        color = $(this).attr('data-color');
+                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+                        if (!result) $(this).addClass('disable');
+                    })
+                    const totalProducts = variantProducts.reduce((total, product) => {
+                        if (product.size === size) {
+                            return total + product.quantity;
+                        }
+                        return total;
+                    }, 0);
+                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                }
+            }
+        })
+
+        var inputQuantity = $("input[name='quantity']");
+
+        $(".btn-plus").click(function() {
+            var availableQuantity = parseInt($(".quantity-available").text().match(/\d+/)[0], 10);
+            var currentValue = parseInt(inputQuantity.val());
+            if (currentValue < availableQuantity) {
+                inputQuantity.val(currentValue + 1);
+                $(".btn-minus").removeClass('disable')
+            }
+            if (currentValue + 1 == availableQuantity) {
+                $(this).addClass('disable');
+            }
+        });
+        $(".btn-minus").click(function() {
+            var availableQuantity = parseInt($(".quantity-available").text().match(/\d+/)[0], 10);
+            var currentValue = parseInt(inputQuantity.val());
+            if (currentValue > 1) {
+                inputQuantity.val(currentValue - 1);
+                $(".btn-plus").removeClass('disable')
+            }
+            if (currentValue-1 == 0) {
+                $(this).addClass('disable');
+            }
+        });
+
+
+        // Add to cart
+        $('.add-cart, .buy-now').click(function() {
+        // Lấy giá trị của màu sắc và kích cỡ
+            var color = $('.color-option button.active').data('color');
+            var size = $('.size-option button.active').data('size');
+            var quantity = parseInt(inputQuantity.val());
+            // Kiểm tra xem màu sắc và kích cỡ đã được chọn hay chưa
+            if (color == undefined || size == undefined) {
+            // Hiển thị thông báo cho người dùng
+                alert('Vui lòng chọn màu sắc và kích cỡ!');
+                return false;
+            }
+            console.log(color, size, quantity);
+            var url = '';
+            var action = $(this).data('action');
+                if (action == 'add-cart') {
+                url = '{% url "cart" %}';
+                } else if (action == 'buy-now') {
+                url = '{% url "check-out" %}';
+            }
+            var data = {
+                'product_id': {{ product.product_id}},
+                'color': color,
+                'size': size,
+                'quantity': quantity,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            }
+
+            $.ajax( {
+                url: url,
+                method: 'POST',
+                data: data,
+                success: function(response) {
+                    alert(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        });
+
+        $('.btn-like').click(function() {
+            console.log(1);
+            $(this).toggleClass('active');
+            $('.btn-dislike').removeClass('active');
+        })
+        $('.btn-dislike').click(function() {
+            $(this).toggleClass('active');
+            $('.btn-like').removeClass('active');
+        })
+    })
+</script>
+{% endblock content%}

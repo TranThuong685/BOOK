@@ -28,6 +28,8 @@
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     
+    {% block cdn %}
+    {% endblock cdn %}
   
     <link rel="stylesheet" href="{% static '/css/style.css' %}" />
 </head>
@@ -38,7 +40,7 @@
             <div class="container ps-2">
                 <div class="row d-flex justify-content-between align-items-center">
                     <div class="col-lg-auto col-4">
-                        <a href="#" class="navbar-brand">Logo Shop</a>
+                        <a href="home" class="navbar-brand">Logo Shop</a>
                     </div>
                     <div class="col-lg-auto order-lg-last col-8">
                         <div class="d-flex float-end gap-4" >
@@ -108,10 +110,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="navbar-nav">
                     <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Trang chủ</span></a>
+                        <a href="/home" class="nav-link pe-5"><span class="nav-content">Trang chủ</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Sản phẩm</span></a>
+                        <a href="/list-product" class="nav-link pe-5"><span class="nav-content">Sản phẩm</span></a>
                     </li>
                     <li class="nav-item">
                         <a href="" class="nav-link pe-5"><span class="nav-content">Đơn hàng</span></a>
