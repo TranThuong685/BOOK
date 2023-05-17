@@ -5,258 +5,284 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Quản lý khách hàng</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"/>
     <!-- css -->
     <!-- Font awesome -->
     <script src="https://kit.fontawesome.com/2f72a1f7d3.js" crossorigin="anonymous"></script>
     <!-- jquery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <!-- bootstrap js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="../assets/css/main.css" />
-    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <link rel="stylesheet" href="../assets/css/main.css"/>
+    <link rel="stylesheet" href="../assets/css/admin.css"/>
 </head>
 
 <body>
-    <div class="main">
+<div class="main">
 
-        <head class="header">
-            <div class="header-main">
-                <div class="row d-flex justify-content-between align-items-center px-5">
-                    <div class="col-lg-auto col-4">
-                        <a href="#" class="navbar-brand">Logo Shop</a>
-                    </div>
-                    <div class="col-lg-auto order-lg-last col-8">
-                        <div class="d-flex float-end">
-                            <a href="" class="header-nav-item ms-4 position-relative">
-                                <i class="fa-solid fa-bell">
-                                </i>
-                                <span class="badge bg-danger position-absolute">3</span>
-                            </a>
+    <head class="header">
+        <div class="header-main">
+            <div class="row d-flex justify-content-between align-items-center px-5">
+                <div class="col-lg-auto col-4">
+                    <a href="/admin_orders" class="navbar-brand"><img src="app/media/images/Logo.png" width="100"></a>
+                </div>
+                <div class="col-lg-auto order-lg-last col-8">
+                    <div class="d-flex float-end">
+                        <a href="" class="header-nav-item ms-4 position-relative">
+                            <i class="fa-solid fa-bell">
+                            </i>
+                            <span class="badge bg-danger position-absolute">3</span>
+                        </a>
 
-                            <div href="" class="header-nav-item header-user ms-4 d-flex">
-                                <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
-                                <p class="">Huy Phan</p>
-                                <div class="header-user__list-option d-flex flex-column">
-                                    <a class="header-user__option" href="./profile.html">
-                                        <p>Tài khoản của tôi</p>
-                                    </a>
-                                    <a class="header-user__option" href="">
-                                        <p>Đăng xuất</p>
-                                    </a>
-                                </div>
+                        <div href="" class="header-nav-item header-user ms-4 d-flex">
+                            <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
+                            <p class="">{{ request.user.name }}</p>
+                            <div class="header-user__list-option d-flex flex-column">
+                                <a class="header-user__option" href="/view_profile/{{ request.user.id }}">
+                                    <p>Tài khoản của tôi</p>
+                                </a>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Search -->
-                    <div class="col-lg-6 col-12">
-                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
-                            <div class="search-btn" type="submit">
-                                <i class="fa fa-search"></i>
-                            </div>
-                        </form>
-                    </div>
+                <!-- Search -->
+                <div class="col-lg-6 col-12">
+                    <form action="" class="d-flex position-relative justify-content-center align-items-center"
+                          role="search">
+                        <input type="text" class="form-control shadow-none search-input" type="search"
+                               placeholder="Search"/>
+                        <div class="search-btn" type="submit">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </head>
+        </div>
+    </head>
 
-        <nav class="navbar navbar-vertical">
-            <ul class="navbar-nav">
-                <div class="navbar-option">
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5 active">
-                            <span class="nav-content">Sản phẩm</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Đơn hàng</span>
-                        </a>
-                    </li>
+    <nav class="navbar navbar-vertical">
+        <ul class="navbar-nav">
+            <div class="navbar-option">
+                <li class="nav-item">
+                    <a href="/products" class="nav-link pe-5 active">
+                        <span class="nav-content">Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin_orders" class="nav-link pe-5">
+                        <span class="nav-content">Đơn hàng</span>
+                    </a>
+                </li>
 
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Khuyến mãi</span>
-                        </a>
-                    </li>
+                <li class="nav-item .active">
+                    <a href="/coupons" class="nav-link pe-5">
+                        <span class="nav-content">Khuyến mãi</span>
+                    </a>
+                </li>
 
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Khách hàng</span>
-                        </a>
-                    </li>
+                <li class="nav-item .active">
+                    <a href="/customers" class="nav-link pe-5">
+                        <span class="nav-content">Khách hàng</span>
+                    </a>
+                </li>
 
-                    <li class="nav-item .active">
-                        <a href="" class="nav-link pe-5">
-                            <span class="nav-content">Thống kê</span>
-                        </a>
-                    </li>
-                </div>
+                <li class="nav-item .active">
+                    <a href="/report" class="nav-link pe-5">
+                        <span class="nav-content">Thống kê</span>
+                    </a>
+                </li>
+            </div>
 
-                <div class="log-out">
-                    <li class="nav-item">
-                        <a href="" class="nav-link pe-5">
+            <div class="log-out">
+                <li class="nav-item">
+                    <a href="/logout" class="nav-link pe-5">
                             <span class="nav-content">
                                 Đăng xuất
                                 <i class="fa-solid fa-right-from-bracket ms-2"></i>
                             </span>
-                        </a>
-                    </li>
-                </div>
-            </ul>
-        </nav>
+                    </a>
+                </li>
+            </div>
+        </ul>
+    </nav>
 
-        <div class="content">
-            <div class="customers">
-                <h4 class="my-4">Khách hàng</h4>
-                <div class="content-body">
-                    <div class="row justify-content-between">
-                        <div class="col-auto d-flex gap-1 align-items-center">
-                            <div class="admin-search">
-                                <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                                    <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
-                                    <div class="search-btn" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="d-flex align-items-center" >
-                                <label for="vip-customer" class="form-label m-0">Thành viên</label>
-                                <select class="form-select m-0 ms-2" name="" id="vip-customer">
-                                    <option selected>VIP1</option>
-                                    <option value="">VIP2</option>
-                                    <option value="">VIP3</option>
-                                </select>
-                            </div>
-                            <button class="btn btn-primary ms-2 d-flex align-items-center px-3"><i class="fa-solid fa-filter me-2"></i>Lọc</button>
-
-                        </div>
-                        <div class="col-auto">
-                            <a href="" class="">
-                                <button class="btn btn-primary">
-                                    <i class="fa-solid fa-plus"></i>
-                                    Thêm mã
+    <div class="content">
+        <div class="customers">
+            <h4 class="my-4">Khách hàng</h4>
+            <div class="content-body">
+                <div class="row justify-content-between">
+                    <div class="col-auto d-flex gap-1 align-items-center">
+                        <div class="admin-search">
+                            <form action="/customers" method="get"
+                                  class="d-flex position-relative justify-content-center align-items-center"
+                                  role="search">
+                                {% csrf_token %}
+                                <input type="text" class="form-control shadow-none search-input" type="search"
+                                       name="keyword" value="{{ request.GET.keyword }}" placeholder="Search"/>
+                                <button class="search-btn" type="submit"
+                                        style="background-color: transparent;border: none;">
+                                    <i class="fa fa-search"></i>
                                 </button>
-                            </a>
+                            </form>
                         </div>
-                    </div>
-
-                    <div class="list mt-4">
-                        <div class="coupon-table">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Tên</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Số điện thoại</th>
-                                        <th scope="col">Ngày tham gia</th>
-                                        <th scope="col">Số đơn hàng</th>
-                                        <th scope="col">Tổng tiền hàng</th>
-                                        <th scope="col">Thành viên</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="order-item">
-                                        <td><a href="" class="color-blue">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
-                                                    <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
-                                                </div>
-                                            </a></td>
-                                        <td>
-                                            pqhuy2712@gmail.com
-                                        </td>
-                                        <td>
-                                            012345678
-                                        </td>
-                                        <td>12:23, 29/10/2023</td>
-                                        <td>10</td>
-                                        <td>1.432.500đ</td>
-                                        <td>
-                                            <span class="badge rounded-pill badge-success">
-                                                <span class="badge-lable ">VIP1</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr class="order-item">
-                                        <td><a href="" class="color-blue">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
-                                                    <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
-                                                </div>
-                                            </a></td>
-                                        <td>
-                                            pqhuy2712@gmail.com
-                                        </td>
-                                        <td>
-                                            012345678
-                                        </td>
-                                        <td>12:23, 29/10/2023</td>
-                                        <td>10</td>
-                                        <td>1.432.500đ</td>
-                                        <td>
-                                            <span class="badge rounded-pill badge-infor">
-                                                <span class="badge-lable ">VIP2</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr class="order-item">
-                                        <td><a href="" class="color-blue">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <img src="../assets/image/scene.jpeg" alt="" class="order-user-img" />
-                                                    <div class="order-user-name text-container ms-2 color-blue">Huy Phan</div>
-                                                </div>
-                                            </a></td>
-                                        <td>
-                                            pqhuy2712@gmail.com
-                                        </td>
-                                        <td>
-                                            012345678
-                                        </td>
-                                        <td>12:23, 29/10/2023</td>
-                                        <td>10</td>
-                                        <td>1.432.500đ</td>
-                                        <td>
-                                            <span class="badge rounded-pill badge-danger">
-                                                <span class="badge-lable ">VIP3</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="page-controller">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center mt-4">
-                                <li class="page-item disabled">
-                                    <a class="page-link pre-page" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link next-page" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                        <form action="/customers" method="post" id="filter-form">
+                            {% csrf_token %}
+                            <div style="display: flex; align-items: center;">
+                                <div class="d-flex align-items-center">
+                                    <label for="vip-customer" class="form-label m-0">Thành viên</label>
+                                    <select class="form-select m-0 ms-2" name="type_customer" id="vip-customer">
+                                        <option selected value="Tất cả">Tất cả</option>
+                                        <option value="VIP1">VIP1</option>
+                                        <option value="VIP2">VIP2</option>
+                                        <option value="VIP3">VIP3</option>
+                                        <option value="Thường">Thường</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary ms-2 d-flex align-items-center px-3" type="submit"><i
+                                        class="fa-solid fa-filter me-2"></i>Lọc
+                                </button>
+                                <input type="hidden" name="keyword" id="keyword-input"
+                                       value="{{ request.GET.keyword }}">
+                            </div>
+                        </form>
                     </div>
                 </div>
+
+                <div class="list mt-4" ,>
+                    <div class="coupon-table">
+                        <table class="table" id="customer-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Ngày tham gia</th>
+                                <th scope="col">Số đơn hàng</th>
+                                <th scope="col">Tổng tiền hàng</th>
+                                <th scope="col">Thành viên</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for customer in page_obj %}
+                                <tr class="order-item">
+                                    <td><a href="/view_profile/{{ customer.id }}" class="color-blue">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <img src="../assets/image/scene.jpeg" alt="" class="order-user-img"/>
+                                            <div class="order-user-name text-container ms-2 color-blue">{{ customer.name }}</div>
+                                        </div>
+                                    </a></td>
+                                    <td>
+                                        {{ customer.email }}
+                                    </td>
+                                    <td>
+                                        {{ customer.phone }}
+                                    </td>
+                                    <td>{{ customer.date_joined | date:"d/m/Y" }}</td>
+                                    <td>{{ customer.total_orders }}</td>
+                                    <td>{{ customer.total_amount | floatformat:0 }}đ</td>
+                                    <td>{{ customer.type_customer }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="page-controller">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mt-4">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link page-number"
+                                       href="?page=1&keyword={{ keyword }}&type_customer={{ type_customer }}"
+                                       data-url="?page=1&keyword={{ keyword }}&type_customer={{ type_customer }}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link page-number" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% for i in page_obj.paginator.page_range %}
+                                {% if i == page_obj.number %}
+                                    <li class="page-item active" aria-current="page"><a class="page-link page-number"
+                                                                                        href="#"
+                                                                                        data-url="?page={{ i }}&keyword={{ keyword }}&type_customer={{ type_customer }}">{{ i }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link page-number"
+                                                             href="?page={{ i }}&keyword={{ keyword }}&type_customer={{ type_customer }}"
+                                                             data-url="?page={{ i }}&keyword={{ keyword }}&type_customer={{ type_customer }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link page-number"
+                                       href="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&type_customer={{ type_customer }}"
+                                       data-url="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&type_customer={{ type_customer }}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link page-number" href="#" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+
+                <script>
+                    // Hàm để gửi yêu cầu AJAX và cập nhật bảng
+                    function updateTable(url) {
+                        // Lấy các giá trị lọc từ form
+                        var keyword = $("#filter-form input[name='keyword']").val();
+                        var type_customer = $("#filter-form input[name='type_customer']").val();
+                        // Thêm các giá trị lọc vào url
+                        url = url + "&keyword=" + keyword + "&type_customer=" + type_customer;
+                        $.ajax({
+                            url: url,
+                            type: "GET",
+                            success: function (data) {
+                                // Lấy nội dung HTML của bảng mới từ data
+                                var newTable = $(data).find("#customer-table").html();
+                                // Thay thế nội dung của bảng hiện tại bằng bảng mới
+                                $("#customer-table").html(newTable);
+                            }
+                        });
+                    }
+
+                    // Bắt sự kiện click vào các thẻ a của phân trang
+                    $(".pagination a").click(function (e) {
+                        // Ngăn chặn hành vi mặc định của thẻ a
+                        e.preventDefault();
+                        // Lấy đường dẫn đến trang tương ứng từ thuộc tính data-url
+                        var url = $(this).data("url");
+                        // Gọi hàm updateTable với url
+                        updateTable(url);
+                    });
+                </script>
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

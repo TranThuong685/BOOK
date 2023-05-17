@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
-from django.db.models import F, FloatField, ExpressionWrapper, Sum, Value, CharField
-from django.db.models.functions import Coalesce, Round
+from django.db.models import F, FloatField, ExpressionWrapper, Sum, Value, CharField, Count, Case, When
+from django.db.models.functions import Coalesce, Round, TruncMonth
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -19,6 +19,25 @@ from .forms import *
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.forms import formset_factory
+from django.db.models.functions import Coalesce
+from django.utils import timezone
+from datetime import date
+
+
+def convert_diff(diff):
+    days_in_month = 30
+    days_in_year = 365
+
+    if diff.days < days_in_month:
+        return f"{diff.days} ngày"
+
+    elif diff.days < days_in_year:
+        months = diff.days // days_in_month
+        return f"{months} tháng"
+
+    else:
+        years = diff.days // days_in_year
+        return f"{years} năm"
 
 
 def log_in(request):
@@ -31,7 +50,7 @@ def log_in(request):
         if user is not None:
             login(request, user)
             if user.is_superuser:
-                return redirect('/admin/orders')
+                return redirect('/admin_orders')
             return redirect('/home')
         else:
             return render(request, 'customer/login.html', {'error': 'Tên đăng nhập hoặc mật khẩu không đúng'})
@@ -59,11 +78,7 @@ def register(request):
                 user.set_password(password)
                 user.save()
                 message = 'Đăng ký tài khoản thành công'
-        print(message)
         return render(request, 'customer/login.html', {'messages': message})
-
-
-# def order_admin(request):
 
 
 def home(request):
@@ -110,7 +125,6 @@ def listProduct(request):
 
 @api_view(['GET'])
 def getListProduct(request):
-    
     category = request.GET.get('category')
     if category:
         category = [int(category) for category in category.split(',')]
@@ -140,10 +154,9 @@ def getListProduct(request):
         products = products.order_by('price')
     elif sort == 'price_desc':
         products = products.order_by('-price')
-    else :
+    else:
         products = products.order_by('-total_sold')
-    
-    
+
     if top_sale_products:
         now = timezone.now()
         products = (products
@@ -162,23 +175,24 @@ def getListProduct(request):
     if best_selling_product:
         now = timezone.now()
         products = (products.filter(
-                                orderitem__order__date__month=now.month,
-                                orderitem__order__date__year=now.year
-                            ).annotate(
-                                total_sold_month=Sum('orderitem__quantity')
-                            ).order_by('-total_sold_month')
-                            )
+            orderitem__order__date__month=now.month,
+            orderitem__order__date__year=now.year
+        ).annotate(
+            total_sold_month=Sum('orderitem__quantity')
+        ).order_by('-total_sold_month')
+                    )
 
     paginator = PageNumberPagination()
     paginator.page_query_param = 'page'
     paginator.page_size = 20
     result_page = paginator.paginate_queryset(products, request)
-    serializer = ProductSerializer(result_page, many=True,context={'request': request})
+    serializer = ProductSerializer(result_page, many=True, context={'request': request})
 
     respone = paginator.get_paginated_response(serializer.data)
     respone.data['current_page'] = paginator.page.number
     respone.data['total_page'] = paginator.page.paginator.num_pages
     return respone
+
 
 def getProductDetail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -214,8 +228,8 @@ def add_to_cart(request):
         context = {
             'cart': cart
         }
-        return render(request, 'customer/cart.html', context = context)
-    
+        return render(request, 'customer/cart.html', context=context)
+
     if request.method == 'POST':
         id = request.POST.get('product_id')
         product = get_object_or_404(Product, pk=id)
@@ -231,7 +245,7 @@ def add_to_cart(request):
         else:
             cart = Cart.objects.create(customer=request.user)
             request.session['cart_id'] = cart.cart_id
-        
+
         cart_item = CartItem.objects.filter(cart=cart, product=product, color=color, size=size).first()
         if cart_item:
             cart_item.quantity += quantity
@@ -240,6 +254,7 @@ def add_to_cart(request):
         cart_item.save()
 
         return Response('Thêm giỏ hàng thành công', status=status.HTTP_200_OK)
+
 
 def edit_cart_item(request):
     cart_item_id = request.POST.get('cart_item_id')
@@ -250,6 +265,7 @@ def edit_cart_item(request):
     if int(quantity) == 0:
         cart_item.delete()
     return JsonResponse({'success': 'Cập nhật thành công'})
+
 
 def delete_cart_item(request):
     cart_item_id = request.POST.get('cart_item_id')
@@ -264,20 +280,20 @@ def check_coupon(request):
     coupon = Coupon.objects.filter(code=coupon_code).first()
     if not coupon:
         return JsonResponse({'status': 'error', 'message': 'Mã giảm giá không hợp lệ'})
-    
+
     now = timezone.now()
     if now < coupon.start_date or now > coupon.end_date:
         return JsonResponse({'status': 'error', 'message': 'Mã giảm giá đã hết hạn'})
-    
+
     total_money = request.GET.get('total_money')
     total_money = float(total_money)
-    if total_money < coupon.condition:  
+    if total_money < coupon.condition:
         locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
         condition = locale.format_string('%dđ', int(coupon.condition), grouping=True).replace(',', '.')
-        return JsonResponse({'status': 'error', 'message': 'Chưa đủ điều kiện đơn hàng tối thiếu. Đơn hàng tối thiểu là ' + condition})
-    
-    return JsonResponse({'status': 'success', 'discount': coupon.discount})
+        return JsonResponse(
+            {'status': 'error', 'message': 'Chưa đủ điều kiện đơn hàng tối thiếu. Đơn hàng tối thiểu là ' + condition})
 
+    return JsonResponse({'status': 'success', 'discount': coupon.discount})
 
 
 def checkout(request):
@@ -296,7 +312,8 @@ def checkout(request):
         'discount': discount
     }
     return render(request, 'customer/checkout.html', context)
-    
+
+
 def address_shing(request):
     if request.method == 'POST':
         receiver = request.POST.get('receiver')
@@ -364,7 +381,7 @@ def get_order_detail(request, id):
     return render(request, 'order_detail.html', context)
 
 
-# @login_required(login_url='/login/')
+@login_required(login_url='/login')
 def addProduct(request):
     error = ''
     product_form = ProductForm(request.POST or None)
@@ -380,19 +397,18 @@ def addProduct(request):
         for i in range(len(colors)):
             product_detail = ProductDetail(color=colors[i], size=sizes[i], quantity=quantities[i], product=product)
             product_detail.save()
-        images = request.FILES.getlist('name')
-        for image in images:
-            product_image = ProductImage(name=image, product=product)
-            product_image.save()
+            images = request.FILES.getlist('name')
+            for image in images:
+                product_image = ProductImage(name=image, product=product)
+                product_image.save()
     else:
         error = 'Bạn cần nhập đầy đủ thông tin'
-        print(error)
     return render(request, 'admin/add-product.html',
                   {'product_form': product_form, 'product_sale_form': product_sale_form,
                    'product_image_form': product_image_form, 'error': error})
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def addCoupon(request):
     error = ''
     if request.method == "POST":
@@ -407,6 +423,7 @@ def addCoupon(request):
     return render(request, 'admin/add-coupon.html', {'coupon_form': coupon_form, 'error': error})
 
 
+@login_required(login_url='/login')
 def couponManager(request):
     keyword = request.GET.get('keyword', '')
     coupons = Coupon.objects.filter(code__contains=keyword)
@@ -414,27 +431,28 @@ def couponManager(request):
         start_date = request.POST.get('start_date', '')
         end_date = request.POST.get('end_date', '')
         if start_date == '' and end_date == '':
-            coupons = coupons.objects.all()
+            coupons = coupons.all()
         elif end_date == '':
-            coupons = coupons.objects.filter(start_date__gte=start_date)
+            coupons = coupons.filter(start_date__gte=start_date)
         elif start_date == '':
-            coupons = coupons.objects.filter(end_date__lte=end_date)
+            coupons = coupons.filter(end_date__lte=end_date)
         else:
-            coupons = coupons.objects.filter(Q(start_date__gte=start_date) & Q(end_date__lte=end_date))
+            coupons = coupons.filter(Q(start_date__gte=start_date) & Q(end_date__lte=end_date))
 
-    paginator = Paginator(coupons, 20)
+    paginator = Paginator(coupons, 15)
 
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
     return render(request, 'admin/coupons.html', {'page_obj': page_obj})
 
 
+@login_required(login_url='/login')
 def productManager(request):
     categories = Category.objects.all()
-    keyword = request.GET.get('keyword', '')
-    products = Product.objects.filter(name__contains=keyword).annotate(
-        total_quantity=Sum('productdetail__quantity'))
     if request.method == "POST":
+        keyword = request.POST.get('keyword', '')
+        products = Product.objects.filter(name__contains=keyword).annotate(
+            total_quantity=Sum('productdetail__quantity'))
         category = request.POST.get('category')
         status = request.POST.get('status')
         if category:
@@ -444,22 +462,155 @@ def productManager(request):
                 products = products.filter(total_quantity__gt=0)
             else:
                 products = products.filter(total_quantity=0)
-
-    paginator = Paginator(products, 20)
+    else:
+        keyword = request.GET.get('keyword', '')
+        products = Product.objects.filter(name__contains=keyword).annotate(
+            total_quantity=Sum('productdetail__quantity'))
+    paginator = Paginator(products, 15)
 
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
     return render(request, 'admin/products.html', {'page_obj': page_obj, 'categories': categories})
 
 
+@login_required(login_url='/login')
+def customerManager(request):
+    keyword = request.GET.get('keyword', '')
+    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=7).annotate(
+        total_orders=Count('order'),
+        total_amount=Coalesce(Sum('order__total'), Value(0.0)),
+        type_customer=Case(
+            When(total_amount__gte=20000000, then=Value('VIP3')),
+            When(total_amount__gte=10000000, then=Value('VIP2')),
+            When(total_amount__gte=5000000, then=Value('VIP1')),
+            default=Value('Thường')
+        )
+    )
+    if request.method == "POST":
+        type_customer = request.POST.get('type_customer', 'Tất cả')
+        if type_customer != 'Tất cả':
+            customers = customers.filter(type_customer=type_customer)
+
+    paginator = Paginator(customers, 15)
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'admin/customers.html', {'page_obj': page_obj})
+
+
+@login_required(login_url='/login')
+def orderManager(request):
+    states = OrderStatus.objects.all()
+    keyword = request.GET.get('keyword', '')
+    orders = Order.objects.filter(customer__name__contains=keyword).select_related('customer', 'status').order_by(
+        'order_id')
+    if request.method == "POST":
+        status = request.POST.get('status', '')
+        start_date = request.POST.get('start_date', '')
+        end_date = request.POST.get('end_date', '')
+        if status:
+            orders = orders.filter(status__name=status)
+        if start_date == '' and end_date == '':
+            orders = orders.all()
+        elif end_date == '':
+            orders = orders.filter(date__gte=start_date)
+        elif start_date == '':
+            orders = orders.filter(date__lte=end_date)
+        else:
+            orders = orders.filter(Q(date__gte=start_date) & Q(date__lte=end_date))
+
+    paginator = Paginator(orders, 15)
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'admin/orders.html', {'page_obj': page_obj, 'states': states})
+
+
+@login_required(login_url='/login')
+def getOrderDetail(request, order_id):
+    order = Order.objects.filter(order_id=order_id).select_related('customer', 'status').first()
+    total_price = order.total - order.discount + order.shipping
+    order_items = OrderItem.objects.filter(order_id=order_id).annotate(
+        curr_price=Case(When(product__productsale__start_date__lte=timezone.now(),
+                             product__productsale__end_date__gte=timezone.now(),
+                             then=F('product__productsale__price')), default=F('product__price')),
+        total=F('curr_price') * F('quantity'))
+    states = OrderStatus.objects.filter(order_status_id__gte=order.status_id).order_by("order_status_id")
+    if request.method == "POST":
+        status = request.POST.get('status')
+        status = OrderStatus.objects.get(order_status_id=status)
+        order.status = status
+        order.save()
+        tracking = Tracking(order=order, order_status=status)
+        tracking.save()
+    return render(request, 'admin/order-detail.html',
+                  {'order': order, 'order_items': order_items, 'states': states, 'total_price': total_price})
+
+
+@login_required(login_url='/login')
+def report(request):
+    if request.method == "POST":
+        columns = []
+        values = []
+        type_report = request.POST.get('type_report', 1)
+        start_date = request.POST.get('start_date', '')
+        end_date = request.POST.get('end_date', '')
+        if start_date == '':
+            start_date = timezone.datetime(2020, 1, 1)
+        if end_date == '':
+            end_date = timezone.datetime(2050, 12, 31)
+        if type_report == '1':
+            report = Order.objects.filter(date__gte=start_date, date__lte=end_date).annotate(
+                month=TruncMonth('date')).values('month').annotate(revenue=Sum('total')).values(
+                'month', 'revenue').order_by('month')
+            for record in report:
+                record['month'] = record['month'].strftime('%m %Y').split()
+                record['month'] = 'Tháng ' + record['month'][0] + ' năm ' + record['month'][1]
+                columns.append(record['month'])
+                values.append(int(record['revenue']))
+            report_name = 'Báo cáo doanh thu theo tháng'
+        elif type_report == '2':
+            report = Order.objects.filter(date__gte=start_date, date__lte=end_date, status_id=7).annotate(
+                month=TruncMonth('date')).values('month').annotate(order_total=Count('order_id')).values(
+                'month', 'order_total').order_by('month')
+            for record in report:
+                record['month'] = record['month'].strftime('%m %Y').split()
+                record['month'] = 'Tháng ' + record['month'][0] + ' năm ' + record['month'][1]
+                columns.append(record['month'])
+                values.append(record['order_total'])
+            report_name = 'Báo cáo đơn hàng'
+        else:
+            report = Order.objects.filter(date__gte=start_date, date__lte=end_date, status_id=7).select_related(
+                'customer').values('customer__name').annotate(total=Sum('total')).order_by('total')
+            for record in report:
+                columns.append(record['customer__name'])
+                values.append(record['total'])
+            report_name = 'Báo cáo khách hàng'
+        return render(request, 'admin/report.html', {'values': values, 'columns': columns, 'report_name': report_name})
+    else:
+        return render(request, 'admin/report.html')
+
+
+@login_required(login_url='/login')
 def deleteProduct(request, product_id):
     product = Product.objects.get(product_id=product_id)
     product.delete()
     products = Product.objects.all()
     categories = Category.objects.all()
 
-    paginator = Paginator(products, 20)
+    paginator = Paginator(products, 15)
 
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
-    return render(request, 'admin/products.html', {'page_obj': page_obj, 'categories': categories})
+    return redirect('/products', {'page_obj': page_obj, 'categories': categories})
+
+
+@login_required(login_url='/login')
+def viewProfile(request, user_id):
+    if request.user.is_superuser == 1:
+        user = User.objects.get(id=user_id)
+        diff = date.today() - user.date_joined.date()
+        time = convert_diff(diff)
+    else:
+        return redirect('/home')
+    return render(request, 'admin/profile.html', {'user': user, 'time': time})

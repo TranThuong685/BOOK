@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Quản lý mã giảm giá</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"/>
@@ -31,7 +31,7 @@
         <div class="header-main">
             <div class="row d-flex justify-content-between align-items-center px-5">
                 <div class="col-lg-auto col-4">
-                    <a href="#" class="navbar-brand">Logo Shop</a>
+                    <a href="/admin_orders" class="navbar-brand"><img src="app/media/images/Logo.png" width="100"></a>
                 </div>
                 <div class="col-lg-auto order-lg-last col-8">
                     <div class="d-flex float-end">
@@ -43,13 +43,10 @@
 
                         <div href="" class="header-nav-item header-user ms-4 d-flex">
                             <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
-                            <p class="">Huy Phan</p>
+                            <p class="">{{ request.user.name }}</p>
                             <div class="header-user__list-option d-flex flex-column">
-                                <a class="header-user__option" href="./profile.html">
+                                <a class="header-user__option" href="/view_profile/{{ request.user.id }}">
                                     <p>Tài khoản của tôi</p>
-                                </a>
-                                <a class="header-user__option" href="/logout">
-                                    <p>Đăng xuất</p>
                                 </a>
                             </div>
                         </div>
@@ -80,7 +77,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/orders" class="nav-link pe-5">
+                    <a href="/admin_orders" class="nav-link pe-5">
                         <span class="nav-content">Đơn hàng</span>
                     </a>
                 </li>
@@ -98,7 +95,7 @@
                 </li>
 
                 <li class="nav-item .active">
-                    <a href="" class="nav-link pe-5">
+                    <a href="report" class="nav-link pe-5">
                         <span class="nav-content">Thống kê</span>
                     </a>
                 </li>
@@ -106,7 +103,7 @@
 
             <div class="log-out">
                 <li class="nav-item">
-                    <a href="" class="nav-link pe-5">
+                    <a href="/logout" class="nav-link pe-5">
                             <span class="nav-content">
                                 Đăng xuất
                                 <i class="fa-solid fa-right-from-bracket ms-2"></i>
@@ -139,6 +136,7 @@
                             </form>
                         </div>
                         <form action="/coupons" method="post" class="d-flex">
+                            {% csrf_token %}
                             <div class="d-flex align-items-center gap-2">
                                 <label for="filter-start-date" class="form-label m-0">Từ</label>
                                 <input type="date" class="form-control" name="start_date" id="filter-start-date"
@@ -150,8 +148,8 @@
                                 <input type="date" class="form-control" name="end_date" id="filter-end-date"
                                        aria-describedby="helpId" placeholder="">
                             </div>
-                            <button class="btn btn-primary ms-2 d-flex align-items-center px-3" formmethod="get"
-                                    formaction="/coupons"><i class="fa-solid fa-filter me-2"></i>Lọc
+                            <button class="btn btn-primary ms-2 d-flex align-items-center px-3"
+                            ><i class="fa-solid fa-filter me-2"></i>Lọc
                             </button>
                         </form>
                     </div>
@@ -183,14 +181,14 @@
                                 <tr class="order-item">
                                     <td><a href="" class="color-blue">{{ coupon.code }}</a></td>
                                     <td>
-                                        {{ coupon.discount }}đ
+                                        {{ coupon.discount | floatformat:0 }}đ
                                     </td>
                                     <td>
-                                        {{ coupon.condition }}đ
+                                        {{ coupon.condition |floatformat:0 }}đ
                                     </td>
                                     <td>{{ coupon.quantity }}</td>
                                     <td>{{ coupon.start_date | date:"d/m/Y" }}</td>
-                                    <td>{{ coupon.end_date }}</td>
+                                    <td>{{ coupon.end_date | date:"d/m/Y" }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

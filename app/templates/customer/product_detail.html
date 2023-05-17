@@ -1,5 +1,5 @@
 {% extends 'customer/base.html' %}
-
+{% load static %}
 {% block content%}
 <!-- Content -->
 <div class="py-4">
@@ -116,6 +116,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% if request.user.is_superuser == 0 %}
                         <div class="buy d-flex gap-4 mt-4">
                             <button class="add-cart btn" data-action='add-cart'>
                                 <i class="fa-sharp fa-solid fa-cart-plus me-2"></i>
@@ -123,6 +124,7 @@
                             </button>
                             <button class="buy-now btn btn-primary" data-action='buy-now'>Mua ngay</button>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 

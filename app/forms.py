@@ -49,7 +49,7 @@ class ProductImageForm(forms.ModelForm):
         fields = ['name']
 
 
-# class OrderStatusForm(forms.ModelForm):
-#     class Meta:
-#         model = OrderStatus
-#         fields = ['name', 'description']
+class OrderStatusForm(forms.ModelForm):
+    class Meta:
+        model = OrderStatus
+        fields = ['name', 'description']

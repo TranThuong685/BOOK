@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your models here.
 class User(AbstractUser):
     name = models.CharField(max_length=100, blank=False, null=False)
-    # avatar = models.ImageField(upload_to='user/')
+    avatar = models.ImageField(default='user/default.jpg', upload_to='user/')
     dob = models.DateField(blank=False, null=True)
     gender = models.CharField(max_length=50, blank=False, null=False)
     phone = models.CharField(max_length=20, blank=False, null=False)
@@ -43,6 +43,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
+
 
 class ProductDetail(models.Model):
     detail_id = models.AutoField(primary_key=True, blank=False, null=False)
@@ -110,16 +111,25 @@ class AddressShipping(models.Model):
         return self.receiver
 
 
+class OrderStatus(models.Model):
+    order_status_id = models.AutoField(primary_key=True, blank=False, null=False)
+    name = models.CharField(max_length=100, blank=False, null=False)
+    description = models.CharField(max_length=255, blank=True, null=True)
+
+
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True, blank=False, null=False)
     date = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
     discount = models.FloatField(default=0, blank=False, null=False)
     shipping = models.FloatField(default=0, blank=False, null=False)
     total = models.FloatField(blank=False, null=False)
+    status = models.ForeignKey(OrderStatus, default=7, on_delete=models.CASCADE, blank=False, null=False)
     note = models.CharField(max_length=100, blank=True, null=False)
     payment_method = models.CharField(max_length=100, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
-    address_shipping = models.ForeignKey(AddressShipping, on_delete=models.CASCADE, blank=False, null=False)
+    receiver = models.CharField(max_length=100, blank=False, null=False)
+    phone = models.CharField(max_length=20, blank=False, null=False)
+    address = models.CharField(max_length=255, blank=False, null=False)
 
 
 class OrderItem(models.Model):
@@ -131,12 +141,6 @@ class OrderItem(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
-
-
-class OrderStatus(models.Model):
-    order_status_id = models.AutoField(primary_key=True, blank=False, null=False)
-    name = models.CharField(max_length=100, blank=False, null=False)
-    description = models.CharField(max_length=255, blank=False, null=False)
 
 
 class Tracking(models.Model):

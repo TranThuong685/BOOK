@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm mã giảm giá</title>
+    <title>Thông tin tài khoản</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"/>
@@ -31,21 +30,25 @@
         <div class="header-main">
             <div class="row d-flex justify-content-between align-items-center px-5">
                 <div class="col-lg-auto col-4">
-                    <a href="/admin_orders" class="navbar-brand"><img src="app/media/images/Logo.png" width="100"></a>
+                    <a href="/admin_orders" class="navbar-brand"><img src="app/media/images/Logo.png"width="100"></a>
                 </div>
                 <div class="col-lg-auto order-lg-last col-8">
                     <div class="d-flex float-end">
-                        <a href="" class="header-nav-item ms-4 position-relative">
-                            <i class="fa-solid fa-bell">
-                            </i>
+                        <a href="" class="header-nav-item ms-4 position-relative" data-toggle="dropdown">
+                            <i class="fa-solid fa-bell"></i>
                             <span class="badge bg-danger position-absolute">3</span>
                         </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">You have a new message</a>
+                            <a class="dropdown-item" href="#">You have a new friend request</a>
+                            <a class="dropdown-item" href="#">You have a new notification</a>
+                        </div>
 
                         <div href="" class="header-nav-item header-user ms-4 d-flex">
                             <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
                             <p class="">{{ request.user.name }}</p>
                             <div class="header-user__list-option d-flex flex-column">
-                                <a class="header-user__option" href="/view_profile/{{ request.id }}.html">
+                                <a class="header-user__option" href="/view_profile/{{ request.user.id }}">
                                     <p>Tài khoản của tôi</p>
                                 </a>
                             </div>
@@ -114,57 +117,34 @@
         </ul>
     </nav>
 
-    <div class="content">
-        <div class="add-coupon">
-            <h4 class="my-4">Tạo mã giảm giá</h4>
-            <div class="content-body">
-                <form action="/add_coupon" method="post">
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        <label for="coupon-code" class="form-label h6">Mã coupon</label>
-                        <input type="text" class="form-control" name="code" id="coupon-code" aria-describedby="helpId"
-                               placeholder="Tạo mã ...">
-                    </div>
-                    <div class="mb-4">
-                        <label for="coupon-discount" class="form-label h6">Giảm giá</label>
-                        <input type="number" class="form-control" name="discount" id="coupon-discount"
-                               aria-describedby="helpId" placeholder="0">
-                    </div>
-                    <div class="mb-4">
-                        <label for="coupon-condition" class="form-label h6">Điều kiện</label>
-                        <input type="number" class="form-control" name="condition" id="coupon-condition"
-                               aria-describedby="helpId" placeholder="0">
-                    </div>
-                    <div class="mb-4">
-                        <label for="coupon-quantity" class="form-label h6">Số lượng</label>
-                        <input type="number" class="form-control" name="quantity" id="coupon-quantity"
-                               aria-describedby="helpId" placeholder="0">
-                    </div>
+</div>
+<div class="list">
+    <div class="cart-table">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" style="width: 250px;">Ảnh đại diện</th>
+                <th scope="col">Thông tin tài khoản</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="cart-table-row align-items-center">
 
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="mb-4">
-                                <label for="coupon-start-date" class="form-label h6">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" name="start_date" id="coupon-start-date"
-                                       aria-describedby="helpId" placeholder="0">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-4">
-                                <label for="coupon-end-date" class="form-label h6">Ngày kết thúc</label>
-                                <input type="date" class="form-control" name="end_date" id="coupon-end-date"
-                                       aria-describedby="helpId" placeholder="0">
-                            </div>
-                        </div>
+                <td>
+                    <div class="col-4">
+                        <img class='user-image' src="{{ user.avatar.url }}" alt="{{ user.name }}" height="200">
                     </div>
-
-                    <div class="d-flex justify-content-end gap-3 mt-3">
-                        <button class="btn btn-min-width" formmethod="get">Hủy bỏ</button>
-                        <button class="btn btn-primary btn-min-width" formmethod="post">Thêm</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </td>
+                <td>
+                    <div class="name">Họ tên: {{ user.name }}</div>
+                    <div class="time">Tham gia: {{ time }} trước</div>
+                    <div class="dob">Ngày sinh: {{ user.dob }}</div>
+                    <div class="phone">Số điện thoại: {{ user.phone }}</div>
+                    <div class="email">Email: {{ user.email }}</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>
