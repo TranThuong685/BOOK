@@ -194,7 +194,6 @@
     padding: 18px 16px !important;
     border-radius: 8px;
     transition: 0.3s all;
-    opacity: 0.6;
 }
 
 .nav-link.active {

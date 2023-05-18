@@ -4,7 +4,11 @@
     <div class="py-4">
         <div class="container">
             <h2 class="mb-4">Mã giảm giá</h2>
-
+            {% if not coupons %}
+            <div class='alert alert-danger mt-3 d-flex justify-content-center'>
+                Chưa có đánh giá nào
+            </div>
+            {% else %}
             <div class="coupon-table min-height card px-5 py-3">
                 <table class="table">
                     <thead>
@@ -61,6 +65,8 @@
                     </nav>
                 </div>
             </div>
+                
+                {% endif %}
         </div>
     </div>
 

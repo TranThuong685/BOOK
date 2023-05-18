@@ -86,16 +86,7 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
-            
-            
-            
-            
-            
-            
-            
-            
-            
-    'use_unicode': True,
+            'use_unicode': True,
         }
     }
 }

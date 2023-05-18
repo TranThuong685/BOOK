@@ -69,13 +69,13 @@ class ProductSale(models.Model):
 
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True, blank=False, null=False)
-    comment = models.CharField(max_length=255, blank=True, null=False)
-    rating = models.IntegerField(blank=False, null=False)
-    date = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
-    like = models.IntegerField(default=0, blank=False, null=False)
-    dislike = models.IntegerField(default=0, blank=False, null=False)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
+    comment     = models.CharField(max_length=255, blank=True, null=False)
+    rating      = models.IntegerField(blank=False, null=False)
+    date        = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
+    like        = models.IntegerField(default=0, blank=False, null=False)
+    dislike     = models.IntegerField(default=0, blank=False, null=False)
+    customer    = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
+    product     = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
     
     def __str__(self):
         return f"{self.product} - {self.customer}"

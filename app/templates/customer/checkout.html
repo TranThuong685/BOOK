@@ -287,11 +287,14 @@
                             <textarea class="form-control" name="note" id="note" rows="5"></textarea>
                         </div>
                     </div>
-                    {% comment %} {% if order_form.errors %}
+
+                    <div class='message'>
+                    {% if order_form.errors %}
                     <div class="alert alert-danger">
                         {{ order_form.errors }}
                     </div>
-                    {% endif %} {% endcomment %}
+                    {% endif %}
+                    </div>
                     <div class="order btn btn-primary w-100 my-5 d-flex align-items-center justify-content-center" style="height: 40px;">Đặt hàng</div>
                 </form>
             </div>
@@ -402,7 +405,8 @@
                     console.log(response);
 
                     if (response.status == 'success') {
-                        $('.modal-address').modal('hide');
+                        $('#modal-add-address').modal('hide');
+                        $('#modal-address').modal('show');
                         var result = response.result;
                         $('.address-options').append(`
                             <div class="form-check mb-3">
@@ -493,12 +497,19 @@
         $('.order').click(function() {
 
             var form = $('.form-order');
+            var address = $('.address-infor .address').text()
+            var receiver = $('.address-infor .receiver').text()
+            var phone = $('.address-infor .phone').text()
 
-            $('input[name="receiver"]').val($('.address-infor .receiver').text());
+            if (address == '' || receiver == '' || phone == '') {
+                $('.message').html('<div class="alert alert-danger">Vui lòng chọn địa chỉ nhận hàng</div>');
+                return;
+            }
+            $('input[name="receiver"]').val(receiver);
 
-            $('input[name="address"]').val($('.address-infor .address').text());
+            $('input[name="address"]').val(address);
 
-            $('input[name="phone"]').val($('.address-infor .phone').text());
+            $('input[name="phone"]').val(phone);
 
             var discount = parseFloat($('.discount').text().replace('.', '').replace('đ', '')) || 0;
             $('input[name="discount"]').val(discount);

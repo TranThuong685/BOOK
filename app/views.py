@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from django.db.models import F, FloatField, ExpressionWrapper, Sum, Value, CharField, Case, When
 from django.db.models.functions import Coalesce, Round
-from django.db.models import F, FloatField, ExpressionWrapper, Sum, Value, CharField, Count, Case, When
+from django.db.models import F, FloatField,ExpressionWrapper, Sum, Value, CharField, Count, Case, When
 from django.db.models.functions import Coalesce, Round, TruncMonth
 from django.core.paginator import Paginator
 from django.http import JsonResponse
@@ -34,7 +34,7 @@ def convert_diff(diff):
     days_in_month = 30
     days_in_year = 365
     if diff.days < 1:
-        return f'{int(diff.total_seconds() // 3600) * -1} giờ'
+        return f'{abs(int(diff.total_seconds() // 3600))} giờ'
 
     if diff.days < days_in_month:
         return f"{diff.days} ngày"
@@ -100,10 +100,10 @@ def home(request):
                         default=F('price'),
                         output_field=FloatField()
                     ),
-                    discount_percent=ExpressionWrapper(
+                    discount_percent=Round(ExpressionWrapper(
                         Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
                         output_field=FloatField()
-                    ),
+                    ),0),
                 )
 
     top_selling_products = products.order_by('-total_sold')[:10]
@@ -166,10 +166,10 @@ def getListProduct(request):
             default=F('price'),
             output_field=FloatField()
         ),
-        discount_percent=ExpressionWrapper(
+        discount_percent=Round(ExpressionWrapper(
             Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
             output_field=FloatField()
-        ),
+        )),
         quantity=Sum('productdetail__quantity')
     )
     if search is not None and search != '':
@@ -195,12 +195,9 @@ def getListProduct(request):
         products = products.filter(rating__gte=rating)
 
 
-    
-    
     if top_sale_products:
-        now = timezone.now()
         products = products.order_by('-discount_percent')
-
+        
     if top_selling_products:
         products = products.order_by('-total_sold')
 
@@ -214,11 +211,10 @@ def getListProduct(request):
                             ).order_by('-total_sold_month')
                             )
     if sort == 'price_asc':
-        products = products.order_by('price')
+        products = products.order_by('curr_price')
     elif sort == 'price_desc':
-        products = products.order_by('-price')
-    else :
-        products = products.order_by('-total_sold')
+        products = products.order_by('-curr_price')
+
 
     paginator = PageNumberPagination()
     paginator.page_query_param = 'page'
@@ -241,10 +237,10 @@ def getProductDetail(request, product_id):
             default=F('price'),
             output_field=FloatField()
         ),
-        discount_percent=ExpressionWrapper(
+        discount_percent=Round(ExpressionWrapper(
             Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
             output_field=FloatField()
-        ),
+        )),
         quantity=Sum('productdetail__quantity')
     ).first()
 
@@ -266,10 +262,10 @@ def getProductDetail(request, product_id):
                             default=F('price'),
                             output_field=FloatField()
                             ),
-                            discount_percent=ExpressionWrapper(
+                            discount_percent=Round(ExpressionWrapper(
                                     Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
                                     output_field=FloatField()
-                            )
+                            ))
                         )
 
     context = {
@@ -298,8 +294,8 @@ def add_to_cart(request):
                 default=F('product__price'),
                 output_field=FloatField()
             ),
-            total_price=ExpressionWrapper(F('price') * F('quantity'), output_field=FloatField())
-        )
+            total_price=Round(ExpressionWrapper(F('price') * F('quantity'), output_field=FloatField())
+        ))
         context = {
             'cart': cart,
             'cartitems': cartitems
@@ -314,13 +310,9 @@ def add_to_cart(request):
         size = request.POST.get('size')
         quantity = request.POST.get('quantity')
         quantity = int(quantity)
-
-        if 'cart_id' in request.session:
-            cart_id = request.session['cart_id']
-            cart = Cart.objects.get(pk=cart_id)
-        else:
+        cart = Cart.objects.filter(customer=request.user).last()
+        if not cart:
             cart = Cart.objects.create(customer=request.user)
-            request.session['cart_id'] = cart.cart_id
 
         cart_item = CartItem.objects.filter(cart=cart, product=product, color=color, size=size).first()
         product_detail = ProductDetail.objects.filter(product=product, color=color, size=size).first()
@@ -418,10 +410,10 @@ def buy_now(request):
                 default=F('price'),
                 output_field=FloatField()
             ),
-            discount_percent=ExpressionWrapper(
+            discount_percent=Round(ExpressionWrapper(
                 Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
                 output_field=FloatField()
-            ),
+            ),0),
         ).first()
 
         color = request.POST.get('color')
@@ -477,7 +469,9 @@ def order(request):
         product_id = request.POST.get('product_id')
         size = request.POST.get('size')
         color = request.POST.get('color')
-        quantity = int(request.POST.get('quantity'))
+        quantity = request.POST.get('quantity')
+        if quantity:
+            quantity = int(request.POST.get('quantity'))
 
         if order_form.is_valid():
             order = order_form.save(commit=False)
@@ -675,9 +669,9 @@ def profile(request):
             day_last_order += ' trước'
         else :
             day_last_order = 'Chưa đặt hàng'
-        
-        total_order = Order.objects.filter(customer=user).count()
-        total_money = Order.objects.filter(customer=user, status__name='Giao hàng thành công').aggregate(total_money=Sum('total', default=0))['total_money']
+        order = Order.objects.filter(customer=user, status__name='Giao hàng thành công')
+        total_order = order.count()
+        total_money = order.aggregate(total_money=Sum('total', default=0))['total_money']
         context = {
             'user': user,
             'day_created': day_created,

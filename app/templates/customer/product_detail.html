@@ -68,8 +68,8 @@
                             {% if product.discount_percent == 0 %}
                             <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
                             {% else %}
-                            <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
                             <div class="text-decoration-line-through">{{product.price|floatformat:0|intcomma_dot}}đ</div>
+                            <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
                             <div class="sale-percent">
                                 {{product.discount_percent|floatformat:0}}% giảm
                             </div>

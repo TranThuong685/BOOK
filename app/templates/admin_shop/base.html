@@ -33,7 +33,7 @@
         <div class="header-main">
             <div class="row d-flex justify-content-between align-items-center px-5">
                 <div class="col-lg-auto col-4">
-                    <a href="/admin_orders" class="navbar-brand"><img src="app/media/images/Logo.png" width="40"></a>
+                    <a href="/admin_orders" class="navbar-brand"><img src="app/media/images/logo.jpg" width="40"></a>
                 </div>
                 <div class="col-lg-auto order-lg-last col-8">
                     <div class="d-flex float-end">
@@ -44,7 +44,7 @@
                         </a>
 
                         <div href="" class="header-nav-item header-user ms-4 d-flex">
-                            <img class="header-img-user" src="../assets/image/scene.jpeg" alt="">
+                            <img class="header-img-user" src="{{user.avatar.url}}" alt="">
                             <p class="">{{ request.user.name }}</p>
                             <div class="header-user__list-option d-flex flex-column">
                                 <a class="header-user__option" href="/view_profile/{{ request.user.id }}">

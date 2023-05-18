@@ -1,8 +1,8 @@
 {% extends 'customer/base.html' %}
-
+{% load my_filters %}
 {% block content %}
 <!-- Content -->
-<div class="py-5">
+<div class="py-4">
     <div class="container">
         <h2 class="mb-2">Trạng thái đơn hàng
             <span class="color-blue fw-normal">#{{ order.order_id }}</span>
@@ -130,11 +130,11 @@
                             </div>
                             <div class="row my-2">
                                 <div class="col-9">Voucher</div>
-                                <div class="col-3 d-flex flex-row-reverse color-red discount">{{order.discount|floatformat:0}} đ</div>
+                                <div class="col-3 d-flex flex-row-reverse color-red discount">{{order.discount|floatformat:0|intcomma_dot}} đ</div>
                             </div>
                             <div class="row my-2">
                                 <div class="col-9">Phí vận chuyển</div>
-                                <div class="col-3 d-flex flex-row-reverse ship-price">-{{order.shipping|floatformat:0}}</div>
+                                <div class="col-3 d-flex flex-row-reverse ship-price">-{{order.shipping|floatformat:0|intcomma_dot}}đ</div>
                             </div>
                         </div>
                         <div class="row my-2 fs-5">
@@ -149,10 +149,32 @@
                             <div  class='btn btn-secondary' style='width: 120px;'>Đã hủy đơn</div>
 
                             {% else %}
-                            <a href='/cancel-order?order_id={{order.order_id}}' class='btn btn-secondary' style='width: 120px;'>Hủy đơn</a>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#cancel-order" style='width: 120px;'>
+                                Hủy đơn
+                            </button>
                             {% endif %}
                         </div>
                         
+                        
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="cancel-order" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Xác nhận</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Bạn có muốn hủy đơn hàng không
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                                        <a href='/cancel-order?order_id={{order.order_id}}' class='btn btn-primary'>Hủy đơn</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

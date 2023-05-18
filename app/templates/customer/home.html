@@ -12,25 +12,25 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="app/media/banner/banner1.jpg" class="d-block w-100" alt="...">
+                <img src="app/media/banner/banner4.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h3>Sale off 50%</h3>
-                    <p>Some representative placeholder content for the first slide.</p>
+                    {% comment %} <h3>Sale off 50%</h3>
+                    <p>Some representative placeholder content for the first slide.</p> {% endcomment %}
                     {% comment %} <button class="carousel-btn btn btn-outline-primary">Buy now</button> {% endcomment %}
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="app/media/banner/banner2.jpg" class="d-block w-100" alt="...">
+                <img src="app/media/banner/banner5.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>Second slide label</h5>
-                    <p>Some representative placeholder content for the second slide.</p>
+                    {% comment %} <h5>Second slide label</h5>
+                    <p>Some representative placeholder content for the second slide.</p> {% endcomment %}
                 </div>
             </div>
             <div class="carousel-item">
                 <img src="app/media/banner/banner3.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>Third slide label</h5>
-                    <p>Some representative placeholder content for the third slide.</p>
+                    {% comment %} <h5>Third slide label</h5>
+                    <p>Some representative placeholder content for the third slide.</p> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
         <div class="products-slider mt-5 p-3">
             <div class="d-flex justify-content-between">
                 <h4>Sản phẩm bán chạy</h4>
-                <a href="" class="product-more">
+                <a href="/list-product" class="product-more">
                     Xem thêm
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
@@ -109,7 +109,7 @@
         <div class="products-slider mt-5 p-3">
             <div class="d-flex justify-content-between">
                 <h4>Sản phẩm đang hot</h4>
-                <a href="" class="product-more">
+                <a href="/list-product" class="product-more">
                     Xem thêm
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
@@ -168,7 +168,7 @@
         <div class="products-slider my-5 p-3">
             <div class="d-flex justify-content-between">
                 <h4>Sản phẩm đang sale</h4>
-                <a href="" class="product-more">
+                <a href="/list-product" class="product-more">
                     Xem thêm
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
@@ -185,7 +185,7 @@
                                     <div class="product-image">
                                         <img src="{{product.productimage_set.first.name.url}}" alt="" class="product-img">
                                         {% if product.discount_percent > 0 %}
-                                        <div class="product-sale-percentage">{{ product.discount_percent}}%</div>
+                                        <div class="product-sale-percentage">{{ product.discount_percent|floatformat:0}}%</div>
                                         {% endif %}
                                     </div>
                                     <div class="product-name">{{product.name}}</div>
@@ -223,20 +223,31 @@
                 </div>
             </div>
         </div>
-        {% if not user.is_authenticated %}
+        
 
         <div class="welcome row align-items-center justify-content-center">
             <div class="col-auto">
                 <img class="welcome-image" src="app/media/banner/banner4.png" alt="">
             </div>
+            {% if not user.is_authenticated %}
             <div class="col-auto">
                 <h1 class="welcome-title">Chào mừng bạn đến với <span class="welcome-title-bold">Shop</span></h1>
                 <p class="welcome-description">Mua sắm trực tuyến hàng đầu Việt Nam</p>
                 <h2 class="welcome-description">Đăng kí <span>thành viên</span> ngay hôm nay</h2>
                 <a href="" class="btn btn-outline-primary">Đăng kí <i class="fa-solid fa-angle-right ms-2"></i></a>
             </div>
+            {% else %}
+            <div class="col-auto">
+                <h1 class="welcome-title">Chào mừng bạn đến với <span class="welcome-title-bold">Shop</span></h1>
+                <p class="welcome-description">Mua sắm trực tuyến hàng đầu Việt Nam</p>
+                <h2 class="welcome-description">Khám phá các sản phẩm hot nhất</h2>
+                <a href="/list-product" class="btn btn-primary">Khám phá ngay <i class="fa-solid fa-angle-right ms-2"></i></a>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
+
+
+
     </div>
 
     <script>
