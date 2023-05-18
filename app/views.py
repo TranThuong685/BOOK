@@ -22,6 +22,7 @@ from django.forms import formset_factory
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 from datetime import date
+import os
 
 
 def convert_diff(diff):
@@ -594,6 +595,9 @@ def report(request):
 @login_required(login_url='/login')
 def deleteProduct(request, product_id):
     product = Product.objects.get(product_id=product_id)
+    images = ProductImage.objects.filter(product=product).values('name')
+    for image in images:
+        os.remove(f"app/media/{image['name']}")
     product.delete()
     products = Product.objects.all()
     categories = Category.objects.all()
