@@ -197,7 +197,7 @@ def getListProduct(request):
 
     if top_sale_products:
         products = products.order_by('-discount_percent')
-        
+
     if top_selling_products:
         products = products.order_by('-total_sold')
 
@@ -322,8 +322,8 @@ def add_to_cart(request):
         else:
             cart_item = CartItem.objects.create(cart=cart, product=product, color=color, size=size, quantity=quantity)
         cart_item.save()
-
-        return JsonResponse({'status': 'success', 'message': 'Thêm vào giỏ hàng thành công'})
+        num_cart_item = cart.cartitem_set.count()
+        return JsonResponse({'status': 'success', 'message': 'Thêm vào giỏ hàng thành công', 'num_cart_item': num_cart_item})
 
 
 def edit_cart_item(request):
@@ -657,36 +657,34 @@ def getCoupon(request):
     return render(request, 'customer/list-coupon.html', context)
 
 def profile(request):
-    if request.method == 'GET':
-        user = request.user
-        created_at = user.date_joined
-        day_created = timezone.now() - created_at
-        day_created = convert_diff(day_created) + ' trước'
-        last_order =  Order.objects.filter(customer=user).last()
-        if last_order:
-            day_last_order = timezone.now() - last_order.date
-            day_last_order = convert_diff(day_last_order)
-            day_last_order += ' trước'
-        else :
-            day_last_order = 'Chưa đặt hàng'
-        order = Order.objects.filter(customer=user, status__name='Giao hàng thành công')
-        total_order = order.count()
-        total_money = order.aggregate(total_money=Sum('total', default=0))['total_money']
-        context = {
-            'user': user,
-            'day_created': day_created,
-            'day_last_order': day_last_order,
-            'total_order': total_order,
-            'total_money': total_money
-        }
-        return render(request, 'customer/profile.html', context)
-    else:
-        form = UserForm(request.POST, instance=request.user)
-        if not form.is_valid():
-            return JsonResponse({'status': 'error', 'message': 'Thông tin không hợp lệ'})
-        user = form.save()
-        return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công'})
+    user = request.user
+    created_at = user.date_joined
+    day_created = timezone.now() - created_at
+    day_created = convert_diff(day_created) + ' trước'
+    last_order =  Order.objects.filter(customer=user).last()
+    if last_order:
+        day_last_order = timezone.now() - last_order.date
+        day_last_order = convert_diff(day_last_order)
+        day_last_order += ' trước'
+    else :
+        day_last_order = 'Chưa đặt hàng'
+    order = Order.objects.filter(customer=user, status__name='Giao hàng thành công')
+    total_order = order.count()
+    total_money = order.aggregate(total_money=Sum('total', default=0))['total_money']
+    context = {
+        'user': user,
+        'day_created': day_created,
+        'day_last_order': day_last_order,
+        'total_order': total_order,
+        'total_money': total_money
+    }
     
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save()
+        context['form'] = form
+    return render(request, 'customer/profile.html', context)
 
 def notification(request):
     return render(request, 'customer/notification.html')    
@@ -782,11 +780,37 @@ def productManager(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'admin_shop/products.html', {'page_obj': page_obj, 'categories': categories})
 
+@login_required(login_url='/login')
+def getProductDetailAdmin(request, product_id):
+    product = Product.objects.filter(pk=product_id).annotate(
+        curr_price=Case(
+            When(productsale__start_date__lte=timezone.now(),
+                    productsale__end_date__gte=timezone.now(),
+                    then=F('productsale__price')),
+            default=F('price'),
+            output_field=FloatField()
+        ),
+    ).first()
+
+    feedback = Feedback.objects.filter(product=product).order_by('-date')
+    feedback_paginator = Paginator(feedback, 5)
+    feedback_page = request.GET.get('page')
+    page_obj = feedback_paginator.get_page(feedback_page)
+    feedbacks = page_obj.object_list
+    context = {
+        'product': product,
+        'feedbacks': feedbacks,
+        'page_obj': page_obj 
+    }
+    return render(request, 'admin_shop/product-detail.html', context)
+
+    
+
 
 @login_required(login_url='/login')
 def customerManager(request):
     keyword = request.GET.get('keyword', '')
-    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=7).annotate(
+    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=6).annotate(
         total_orders=Count('order'),
         total_amount=Coalesce(Sum('order__total'), Value(0.0)),
         type_customer=Case(

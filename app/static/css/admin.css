@@ -1,5 +1,6 @@
 .header-main {
     padding: 16px 0;
+    height: 75px;
     background-color: var(--dark);
     border-bottom: 1px solid #31374a;
     position: fixed;
@@ -15,6 +16,10 @@
     color: #fff;
 }
 
+.fa-star,
+.fa-star-half-stroke {
+    color: var(--red);
+}
 /* .header-nav-item {
   font-size: 20px;
 } */
@@ -24,7 +29,7 @@
 
 /* Search */
 .search-input {
-    height: 34px;
+    height: 40px;
     border-radius: 20px;
     padding-left: 24px;
     color: #afadad;
@@ -84,7 +89,7 @@
 }
 
 .header-nav-item p {
-    font-size: 14px;
+    font-size: 16px;
     margin: 0 8px !important;
 }
 
@@ -128,7 +133,7 @@
     background-color: white;
     top: calc(100% + 8px);
     right: 0;
-    width: 144px;
+    width: 160px;
     margin-top: 8px;
     /* border: 1px solid #ccc; */
     box-shadow: 4px 4px 4px rgb(0, 0, 0, 0.2);
@@ -178,7 +183,7 @@
 
 .navbar-vertical {
     width: 250px;
-    top: 67px;
+    top: 75px;
     position: fixed;
 }
 
@@ -227,7 +232,6 @@
     width: 100px;
 }
 
-
 .filter-list,
 .filter-list:hover {
     border: 1px solid var(--border);
@@ -242,7 +246,8 @@
     background-color: white;
 }
 
-.filter-list.show, .filter-list.btn:active {
+.filter-list.show,
+.filter-list.btn:active {
     background-color: white;
 }
 
@@ -305,7 +310,6 @@
     background-color: transparent;
 }
 
-
 .orders-table {
     padding: 16px;
     background-color: #fff;
@@ -347,7 +351,6 @@
     border-color: #96d9ff;
 }
 
-
 /* Add Product */
 .content-body {
     background-color: white;
@@ -355,7 +358,8 @@
     border-radius: 8px;
 }
 
-.add-variant, .add-category {
+.add-variant,
+.add-category {
     cursor: pointer;
 }
 
@@ -414,7 +418,6 @@
     object-fit: cover;
 }
 
-
 /* Order detail */
 
 .order-detail select {
@@ -460,7 +463,6 @@
     object-fit: cover;
 }
 
-
 /* Report */
 
 .chart {
@@ -473,3 +475,40 @@
     height: 500px;
 }
 
+
+.text {
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.show-text {
+    max-height: none;
+}
+
+.product-detail-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.user-image-rate {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.image-feedback-item {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.image-feedback-item img {
+    width: 100%;
+    height: 100%;
+}
+
+.customers table tr td:first-child {
+    text-align: left;
+}

@@ -119,6 +119,13 @@ a {
     min-width: 140px;
 }
 
+.btn-secondary:hover {
+    outline: none !important;
+    color: #fff;
+    box-shadow: none;
+    border-color: #fff !important;
+}
+
 th,
 td {
     text-align: center;

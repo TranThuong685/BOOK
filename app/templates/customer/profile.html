@@ -1,5 +1,5 @@
 {% extends 'customer/base.html' %}
-{% load humanize %} 
+{% load my_filters   %} 
 {% block content %}
     <div class="py-5">
         <div class="container">
@@ -121,7 +121,7 @@
                             </div>
                             <div class="row my-3">
                                 <div class="col-6">Tổng số tiền</div>
-                                <div class="col-6 text-end">{{total_money|floatformat:0|intcomma}}đ</div>
+                                <div class="col-6 text-end">{{total_money|floatformat:0|intcomma_dot}}đ</div>
                             </div>
                         </div>
                     </div>

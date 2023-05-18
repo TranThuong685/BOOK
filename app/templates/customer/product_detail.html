@@ -651,6 +651,7 @@
                     if(response.status == 'success'){
                         $('.message').addClass('color-green')
                         $('.message').removeClass('color-red')
+                        $('.cart').text(response.num_cart_item)
                     }
                     else {
                         $('.message').removeClass('color-green')

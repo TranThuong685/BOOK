@@ -30,7 +30,7 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="{{ category.category_id }}" id="category-{{ category.category_id }}" name='category'>
                                 <label class="form-check-label" for="category-{{ category.category_id }}">
-                                    {{ category.name }}
+                                    {{ category.name|title }}
                                 </label>
                             </div>
                             {% endfor %}

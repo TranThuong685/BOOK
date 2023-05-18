@@ -118,7 +118,7 @@
                             <tr class="order-table-row">
                                 <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
                                 <td>
-                                    <a href="/product/{{ order_item.product.product_id }}">
+                                    <a href="/product-detail/{{ order_item.product.product_id }}">
                                         <div class="d-flex align-items-center">
                                             <img src="{{order_item.product.productimage_set.first.name.url}}" alt="" class="order-product-img" style="width: 64px;" />
                                             <div class="order-product-name text-container ms-3">{{ order_item.product.name }}</div>

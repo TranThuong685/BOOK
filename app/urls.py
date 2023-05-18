@@ -38,6 +38,8 @@ urlpatterns = [
     path('add_coupon', views.addCoupon, name='add_coupon'),
     path('add_product', views.addProduct, name='add_product'),
     path('products', views.productManager, name='products'),
+    path('product-detail/<int:product_id>', views.getProductDetailAdmin, name='product_detail_admin'),
+
     path('delete_product/<int:product_id>', views.deleteProduct, name='delete_product'),
     path('order/<int:order_id>', views.getOrderDetail, name='order_detail'),
     path('report', views.report, name='report'),
