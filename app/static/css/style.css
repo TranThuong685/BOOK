@@ -411,6 +411,9 @@ a {
     transform-origin: left;
 }
 
+.content {
+    min-height: 500px;
+}
 /* Carousel */
 .slider {
 }
@@ -1192,12 +1195,6 @@ table tr td:first-child {
 .rating i:hover {
     cursor: pointer;
 }
-.list-table {
-    min-height: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
 
 
 /* order success */
@@ -1206,4 +1203,11 @@ table tr td:first-child {
     width: 200px;
     padding: 8px;
     font-size: 18px;
+}
+
+.min-height {
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

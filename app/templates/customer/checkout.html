@@ -13,8 +13,11 @@
                     {% for item in cart_items %}
                     <input type="hidden" name="cart_item" value="{{item.cart_item_id}}" />
                     {% endfor %}
-
-
+                    <input type="hidden" name="product_id" value="{{product.product_id}}" />
+                    <input type="hidden" name="quantity" value="{{quantity}}" />
+                    <input type="hidden" name="size" value="{{size}}" />
+                    <input type="hidden" name="color" value="{{color}}" />
+                    
                     <div class="d-flex align-items-center gap-3">
                         <i class="fa-solid fa-location-dot color-blue"></i>
                         <p class="m-0 fs-5">Địa chỉ nhận hàng</p>
@@ -297,6 +300,7 @@
                     <div class="card-body">
                         <h5>Đơn hàng</h5>
                         <div class="list-order-item mt-3">
+                            {% if cart_items %}
                             {% for item in cart_items %}
                             <div class="order-item row d-flex align-items-center my-2">
                                 <div class="col-6">
@@ -306,9 +310,23 @@
                                     </div>
                                 </div>
                                 <div class="col-2 d-flex justify-content-center quantity">x {{item.quantity}}</div>
-                                <div class="col-4 d-flex flex-row-reverse price-item">{{item.product.price|floatformat:0}}</div>
+                                <div class="col-4 d-flex flex-row-reverse price-item">{{item.price|floatformat:0}}</div>
                             </div>
                             {% endfor %}
+
+                            {% else %}
+                            <div class="order-item row d-flex align-items-center my-2">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{product.productimage_set.first.name.url}}" alt="" style="width: 40px;height: 40px;">
+                                        <div class="order-item-name text-container ms-2">{{product.name}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-2 d-flex justify-content-center quantity">x {{quantity}}</div>
+                                <div class="col-4 d-flex flex-row-reverse price-item">{{product.curr_price|floatformat:0}}</div>
+                            </div>
+                            {% endif %}
+                            
                         </div>
 
                         <div class="order-infor-money">

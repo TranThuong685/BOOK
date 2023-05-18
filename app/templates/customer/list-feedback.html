@@ -4,8 +4,12 @@
 <div class="py-4">
     <div class="container">
         <h2 class="mb-4">Danh sách đánh giá</h2>
-
-        <div class="feedback-table list-table card px-5 py-3 ">
+        {% if not feedbacks %}
+        <div class='alert alert-danger mt-3 d-flex justify-content-center'>
+            Chưa có đánh giá nào
+        </div>
+        {% else %}
+        <div class="feedback-table min-height card px-5 py-3 ">
             <table class="table">
                 <thead>
                     <tr>
@@ -46,7 +50,7 @@
                             </a>
                         </td>
                     </tr>
-                    
+
                     {% endfor %}
                 </tbody>
             </table>
@@ -82,24 +86,39 @@
                 </nav>
             </div>
         </div>
+        {% endif %}
+
+
     </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        {% for feedback in feedbacks %}
-        var rating = {{feedback.rating}};
-        var feedback_id = {{feedback.feedback_id}};
+        {
+            %
+            for feedback in feedbacks %
+        }
+        var rating = {
+            {
+                feedback.rating
+            }
+        };
+        var feedback_id = {
+            {
+                feedback.feedback_id
+            }
+        };
         var rating_html = '';
-        for(var i = 1; i<= 5; i++) {
-            if(i <= rating) {
+        for (var i = 1; i <= 5; i++) {
+            if (i <= rating) {
                 rating_html += '<i class="fa-solid fa-star"></i>';
             } else {
                 rating_html += '<i class="fa-regular fa-star"></i>';
             }
         }
-        $('.rating-'+feedback_id).html(rating_html);
-        {% endfor %}
+        $('.rating-' + feedback_id).html(rating_html); {
+            % endfor %
+        }
     })
 </script>
 {% endblock content %}

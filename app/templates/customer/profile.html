@@ -11,7 +11,7 @@
                                 <img src=".{{user.avatar.url}}" alt="" class="profile-image">
                                 <div class="d-flex flex-column ms-4">
                                     <h3>{{user.name}}</h3>
-                                    <p>Tham gia từ 3 tháng trước</p>
+                                    <p>Tham gia từ {{day_created}}</p>
                                     <div class="d-flex gap-2">
                                         <a href=""><i class="fa-brands fa-facebook"></i></a>
                                         <a href=""><i class="fa-brands fa-instagram"></i></a>
@@ -85,23 +85,23 @@
                                 </div>
                                 <div class="row mt-4 mb-2">
                                     <div class="col-4">Tên</div>
-                                    <div class="col-4">{{user.name}}</div>
+                                    <div class="col-4">{{user.name|default:"Chưa điền thông tin"}}</div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-4">Ngày sinh</div>
-                                    <div class="col-4">{{user.dob|date:'d/m/Y'}}</div>
+                                    <div class="col-4">{{user.dob|date:'d/m/Y'|default:"Chưa điền thông tin"}}</div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-4">Giới tính</div>
-                                    <div class="col-4">{{user.gender}}</div>
+                                    <div class="col-4">{{user.gender|default:"Chưa điền thông tin"}}</div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-4">Số điện thoại</div>
-                                    <div class="col-4">{{user.phone}}</div>
+                                    <div class="col-4">{{user.phone|default:"Chưa điền thông tin"}}</div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-4">Email</div>
-                                    <div class="col-4">{{user.email}}</div>
+                                    <div class="col-4">{{user.email|default:"Chưa điền thông tin"}}</div>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                             <h4>Thông tin mua hàng</h4>
                             <div class="row my-3">
                                 <div class="col-6">Đơn hàng gần nhất</div>
-                                <div class="col-6 text-end">{{day_last_order}} ngày trước</div>
+                                <div class="col-6 text-end">{{day_last_order}}</div>
                             </div>
                             <div class="row my-3">
                                 <div class="col-6">Tổng số đơn</div>

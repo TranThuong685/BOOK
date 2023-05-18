@@ -1,5 +1,7 @@
 {% extends 'customer/base.html' %}
 {% load my_filters %}
+{% load static %}
+
 {% block content%}
 <!-- Content -->
 <div class="py-4">
@@ -48,11 +50,13 @@
                         <div class="d-flex">
                             <div class='d-flex gap-2'>
                                 <div class='rating'>
+                                    {% for i in 5|times %}
+                                    {% if i <= product.rating %}
                                     <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
+                                    {% else %}
+                                    <i class="fa-regular fa-star"></i>
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
                                 {{ product.rating}}
                             </div>
@@ -119,16 +123,26 @@
                                 </div>
                             </div>
                         </div>
+                        {% if request.user.is_superuser == 0 %}
+                        
                         <div class="buy d-flex gap-4 mt-4">
                             <button class="add-cart btn" data-action='add-cart'>
                                 <i class="fa-sharp fa-solid fa-cart-plus me-2"></i>
                                 Thêm vào giỏ hàng
                             </button>
                             <button class="buy-now btn btn-primary" data-action='buy-now'>Mua ngay</button>
+                            <form action='/buynow' method='post'>
+                                {% csrf_token %}
+                                <input type="hidden" name='product_id' value='{{ product.product_id }}'>
+                                <input type="hidden" name='color' value=''>
+                                <input type="hidden" name='size' value=''>
+                                <input type="hidden" name='quantity' value=''>
+                            </form>
                         </div>
                         <div class='message'>
 
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -160,11 +174,13 @@
                                 <span class="fs-5">/5</span>
                             </h2>
                             <div class="rating">
+                                {% for i in 5|times %}
+                                {% if i <= product.rating %}
                                 <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star-half-stroke"></i>
+                                {% else %}
+                                <i class="fa-regular fa-star"></i>
+                                {% endif %}
+                                {% endfor %}
                             </div>
                             <div>{{num_feedbacks}} đánh giá</div>
                         </div>
@@ -595,7 +611,7 @@
 
 
         // Add to cart
-        $('.add-cart, .buy-now').click(function() {
+        $('.add-cart').click(function() {
         // Lấy giá trị của màu sắc và kích cỡ
             var color = $('.color-option button.active').data('color');
             var size = $('.size-option button.active').data('size');
@@ -606,6 +622,11 @@
                 alert('Vui lòng chọn màu sắc và kích cỡ!');
                 return false;
             }
+
+            {% if not user.is_authenticated %}
+                window.location.href = '/login';
+                return false;
+            {% endif %}
             console.log(color, size, quantity);
             var url = '';
             var action = $(this).data('action');
@@ -636,12 +657,36 @@
                         $('.message').addClass('color-red')
                     }
                     $('.message').html(response.message)
+                    console.log(response);
                 },
                 error: function(error) {
                     console.log(error);
                 }
             })
         });
+
+        $('.buy-now').click(function() {
+            var color = $('.color-option button.active').data('color');
+            var size = $('.size-option button.active').data('size');
+            var quantity = parseInt(inputQuantity.val());
+            // Kiểm tra xem màu sắc và kích cỡ đã được chọn hay chưa
+            if (color == undefined || size == undefined) {
+            // Hiển thị thông báo cho người dùng
+            alert('Vui lòng chọn màu sắc và kích cỡ!');
+            return false;
+            }
+
+            {% if not user.is_authenticated %}
+            window.location.href = '/login';
+            return false;
+            {% endif %}
+            
+            var form = $('form')
+            form.find("input[name='color']").val(color);
+            form.find("input[name='size']").val(size);
+            form.find("input[name='quantity']").val(quantity);
+            form.submit();
+        })
 
         $('.btn-like').click(function() {
             console.log(1);
@@ -667,6 +712,15 @@
                     if(feedbacks.length != 0) {
                         let html = '';
                         feedbacks.forEach(function(feedback) {
+                            let rating = feedback.rating;
+                            let ratingHtml = '';
+                            for (let i = 1; i <= 5; i++) {
+                                if (i <= rating) {
+                                    ratingHtml += '<i class="fa-solid fa-star"></i>';
+                                } else {
+                                    ratingHtml += '<i class="fa-regular fa-star"></i>';
+                                }
+                            }
                             html += `
                             <div class="product-rating__item">
                                 <div class="d-flex mt-4">
@@ -675,11 +729,7 @@
                                         <div class="">${feedback.user_name}</div>
                                         <div class="color-gray">${feedback.date}</div>
                                         <div class="mt-1">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
+                                            ${ratingHtml}
                                         </div>
                                         <div class=" image-feedback-list d-flex mt-3">
                             `;

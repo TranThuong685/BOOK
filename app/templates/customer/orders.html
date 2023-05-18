@@ -1,14 +1,17 @@
 {% extends 'customer/base.html' %}
-
+{% load my_filters %}
 {% block content %}
 <!-- Content -->
-<div class="py-5">
+<div class="py-4">
     <div class="container">
         <h2 class="mb-2">Đơn hàng của bạn
         </h2>
-
-        <hr class="mb-5">
-        <div class="orders-table">
+        {% if not orders %}
+        <div class='alert alert-danger mt-3 d-flex justify-content-center mt-4'>
+            Chưa có đơn hàng nào
+        </div>
+        {% else %}
+        <div class="orders-table min-height mt-4">
             <table class="table">
                 <thead>
                     <tr>
@@ -31,45 +34,50 @@
                         </td>
                         <td>{{order.payment_method}}</td>
                         <td>{{order.date|date:"h:i, d/m/Y"}}</td>
-                        <td>{{order.total}}đ</td>
+                        <td>{{order.total|floatformat:0|intcomma_dot}}đ</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="page-controller">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %} ">
+                            <a class="page-link pre-page" href="/get-order?page=1" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% if page_obj.has_previous %}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link" href="/get-order?page={{page_obj.previous_page_number}}">{{page_obj.previous_page_number}}</a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{page_obj.number}}</a>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link" href="/get-order?page={{page_obj.next_page_number}}">{{page_obj.next_page_number}}</a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link next-page {% if page_obj.number == 1 %}disabled{% endif %}" href="/get-order?page={{page_obj.paginator.num_pages}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
+        
+        {% endif %}
+
+
     </div>
 </div>
 
-<div class="page-controller">
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %} ">
-                <a class="page-link pre-page" href="/get-order?page=1" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            {% if page_obj.has_previous %}
-            <li class="page-item" aria-current="page">
-                <a class="page-link" href="/get-order?page={{page_obj.previous_page_number}}">{{page_obj.previous_page_number}}</a>
-            </li>
-            {% endif %}
-            <li class="page-item active">
-                <a class="page-link" href="#">{{page_obj.number}}</a>
-            </li>
 
-            {% if page_obj.has_next %}
-            <li class="page-item" aria-current="page">
-                <a class="page-link" href="/get-order?page={{page_obj.next_page_number}}">{{page_obj.next_page_number}}</a>
-            </li>
-            {% endif %}
-            <li class="page-item">
-                <a class="page-link next-page {% if page_obj.number == 1 %}disabled{% endif %}" href="/get-order?page={{page_obj.paginator.num_pages}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
 
 <script>
     $(document).ready(function() {

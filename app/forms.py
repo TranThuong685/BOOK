@@ -69,7 +69,7 @@ class OrderForm(forms.ModelForm):
         model = Order
         exclude = ['date', 'customer', 'status']
 
-# class OrderStatusForm(forms.ModelForm):
-#     class Meta:
-#         model = OrderStatus
-#         fields = ['name', 'description']
+class OrderStatusForm(forms.ModelForm):
+    class Meta:
+        model = OrderStatus
+        fields = ['name', 'description']
