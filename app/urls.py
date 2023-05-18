@@ -12,9 +12,22 @@ urlpatterns = [
     path('delete-cart-item', views.delete_cart_item, name='delete-cart-item'),
     path('check-coupon', views.check_coupon, name='check-coupon'),
     path('checkout', views.checkout, name='check-out'),
+    path('get-order', views.get_order, name='get_order'),
+    path('order-detail/<int:order_id>', views.get_order_detail, name='order-detail'),
+    path('cancel-order', views.cancel_order, name='cancel-order'),
     # API
     path('filter-product', views.getListProduct, name='list-product'),
+    path('add-address', views.add_address, name='add-address'),
     path('register', views.register, name='register'),
+    path('order', views.order, name='order'),
+
+    path('feedback', views.handleFeedback, name='feedback'),
+    path('list-feedback', views.getFeedback, name='list-feedback'),
+    path('get-feedback', views.getFeedbackByProduct, name='get-feedback'),
+
+    path('list-coupon', views.getCoupon, name='list-coupon'),
+    path('profile', views.profile, name='profile'),
+    path('notification', views.notification, name='notification'),
     # path('admin/orders', views.orders_admin, name='admin_orders'),
 
     path('coupons', views.couponManager, name='coupons'),

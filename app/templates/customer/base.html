@@ -44,15 +44,64 @@
                     </div>
                     <div class="col-lg-auto order-lg-last col-8">
                         <div class="d-flex float-end gap-4" >
-                            <!-- Thông báo-->
-                            <a href="/notification" class="header-nav-item ms-4 position-relative">
-                                <i class="fa-solid fa-bell">
-                                </i>
-                                <span class="badge bg-danger position-absolute">3</span>
-                            </a>
 
                             {% if user.is_authenticated %}
-                            
+                            <!-- Thông báo-->
+                            <div class="position-relative notification">
+                                <a href="" class="header-nav-item ms-4 position-relative">
+                                    <i class="fa-solid fa-bell">
+                                    </i>
+                                    <span class="badge bg-danger position-absolute">3</span>
+                                </a>
+                                <div class="notification-list position-absolute">
+                                    <div class="px-3 py-2 fw-medium">Thông báo mới nhất</div>
+                                    <hr class="my-1">
+                                    <div class="notification-item px-3 py-1 mb-2">
+                                        <a href="">
+                                            <div class="row align-items-center">
+                                                <div class="col-3">
+                                                    <img src="../assets/image/shirt.jpg" alt="" width="40px">
+                                                </div>
+                                                <div class="col-9 text-container ps-0">
+                                                    Voucher khủng áp dụng từ 20/5/2023
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="notification-item px-3 py-1 mb-2">
+                                        <a href="">
+                                            <div class="row align-items-center">
+                                                <div class="col-3">
+                                                    <img src="../assets/image/shirt.jpg" alt="" width="40px">
+                                                </div>
+                                                <div class="col-9 text-container ps-0">
+                                                    Đơn hàng #5 đã được giao thành công
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="notification-item px-3 py-1 mb-2">
+                                        <a href="">
+                                            <div class="row align-items-center">
+                                                <div class="col-3">
+                                                    <img src="../assets/image/shirt.jpg" alt="" width="40px">
+                                                </div>
+                                                <div class="col-9 text-container ps-0">
+                                                    Voucher khủng áp dụng từ 20/5/2023
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="notification-item px-3 py-2 text-center">
+                                        <a href="/notification">
+                                            Xem tất cả
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Giỏ hàng-->
                             <a href="/cart" class="header-nav-item position-relative">
                                 <i class="fa-solid fa-cart-shopping"></i>
@@ -89,8 +138,8 @@
     
                     <!-- Search -->
                     <div class="col-lg-6 col-12">
-                        <form action="" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                            <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" />
+                        <form action="/list-product" class="d-flex position-relative justify-content-center align-items-center" role="search">
+                            <input type="text" class="form-control shadow-none search-input" name='search' type="search" placeholder="Search" />
                             <div class="search-btn" type="submit">
                                 <i class="fa fa-search"></i>
                             </div>
@@ -116,13 +165,13 @@
                         <a href="/list-product" class="nav-link pe-5"><span class="nav-content">Sản phẩm</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Đơn hàng</span></a>
+                        <a href="/get-order" class="nav-link pe-5"><span class="nav-content">Đơn hàng</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">Thanh toán</span></a>
+                        <a href="/list-feedback" class="nav-link pe-5"><span class="nav-content">Đánh giá</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link pe-5"><span class="nav-content">About</span></a>
+                        <a href="/list-coupon" class="nav-link pe-5"><span class="nav-content">Khuyến mãi</span></a>
                     </li>
                 </ul>
             </div>
@@ -189,6 +238,13 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            $('.search-btn').click(function() {
+                $('form').submit();
+            })
+        })
+    </script>
 {% block script %}
 {% endblock script %}
 </body>

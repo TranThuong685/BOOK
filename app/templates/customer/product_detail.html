@@ -1,17 +1,17 @@
 {% extends 'customer/base.html' %}
-
+{% load my_filters %}
 {% block content%}
 <!-- Content -->
 <div class="py-4">
     <div class="product-detail">
         <div class="container">
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            {% comment %} <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/home">Trang chủ</a></li>
                     <li class="breadcrumb-item"><a href="">Áo phông</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Library</li>
                 </ol>
-            </nav>
+            </nav> {% endcomment %}
 
             <div class="row product-information p-4">
                 <div class="col-6">
@@ -22,24 +22,11 @@
                         <div class="swiper-theme-container">
                             <div class="swiper swiper-1">
                                 <div class="swiper-wrapper d-flex ">
+                                    {% for image in product.productimage_set.all %}
                                     <div class="swiper-slide">
-                                        <img src="../assets/image/shirt.jpg">
+                                        <img src="{{image.name.url}}">
                                     </div>
-                                    <div class="swiper-slide">
-                                        <img src="../assets/image/light_30.png">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img src="../assets/image/shirt.jpg">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img src="../assets/image/shirt.jpg">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img src="../assets/image/shirt.jpg">
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <img src="../assets/image/shirt.jpg">
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="swiper-nav">
@@ -59,12 +46,14 @@
                             <h3>{{ product.name }}</h3>
                         </div>
                         <div class="d-flex">
-                            <div>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
+                            <div class='d-flex gap-2'>
+                                <div class='rating'>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
                                 {{ product.rating}}
                             </div>
                             <div class="rate-quantity"><span>{{ num_feedbacks}}</span> đánh giá</div>
@@ -72,13 +61,27 @@
                         </div>
                         {% load humanize %}
                         <div class="price d-flex align-items-center gx-2">
-                            <div class="text-decoration-line-through">{{product.price|floatformat:0|intcomma}}đ</div>
-                            <h2 class="sale-price m-0">{{ product.productsale_set.first.price|floatformat:0|intcomma }}đ</h2>
+                            {% if product.discount_percent == 0 %}
+                            <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
+                            {% else %}
+                            <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
+                            <div class="text-decoration-line-through">{{product.price|floatformat:0|intcomma_dot}}đ</div>
                             <div class="sale-percent">
-                                30% giảm
+                                {{product.discount_percent|floatformat:0}}% giảm
                             </div>
+
+                            {% endif %}
                         </div>
-                        <p class="m-0 color-red h5">Còn hàng</p>
+                        {% if product.quantity != 0 %}
+                        
+                        <p class="m-0 color-red h5">
+                            Còn hàng
+                        </p>
+                        {% else %} 
+                        <p class="m-0 color-red h5">
+                            Hết hàng
+                        </p>
+                        {% endif %}
                         <div class="color my-2">
                             <div class="row">
                                 <div class="col-2 d-flex align-items-center">Màu sắc</div>
@@ -112,7 +115,7 @@
                                     <button class="btn btn-quantity btn-plus disable">
                                         <i class="fa-solid fa-plus"></i>
                                     </button>
-                                    <div class="quantity-available d-flex align-items-center color-gray ms-3">10 sản phẩm có sẵn</div>
+                                    <div class="quantity-available d-flex align-items-center color-gray ms-3">{{product.quantity}} sản phẩm có sẵn</div>
                                 </div>
                             </div>
                         </div>
@@ -122,6 +125,9 @@
                                 Thêm vào giỏ hàng
                             </button>
                             <button class="buy-now btn btn-primary" data-action='buy-now'>Mua ngay</button>
+                        </div>
+                        <div class='message'>
+
                         </div>
                     </div>
                 </div>
@@ -153,7 +159,7 @@
                                 {{ product.rating }}
                                 <span class="fs-5">/5</span>
                             </h2>
-                            <div class="">
+                            <div class="rating">
                                 <i class="fa-solid fa-star"></i>
                                 <i class="fa-solid fa-star"></i>
                                 <i class="fa-solid fa-star"></i>
@@ -164,121 +170,7 @@
                         </div>
                     </div>
                     <div class="product-rating__list">
-                        {% for feedback in feedbacks %}
-                        <div class="product-rating__item">
-                            <div class="d-flex mt-4">
-                                <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
-                                <div class="d-flex flex-column ms-3">
-                                    <div class="">{{feedback.customer.name}}</div>
-                                    <div class="color-gray">{{feedback.date}}</div>
-                                    <div class="mt-1">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                    <div class=" image-feedback-list d-flex mt-3">
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
-                                    <div class="d-flex align-items-center mt-3">
-                                        <button class="btn btn-like active">10 <i class="fa-solid fa-thumbs-up active"></i></button>
-                                        <button class="btn ms-2 btn-dislike">2 <i class="fa-solid fa-thumbs-down"></i></button>
-                                    </div>
-                                    <div class="response d-flex mt-3 align-items-start">
-                                        <i class="fa-solid fa-reply fa-rotate-180"></i>
-                                        <div class="ms-3">
-                                            <h5 class="m-0">Phản hồi của người bán</h5>
-                                            <div class="color-gray">23 Oct, 12:30 PM</div>
-                                            <div class="mt-1">Cảm ơn bạn đã tin tưởng và lựa chọn sản phẩm của Shop. Hi vọng trong tương lai tiếp tục được sự ủng hộ và đồng hành của bạn. Cảm ơn bạn rất nhiều ❤</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        <div class="product-rating__item">
-                            <div class="d-flex mt-4">
-                                <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
-                                <div class="d-flex flex-column ms-3">
-                                    <div class="">Huy Phan</div>
-                                    <div class="color-gray">23 Oct, 12:09 PM</div>
-                                    <div class="mt-1">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                    <div class=" image-feedback-list d-flex mt-3">
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
-                                    <div class="d-flex align-items-center mt-3">
-                                        <button class="btn btn-like active">10 <i class="fa-solid fa-thumbs-up active"></i></button>
-                                        <button class="btn ms-2 btn-dislike">2 <i class="fa-solid fa-thumbs-down"></i></button>
-                                    </div>
-                                    <div class="response d-flex mt-3 align-items-start">
-                                        <i class="fa-solid fa-reply fa-rotate-180"></i>
-                                        <div class="ms-3">
-                                            <h5 class="m-0">Phản hồi của người bán</h5>
-                                            <div class="color-gray">23 Oct, 12:30 PM</div>
-                                            <div class="mt-1">Cảm ơn bạn đã tin tưởng và lựa chọn sản phẩm của Shop. Hi vọng trong tương lai tiếp tục được sự ủng hộ và đồng hành của bạn. Cảm ơn bạn rất nhiều ❤</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="product-rating__item">
-                            <div class="d-flex mt-4">
-                                <img class="user-image-rate" src="../assets/image/scene.jpeg" alt="">
-                                <div class="d-flex flex-column ms-3">
-                                    <div class="">Huy Phan</div>
-                                    <div class="color-gray">23 Oct, 12:09 PM</div>
-                                    <div class="mt-1">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                    <div class=" image-feedback-list d-flex mt-3">
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                        <div class="image-feedback-item">
-                                            <img src="../assets/image/shirt.jpg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="mt-3">Áo xanh thì được còn ái trắng thì theo mình thấy nó rất mỏng, mà vẫn đẹp vẫn xinh nhé nên mua nha à ai mà không thích áo mỏng thì nên mua áo mầu bởi áo trắng theo mình thì mỏng nhé. Tính ra được 4* thôi nhưng a shipper đẹp zai quá nên cho 5* luôn ước gì lần sau mưa tiếp❤️❤️ kảm ơn shop đã cho mình gặp được người vừa đẹp vừa cute như a shipper, mãi iu</div>
-                                    <div class="d-flex align-items-center mt-3">
-                                        <button class="btn active btn-like">0 <i class="fa-solid fa-thumbs-up "></i></button>
-                                        <button class="btn ms-2  btn-dislike">0 <i class="fa-solid fa-thumbs-down"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="page-controller">
@@ -319,174 +211,42 @@
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper d-flex">
                             <!-- Slides -->
+                            {% for product in related_products %}
+                            
                             <div class="swiper-slide">
-                                <a class="product" href="">
+                                <a class="product" href="/product/{{product.product_id}}">
                                     <div class="product-card">
                                         <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
+                                            <img src="{{ product.productimage_set.first.name.url}}" alt="" class="product-img">
+                                            {% if product.discount_percent != 0 %}
+                                            <div class="product-sale-percentage">{{product.discount_percent|floatformat:0}}%</div>
+                                            {% endif %}
                                         </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                        <div class="product-name">{{product.name}}</div>
                                         <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
+                                            {% if product.discount_percent != 0 %}
+                                            <div class="product-price-original">{{product.price|floatformat:0|intcomma_dot}}đ</div>
+                                            {% endif %}
+                                            <div class="product-price-sale color-red">{{product.curr_price|floatformat:0|intcomma_dot}}đ</div>
+
                                         </div>
                                         <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                    
+                                                {% for i in 5|times %}
+                                                    {% if i <= product.rating %}
+                                                        <i class="fa-solid fa-star"></i>
+                                                    {% else %}
+                                                        <i class="fa-regular fa-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            <div class="product-quantity-sold ms-2">(Đã bán {{product.total_sold}})</div>
                                         </div>
                                     </div>
                                 </a>
 
                             </div>
-                            <div class="swiper-slide">
-                                <a class="product" href="">
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
-                                        </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                        <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
-                                        </div>
-                                        <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="product" href="">
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
-                                        </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                        <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
-                                        </div>
-                                        <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="product" href="">
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
-                                        </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                        <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
-                                        </div>
-                                        <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="product" href="">
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
-                                        </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                        <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
-                                        </div>
-                                        <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="product" href="">
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
-                                        </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                        <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
-                                        </div>
-                                        <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            </div>
-                            <div class="swiper-slide">
-                                <a class="product" href="">
-                                    <div class="product-card">
-                                        <div class="product-image">
-                                            <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                            <div class="product-sale-percentage">30%</div>
-                                        </div>
-                                        <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                        <div class="product-price d-flex align-items-center">
-                                            <div class="product-price-original">150.000đ</div>
-                                            <div class="product-price-sale">100.000đ</div>
-                                        </div>
-                                        <div class="product-rate d-flex align-items-center">
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <i class="fa-solid fa-star"></i>
-                                            <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                            </div>
+                
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="swiper-nav">
@@ -537,6 +297,19 @@
                 prevEl: '.swiper-button-prev-2',
             },
         });
+
+        var rating = {{ product.rating }};
+        var rating_html = '';
+        for(var i = 1; i<= 5; i++) {
+            if (i <= rating) {
+                rating_html += '<i class="fa-solid fa-star"></i>';
+            } else if (i == Math.ceil(rating)) {
+                rating_html += '<i class="fa-solid fa-star-half-stroke"></i>';
+            } else {
+                rating_html += '<i class="fa-regular fa-star"></i>';
+            }
+        }
+        $('.rating').html(rating_html);
 
         var variantProducts = []
         {% for variant in product.productdetail_set.all %}
@@ -854,7 +627,15 @@
                 method: 'POST',
                 data: data,
                 success: function(response) {
-                    alert(response);
+                    if(response.status == 'success'){
+                        $('.message').addClass('color-green')
+                        $('.message').removeClass('color-red')
+                    }
+                    else {
+                        $('.message').removeClass('color-green')
+                        $('.message').addClass('color-red')
+                    }
+                    $('.message').html(response.message)
                 },
                 error: function(error) {
                     console.log(error);
@@ -871,6 +652,127 @@
             $(this).toggleClass('active');
             $('.btn-like').removeClass('active');
         })
+
+        function getFeedback(page) {
+            $.ajax({
+                url: '/get-feedback',
+                method: 'get',
+                data: {
+                    'product_id': {{ product.product_id }},
+                    'page': page
+                },
+                success: function(response) {
+                    console.log(response);
+                    let feedbacks = response.results;
+                    if(feedbacks.length != 0) {
+                        let html = '';
+                        feedbacks.forEach(function(feedback) {
+                            html += `
+                            <div class="product-rating__item">
+                                <div class="d-flex mt-4">
+                                    <img class="user-image-rate" src="${feedback.user_image}" alt="">
+                                    <div class="d-flex flex-column ms-3">
+                                        <div class="">${feedback.user_name}</div>
+                                        <div class="color-gray">${feedback.date}</div>
+                                        <div class="mt-1">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                        </div>
+                                        <div class=" image-feedback-list d-flex mt-3">
+                            `;
+                            feedback.images.forEach(function(image) {
+                                html += `
+                                            <div class="image-feedback-item">
+                                                <img src="${image}" alt="" width='100px'>
+                                            </div>
+                                            `
+                            })
+                             html +=`</div>
+                                        <div class="mt-3">
+                                            ${feedback.comment}
+                                        </div>
+                                        <div class="d-flex align-items-center mt-3">
+                                            <button class="btn btn-like">${feedback.like} <i class="fa-solid fa-thumbs-up active"></i></button>
+                                            <button class="btn ms-2 btn-dislike">${feedback.dislike} <i class="fa-solid fa-thumbs-down"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `
+                        })
+                        $('.product-rating__list').html(html);
+                        var product_id = {{ product.product_id }};
+                        var currentPage = response.current_page;
+                        var totalPages = response.total_page;
+                        var previous = response.previous;
+                        var next = response.next;
+                        page = `
+                        <li class="page-item ${ previous == null ? 'disabled' : '' }">
+                            <div data-page='1' class="page-link pre-page" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </div>
+                        </li>
+                        `
+                        if (previous) {
+                        page += `
+                            <li class="page-item" aria-current="page">
+                                <div data-page='${currentPage-1}' class="page-link"'>${currentPage-1}</div>
+                            </li>
+                        `
+                        }
+                        page += `
+                            <li class="page-item active" aria-current="page">
+                                <div data-page='${currentPage}' class="page-link"'>${currentPage}</div>
+                            </li>
+                        `
+                        var next = response.next;
+                        if (next) {
+                        page += `
+                            <li class="page-item" aria-current="page">
+                                <div data-page='${currentPage+1}' class="page-link"'>${currentPage+1}</div>
+                            </li>
+                        `;
+                        }
+        
+                        page += `
+                            <li class="page-item ${ currentPage == totalPages ? 'disabled' : '' }">
+                                <div data-page='${totalPages}' class="page-link pre-page" href="#" aria-label="Previous">
+                                    <span aria-hidden="true"'>&raquo;</span>
+                                </div>
+                            </li>
+                        `
+                        $('.pagination').html(page);
+                        $('.page-link').click(function() {
+                        var page = $(this).data('page');
+                        getFeedback(page);
+    
+                        var position = $('.product-rating-overview').offset().top;
+    
+                        // Di chuyển đến vị trí đó với tốc độ 500ms
+                        $('html, body').animate({
+                        scrollTop: position
+                        }, 100);
+                        })
+                    }
+                    else {
+                        $('.pagination').html(
+                            '<div class= " h5 color-red">Chưa có đánh giá nào cho sản phẩm này</div>'
+                        );
+                    }
+    
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        getFeedback(1);
+
+
     })
 </script>
 {% endblock content%}

@@ -1,5 +1,5 @@
 {% extends 'customer/base.html' %}
-
+{% load my_filters %}
 {% block cdn %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -142,397 +142,35 @@
             <div class="col-10 p-0 ps-5">
                 <div class="list-product">
                     <!-- Sort -->
-                    <div class="sort-bar d-flex align-items-center">
-                        <div>Sắp xếp theo</div>
-                        <div class="top_selling_products btn-filter">Phổ biến</div>
-                        <div class="best_selling_product btn-filter">Đang hot</div>
-                        <div class="top_sale_products btn-filter">Giảm nhiều</div>
-                        <div class="dropdown">
-                            <div class="btn dropdown-toggle sort-price-list" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="sort-price-choice">Giá</div>
+                    <div>
+                        <div class="sort-bar d-flex align-items-center">
+                            <div class='color-blue'>Sắp xếp theo</div>
+                            <div class="top_selling_products btn-filter">Phổ biến</div>
+                            <div class="best_selling_product btn-filter">Đang hot</div>
+                            <div class="top_sale_products btn-filter">Giảm nhiều</div>
+                            <div class="dropdown">
+                                <div class="btn dropdown-toggle sort-price-list" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="sort-price-choice">Giá</div>
+                                </div>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <div class="dropdown-item price-sort" data-sort='price_asc' href=''>Giá: từ thấp đến cao</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item price-sort" data-sort='price_desc' href=''>Giá: từ cao đến thấp</div>
+                                    </li>
+                                </ul>
                             </div>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li>
-                                    <div class="dropdown-item price-sort" data-sort='price_asc' href=''>Giá: từ thấp đến cao</div>
-                                </li>
-                                <li>
-                                    <div class="dropdown-item price-sort" data-sort='price_desc' href=''>Giá: từ cao đến thấp</div>
-                                </li>
-                            </ul>
+                            <!-- List product -->
                         </div>
-                        <!-- List product -->
-                    </div>
-                    <div class="row g-3 list-products">
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
+                        <hr class='m-0 mb-2'>
+                        {% if search %}
+                        <div class="mb-3">Kết quả tìm kiếm cho từ khóa: <span class='color-red'>'{{search}}'</span></div>
+                        {% endif %}
+                        <div class="row g-3 list-products">
                         </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <a class="product" href="">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                        <img src="../assets/image/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
-                                    </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
-                                    <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
-                                    </div>
-                                    <div class="product-rate d-flex align-items-center">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
 
+                    </div>
                     <!-- Pagination -->
                     <div class="page-controller mt-5">
                         <nav aria-label="Page navigation">
@@ -597,12 +235,15 @@
         $("#amount").html(formatCurrency($("#slider-range").slider("values", 0)) +
             " - " + formatCurrency($("#slider-range").slider("values", 1)));
 
-        $('.top_sale_products, .top_selling_products, .best_selling_product').click(function() {
-            $('.top_sale_products, .top_selling_products, .best_selling_product').removeClass('active');
+        $('.btn-filter').click(function() {
+            $('.btn-filter').removeClass('active');
             $(this).addClass('active');
+            $('.price-sort').removeClass('selected');
+            $('.sort-price-choice').text('Giá');
         });
 
         $('.price-sort').click(function() {
+            $('.btn-filter').removeClass('active');
             var selectedValue = $(this).text();
             $('.sort-price-choice').text(selectedValue);
             $('.price-sort').removeClass('selected');
@@ -620,7 +261,9 @@
             }).get().join(',');
             const minPrice = $('#slider-range').slider('values', 0);
             const maxPrice = $('#slider-range').slider('values', 1);
-            const status = $('input[name="status"]:checked').val();
+            const status = $('input[name="status"]:checked').map(function() {
+                return $(this).val();
+            }).get().join(',');
             const rating = $('input[name="rating"]:checked').val();
             const topSale = $('.top_sale_products').hasClass('active');
             const topSelling = $('.top_selling_products').hasClass('active');
@@ -633,7 +276,8 @@
                 max_price: maxPrice,
                 status: status,
                 rating: rating,
-                sort: sort
+                sort: sort,
+                search: '{{search|default:""}}'
             }
             if (topSale) {
                 data['top_sale_products'] = topSale;
@@ -662,38 +306,52 @@
                     // Thêm sản phẩm vào danh sách "list-products"
                     let productList = [];
                     let listProduct = response.results;
-                    listProduct.forEach(function(product) {
-
-                        let price = product.price;
-                        let salePrice = product.productsale_set.price;
-                        let discount_percent = Math.round((price - salePrice) / price * 100);
-                        let productHtml = `
-                                <div class="col-3">
-                                    <a class="product" href="product/${product.product_id}">
-                                        <div class="product-card">
-                                            <div class="product-image">
-                                                <img src="${product.images[0]}" alt="" class="product-img">
-                                                <div class="product-sale-percentage">${discount_percent}%</div>
+                    if(listProduct.length == 0){
+                        productList.push('<div class="d-flex justify-content-center color-red mt-4 fs-5">Không có sản phẩm nào phù hợp</div>');
+                    }
+                    else {
+                        listProduct.forEach(function(product) {
+    
+                            let price = product.price;
+                            let salePrice = product.curr_price;
+                            let discount_percent = Math.round((price - salePrice) / price * 100);
+                            price = formatCurrency(price);
+                            salePrice = formatCurrency(salePrice);
+                            let rating = product.rating
+                            let ratingHtml = '';
+                            for (let i = 1; i <= 5; i++) {
+                                if (i <= rating) {
+                                    ratingHtml += '<i class="fa-solid fa-star"></i>';
+                                } else {
+                                    ratingHtml += '<i class="fa-regular fa-star"></i>';
+                                }
+                            }
+    
+                            let productHtml = `
+                                    <div class="col-3">
+                                        <a class="product" href="product/${product.product_id}">
+                                            <div class="product-card">
+                                                <div class="product-image">
+                                                    <img src="${product.images[0]}" alt="" class="product-img">
+                                                    ${discount_percent == 0 ? '' : '<div class="product-sale-percentage">' + discount_percent + '%</div>'}
+                                                    
+                                                </div>
+                                                <div class="product-name">${product.name}</div>
+                                                <div class="product-price d-flex align-items-center">
+                                                    ${discount_percent == 0 ? '' : '<div class="product-price-original">' + price + 'đ</div>'}
+                                                    <div class="product-price-sale color-red">${salePrice}đ</div>
+                                                </div>
+                                                <div class="product-rate d-flex align-items-center">
+                                                    ${ratingHtml}
+                                                    <div class="product-quantity-sold ms-2">(Đã bán ${product.total_sold})</div>
+                                                </div>
                                             </div>
-                                            <div class="product-name">${product.name}</div>
-                                            <div class="product-price d-flex align-items-center">
-                                                <div class="product-price-original">${product.price}đ</div>
-                                                <div class="product-price-sale">${product.productsale_set.price}đ</div>
-                                            </div>
-                                            <div class="product-rate d-flex align-items-center">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <div class="product-quantity-sold ms-2">(Đã bán ${product.total_sold})</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                `;
-                        productList.push(productHtml);
-                    });
+                                        </a>
+                                    </div>
+                                    `;
+                            productList.push(productHtml);
+                        });
+                    }
                     let productsContainer = document.querySelector(".list-products");
                     productsContainer.innerHTML = productList.join("");
 
@@ -706,44 +364,64 @@
 
                     var previous = response.previous;
                     console.log(previous)
-                    var pagination = [];
-                    page = `
-                            <li class="page-item ${ previous == null ? 'disabled' : '' }">
-                                <div class="page-link pre-page" aria-label="Previous" data-page='${previous}' >
-                                    <span aria-hidden="true">&laquo;</span>
-                                </div>
-                            </li>
-                        `
-                    if (previous) {
-                        page += `
-                            <li class="page-item" aria-current="page">
-                                <div class="page-link" data-page='${previous}' >${previous}</div>
-                            </li>
-                        `
-                    }
-                    page += `
-                            <li class="page-item active" aria-current="page">
-                                <div class="page-link" data-page='${currentPage}'>${currentPage}</div>
-                            </li>
-                        `
+                    var currentPage = response.current_page;
+                    var totalPages = response.total_page;
+                    var previous = response.previous;
                     var next = response.next;
-                    if (next) {
-                        page += `
-                            <li class="page-item" aria-current="page">
-                                <div class="page-link" data-page='${next}'>${next}</div>
-                            </li>
-                        `;
-                    }
-
-                    page += `
-                    <li class="page-item ${ next == null ? 'disabled' : '' }">
-                        <div class="page-link pre-page" href="#" aria-label="Previous">
-                            <span aria-hidden="true" data-page='${next}'>&raquo;</span>
+                    page = `
+                    <li class="page-item ${ previous == null ? 'disabled' : '' }">
+                        <div data-page='1' class="page-link pre-page" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
                         </div>
                     </li>
                     `
+                    if (previous) {
+                    page += `
+                    <li class="page-item" aria-current="page">
+                        <div data-page='${currentPage-1}' class="page-link"'>${currentPage-1}</div>
+                        </li>
+                    `
+                    }
+                    page += `
+                        <li class="page-item active" aria-current="page">
+                            <div data-page=' ${currentPage}' class="page-link"'>${currentPage}</div>
+                        </li>
+                    `
+                    var next = response.next;
+                    if (next) {
+                    page += `
+                        <li class="page-item" aria-current="page">
+                            <div data-page=' ${currentPage+1}' class="page-link"'>${currentPage+1}</div>
+                        </li>
+                    `;
+                    }
+    
+                    page += `
+                        <li class="page-item ${ currentPage == totalPages ? ' disabled' : '' }">
+                            <div data-page='${totalPages}' class="page-link pre-page" href="#" aria-label="Previous">
+                                <span aria-hidden="true"'>&raquo;</span>
+                            </div>
+                        </li>
+                    `
                     $('.pagination').html(page);
+                    $('.page-link').click(function() {
+                        $('.page-link').removeClass('selected');
+                        $(this).addClass('selected');
+                        loadDataProduct();
+                    });
+                    var position = $('.list-product').offset().top - 10;
+                    var windowHeight = $(window).height();
+                    var scrollPosition = $(window).scrollTop();
 
+                    // Kiểm tra xem vị trí đó có nằm trong viewport hay không
+                    if (position > scrollPosition && position < scrollPosition + windowHeight) {
+                        // Nếu đúng, không cần di chuyển nữa
+                        return;
+                    }
+                    // Di chuyển đến vị trí đó với tốc độ 500ms
+                    $('html, body').animate({
+                        scrollTop: position
+                    }, 100);
                 },
                 error: function(error) {
                     // Xử lý lỗi nếu có
@@ -756,7 +434,14 @@
             loadDataProduct();
         });
 
+        loadDataProduct();
 
+        function formatCurrency(value) {
+            return value.toLocaleString('vi', {
+                style: 'currency',
+                currency: 'VND'
+            }).replace(',', '.').replace('₫', '').trim();
+        }
     });
 </script>
 {% endblock content %}

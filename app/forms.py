@@ -1,6 +1,11 @@
 from django import forms
 from .models import *
 
+class UserForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['name', 'dob', 'gender', 'phone', 'email']
 
 class CouponForm(forms.ModelForm):
     class Meta:
@@ -42,12 +47,27 @@ class ProductSaleForm(forms.ModelForm):
 
 
 class ProductImageForm(forms.ModelForm):
-    name = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))  # thêm thuộc tính multiple
+    name = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))  # thêm thuộc tính multiple
 
     class Meta:
         model = ProductImage
         fields = ['name']
 
+class AddressShippingForm(forms.ModelForm):
+    class Meta:
+        model = AddressShipping
+        fields = ['receiver', 'phone', 'address']
+
+        widgets = {
+            'receiver': forms.TextInput(),
+            'phone': forms.TextInput(),
+            'address': forms.TextInput(),
+        }
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ['date', 'customer', 'status']
 
 # class OrderStatusForm(forms.ModelForm):
 #     class Meta:

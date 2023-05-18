@@ -1,5 +1,5 @@
 {% extends 'customer/base.html' %}
-
+{% load my_filters %}
 {% block content %}
 
 <!-- Content -->
@@ -48,7 +48,7 @@
     <div class='container'>
         <div class="products-slider mt-5 p-3">
             <div class="d-flex justify-content-between">
-                <h4>Sản phẩm đang sale</h4>
+                <h4>Sản phẩm bán chạy</h4>
                 <a href="" class="product-more">
                     Xem thêm
                     <i class="fa-solid fa-angles-right"></i>
@@ -59,26 +59,33 @@
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper d-flex">
                         <!-- Slides -->
-                        {% for i in range %}
+                        {% for product in top_selling_products %}
                         <div class="swiper-slide">
-                            <a class="product" href="">
+                            <a class="product" href="/product/{{product.product_id}}">
                                 <div class="product-card">
                                     <div class="product-image">
-                                        <img src="app/media/product/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
+                                        <img src="{{product.productimage_set.first.name.url}}" alt="" class="product-img">
+                                        {% if product.discount_percent > 0 %}
+                                        <div class="product-sale-percentage">{{ product.discount_percent}}%</div>
+                                        {% endif %}
                                     </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                    <div class="product-name">{{product.name}}</div>
                                     <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
+                                        {% if product.discount_percent > 0 %}
+                                        <div class="product-price-original">{{product.price|floatformat:0|intcomma_dot}}đ</div>
+                                        {% endif %}
+                                        
+                                        <div class="product-price-sale color-red">{{product.curr_price|floatformat:0|intcomma_dot}}đ</div>
                                     </div>
                                     <div class="product-rate d-flex align-items-center">
+                                        {% for i in 5|times %}
+                                        {% if i <= product.rating %}
                                         <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        {% else %}
+                                        <i class="fa-regular fa-star"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div class="product-quantity-sold ms-2">(Đã bán {{product.total_sold}})</div>
                                     </div>
                                 </div>
                             </a>
@@ -101,7 +108,7 @@
 
         <div class="products-slider mt-5 p-3">
             <div class="d-flex justify-content-between">
-                <h4>Sản phẩm đang sale</h4>
+                <h4>Sản phẩm đang hot</h4>
                 <a href="" class="product-more">
                     Xem thêm
                     <i class="fa-solid fa-angles-right"></i>
@@ -112,26 +119,33 @@
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper d-flex">
                         <!-- Slides -->
-                        {% for i in range %}
+                        {% for product in hot_selling_products %}
                         <div class="swiper-slide">
-                            <a class="product" href="">
+                            <a class="product" href="/product/{{product.product_id}}">
                                 <div class="product-card">
                                     <div class="product-image">
-                                        <img src="app/media/product/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
+                                        <img src="{{product.productimage_set.first.name.url}}" alt="" class="product-img">
+                                        {% if product.discount_percent > 0 %}
+                                        <div class="product-sale-percentage">{{ product.discount_percent}}%</div>
+                                        {% endif %}
                                     </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                    <div class="product-name">{{product.name}}</div>
                                     <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
+                                        {% if product.discount_percent > 0 %}
+                                        <div class="product-price-original">{{product.price|floatformat:0|intcomma_dot}}đ</div>
+                                        {% endif %}
+
+                                        <div class="product-price-sale color-red">{{product.curr_price|floatformat:0|intcomma_dot}}đ</div>
                                     </div>
                                     <div class="product-rate d-flex align-items-center">
+                                        {% for i in 5|times %}
+                                        {% if i <= product.rating %}
                                         <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        {% else %}
+                                        <i class="fa-regular fa-star"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div class="product-quantity-sold ms-2">(Đã bán {{product.total_sold}})</div>
                                     </div>
                                 </div>
                             </a>
@@ -151,7 +165,7 @@
             </div>
         </div>
 
-        <div class="products-slider mt-5 p-3">
+        <div class="products-slider my-5 p-3">
             <div class="d-flex justify-content-between">
                 <h4>Sản phẩm đang sale</h4>
                 <a href="" class="product-more">
@@ -164,26 +178,33 @@
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper d-flex">
                         <!-- Slides -->
-                        {% for i in range %}
+                        {% for product in top_sale_products %}
                         <div class="swiper-slide">
-                            <a class="product" href="">
+                            <a class="product" href="/product/{{product.product_id}}">
                                 <div class="product-card">
                                     <div class="product-image">
-                                        <img src="app/media/product/shirt.jpg" alt="" class="product-img">
-                                        <div class="product-sale-percentage">30%</div>
+                                        <img src="{{product.productimage_set.first.name.url}}" alt="" class="product-img">
+                                        {% if product.discount_percent > 0 %}
+                                        <div class="product-sale-percentage">{{ product.discount_percent}}%</div>
+                                        {% endif %}
                                     </div>
-                                    <div class="product-name">Tee basic ss1 áo thun tay lỡ unisex Local Brand - AO_THUN_DVR (V427)</div>
+                                    <div class="product-name">{{product.name}}</div>
                                     <div class="product-price d-flex align-items-center">
-                                        <div class="product-price-original">150.000đ</div>
-                                        <div class="product-price-sale">100.000đ</div>
+                                        {% if product.discount_percent > 0 %}
+                                        <div class="product-price-original">{{product.price|floatformat:0|intcomma_dot}}đ</div>
+                                        {% endif %}
+
+                                        <div class="product-price-sale color-red">{{product.curr_price|floatformat:0|intcomma_dot}}đ</div>
                                     </div>
                                     <div class="product-rate d-flex align-items-center">
+                                        {% for i in 5|times %}
+                                        {% if i <= product.rating %}
                                         <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                        <div class="product-quantity-sold ms-2">(Đã bán 512)</div>
+                                        {% else %}
+                                        <i class="fa-regular fa-star"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div class="product-quantity-sold ms-2">(Đã bán {{product.total_sold}})</div>
                                     </div>
                                 </div>
                             </a>
@@ -202,6 +223,7 @@
                 </div>
             </div>
         </div>
+        {% if not user.is_authenticated %}
 
         <div class="welcome row align-items-center justify-content-center">
             <div class="col-auto">
@@ -214,7 +236,7 @@
                 <a href="" class="btn btn-outline-primary">Đăng kí <i class="fa-solid fa-angle-right ms-2"></i></a>
             </div>
         </div>
-        </div.>
+        {% endif %}
     </div>
 
     <script>

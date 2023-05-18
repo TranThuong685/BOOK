@@ -1,0 +1,69 @@
+{% extends 'customer/base.html' %}
+{% load humanize %}
+{% block content %}
+    <div class="py-4">
+        <div class="container">
+            <h2 class="mb-4">Mã giảm giá</h2>
+
+            <div class="coupon-table list-table card px-5 py-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Mã</th>
+                            <th scope="col">Giảm giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Điều kiện</th>
+                            <th scope="col">Ngày hết hạn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for coupon in coupons %}
+                        <tr class="coupon-item">
+                            <td class='color-blue'>
+                                {{coupon.code}}
+                            </td>
+                            <td class='color-red'>
+                                {{coupon.discount|floatformat:0|intcomma}}đ
+                            </td>
+                            <td>
+                                50
+                            </td>
+                            <td>
+                                Đơn hàng tối thiểu {{coupon.condition|floatformat:0|intcomma}}đ
+                            </td>
+                            <td>
+                                {{coupon.end_date|date:"d/m/Y"}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+                <div class="page-controller mt-5">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link pre-page" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link next-page" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+

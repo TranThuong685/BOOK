@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your models here.
 class User(AbstractUser):
     name = models.CharField(max_length=100, blank=False, null=False)
-    # avatar = models.ImageField(upload_to='user/')
+    avatar = models.ImageField(upload_to='user/', null=True, blank=True)
     dob = models.DateField(blank=False, null=True)
     gender = models.CharField(max_length=50, blank=False, null=False)
     phone = models.CharField(max_length=20, blank=False, null=False)
@@ -71,7 +71,7 @@ class Feedback(models.Model):
     comment = models.CharField(max_length=255, blank=True, null=False)
     rating = models.IntegerField(blank=False, null=False)
     date = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
-    like = models.IntegerField(default=1, blank=False, null=False)
+    like = models.IntegerField(default=0, blank=False, null=False)
     dislike = models.IntegerField(default=0, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
@@ -82,7 +82,7 @@ class Feedback(models.Model):
 
 class FeedbackImage(models.Model):
     feedback_image_id = models.AutoField(primary_key=True, blank=False, null=False)
-    name = models.CharField(max_length=100, blank=False, null=False)
+    name = models.ImageField(upload_to='feedback/')
     feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE, null=False)
 
     def __str__(self):
@@ -116,21 +116,23 @@ class Order(models.Model):
     discount = models.FloatField(default=0, blank=False, null=False)
     shipping = models.FloatField(default=0, blank=False, null=False)
     total = models.FloatField(blank=False, null=False)
-    note = models.CharField(max_length=100, blank=True, null=False)
+    note = models.CharField(max_length=100, blank=True, null=True)
     payment_method = models.CharField(max_length=100, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
-    address_shipping = models.ForeignKey(AddressShipping, on_delete=models.CASCADE, blank=False, null=False)
-
+    receiver = models.CharField(max_length=100, blank=False, null=True)
+    phone = models.CharField(max_length=20, blank=False, null=True)
+    address = models.CharField(max_length=255, blank=False, null=True)
+    status = models.ForeignKey('OrderStatus', on_delete=models.CASCADE, blank=False, null=True)
 
 class OrderItem(models.Model):
-    oder_item_id = models.AutoField(primary_key=True, blank=False, null=False)
+    order_item_id = models.AutoField(primary_key=True, blank=False, null=False)
     size = models.CharField(max_length=20, blank=False, null=False)
     color = models.CharField(max_length=20, blank=False, null=False)
     quantity = models.IntegerField(default=1, blank=False, null=False)
     price = models.FloatField(blank=False, null=False)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
+    feedback = models.ForeignKey(Feedback, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class OrderStatus(models.Model):
@@ -138,10 +140,13 @@ class OrderStatus(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     description = models.CharField(max_length=255, blank=False, null=False)
 
+    def __str__(self):
+        return self.name
+
 
 class Tracking(models.Model):
     track_id = models.AutoField(primary_key=True, blank=False, null=False)
-    date = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
+    date = models.DateTimeField(blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=False, null=False)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, blank=False, null=False)
 

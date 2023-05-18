@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
-from django.db.models import F, FloatField, ExpressionWrapper, Sum, Value, CharField
+from django.db.models import F, FloatField, ExpressionWrapper, Sum, Value, CharField, Case, When, DateTimeField
 from django.db.models.functions import Coalesce, Round
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, FeedbackSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -19,7 +19,9 @@ from .forms import *
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.forms import formset_factory
-
+from datetime import datetime
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 def log_in(request):
     if request.method == 'GET':
@@ -67,33 +69,36 @@ def register(request):
 
 
 def home(request):
-    top_selling_products = Product.objects.order_by('-total_sold')[:10]
-
     now = timezone.now()
-    top_sale_products = (ProductSale.objects
-                         .filter(start_date__lte=now, end_date__gte=now)
-                         .select_related('product')
-                         .annotate(
-        discount_percent=ExpressionWrapper(Coalesce((1 - F('price') / F('product__price')) * 100, 0),
-                                           output_field=FloatField()))
-                         .order_by('-discount_percent')
-                         )[:10]
 
-    top_sale_products = (Product.objects
-                         .filter(productsale__start_date__lte=now, productsale__end_date__gte=now).annotate(
-        discount_percent=ExpressionWrapper(Coalesce((1 - F('productsale__price') / F('price')) * 100, 0),
-                                           output_field=FloatField())).order_by('-discount_percent')
-                         )[:10]
+    products = Product.objects.annotate(
+                    curr_price=Case(
+                        When(productsale__start_date__lte=now,
+                                productsale__end_date__gte=now,
+                                then=F('productsale__price')),
+                        default=F('price'),
+                        output_field=FloatField()
+                    ),
+                    discount_percent=ExpressionWrapper(
+                        Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
+                        output_field=FloatField()
+                    ),
+                )
 
-    best_selling_product = (Product.objects
-                            .filter(orderitem__order__date__month=now.month,
-                                    orderitem__order__date__year=now.year).annotate(
-        total_sold_month=Sum('orderitem__quantity')).order_by('-total_sold_month')
+    top_selling_products = products.order_by('-total_sold')[:10]
+
+    top_sale_products = products.order_by('-discount_percent')[:10]
+
+    hot_selling_product = (products.filter(orderitem__order__date__month=now.month,
+                                    orderitem__order__date__year=now.year)
+                                    .annotate(total_sold_month=Sum('orderitem__quantity'))
+                                    .order_by('-total_sold_month')
                             )[:10]
+    
     context = {
         'top_selling_products': top_selling_products,
         'top_sale_products': top_sale_products,
-        'best_selling_product': best_selling_product,
+        'hot_selling_products': hot_selling_product,
         'range': range(10)
     }
 
@@ -102,8 +107,11 @@ def home(request):
 
 def listProduct(request):
     categories = Category.objects.all()
+    search = request.GET.get('search')
+
     context = {
         'categories': categories,
+        'search': search
     }
     return render(request, 'customer/list-product.html', context)
 
@@ -111,9 +119,16 @@ def listProduct(request):
 @api_view(['GET'])
 def getListProduct(request):
     
+    search = request.GET.get('search')
+    
     category = request.GET.get('category')
     if category:
         category = [int(category) for category in category.split(',')]
+
+    status = request.GET.get('status')
+    if status:
+        status = [status for status in status.split(',')]
+
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     rating = request.GET.get('rating')
@@ -122,10 +137,32 @@ def getListProduct(request):
     top_selling_products = request.GET.get('top_selling_products')
     best_selling_product = request.GET.get('best_selling_product')
 
-    products = Product.objects.all()
+    products = Product.objects.annotate(
+        curr_price=Case(
+            When(productsale__start_date__lte=timezone.now(),
+                 productsale__end_date__gte=timezone.now(),
+                 then=F('productsale__price')),
+            default=F('price'),
+            output_field=FloatField()
+        ),
+        discount_percent=ExpressionWrapper(
+            Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
+            output_field=FloatField()
+        ),
+        quantity=Sum('productdetail__quantity')
+    )
+    if search is not None and search != '':
+        products = products.filter(name__icontains=search)
+
     if category:
         categories = Category.objects.filter(category_id__in=category)
-        products = Product.objects.filter(category__in=categories)
+        products = products.filter(category__in=categories)
+    
+    if status and len(status) == 1:
+        if status[0] == 'instock':
+            products = products.filter(quantity__gt=0)
+        elif status[0] == 'outstock':
+            products = products.filter(quantity=0)
 
     if min_price:
         products = products.filter(price__gte=int(min_price))
@@ -136,25 +173,12 @@ def getListProduct(request):
     if rating:
         products = products.filter(rating__gte=rating)
 
-    if sort == 'price_asc':
-        products = products.order_by('price')
-    elif sort == 'price_desc':
-        products = products.order_by('-price')
-    else :
-        products = products.order_by('-total_sold')
+
     
     
     if top_sale_products:
         now = timezone.now()
-        products = (products
-                    .filter(
-            productsale__start_date__lte=now,
-            productsale__end_date__gte=now
-        ).annotate(
-            discount_percent=ExpressionWrapper(Coalesce((1 - F('productsale__price') / F('price')) * 100, 0),
-                                               output_field=FloatField())
-        ).order_by('-discount_percent')
-                    )
+        products = products.order_by('-discount_percent')
 
     if top_selling_products:
         products = products.order_by('-total_sold')
@@ -168,6 +192,12 @@ def getListProduct(request):
                                 total_sold_month=Sum('orderitem__quantity')
                             ).order_by('-total_sold_month')
                             )
+    if sort == 'price_asc':
+        products = products.order_by('price')
+    elif sort == 'price_desc':
+        products = products.order_by('-price')
+    else :
+        products = products.order_by('-total_sold')
 
     paginator = PageNumberPagination()
     paginator.page_query_param = 'page'
@@ -181,18 +211,45 @@ def getListProduct(request):
     return respone
 
 def getProductDetail(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+    product = Product.objects.filter(pk=product_id).annotate(
+        curr_price=Case(
+            When(productsale__start_date__lte=timezone.now(),
+                 productsale__end_date__gte=timezone.now(),
+                 then=F('productsale__price')),
+            default=F('price'),
+            output_field=FloatField()
+        ),
+        discount_percent=ExpressionWrapper(
+            Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
+            output_field=FloatField()
+        ),
+        quantity=Sum('productdetail__quantity')
+    ).first()
+
     sales = product.productsale_set.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now()).first()
     feedbacks = Feedback.objects.filter(product=product).order_by('-date')
     num_feedbacks = feedbacks.count()
     feedback_paginator = Paginator(feedbacks, 5)
     feedback_page = request.GET.get('page')
     feedbacks = feedback_paginator.get_page(feedback_page)
-
+    
     related_products = (Product.objects
                         .filter(category=product.category)
                         .exclude(pk=product.pk)
-                        )[:10]
+                        )[:10].annotate(
+                            curr_price=Case(
+                            When(productsale__start_date__lte=timezone.now(),
+                                productsale__end_date__gte=timezone.now(),
+                                then=F('productsale__price')),
+                            default=F('price'),
+                            output_field=FloatField()
+                            ),
+                            discount_percent=ExpressionWrapper(
+                                    Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
+                                    output_field=FloatField()
+                            )
+                        )
+
     context = {
         'product': product,
         'sales': sales,
@@ -210,9 +267,20 @@ def add_to_cart(request):
         cart = Cart.objects.filter(customer=request.user).last()
         if not cart:
             cart = Cart.objects.create(customer=request.user)
-        count = cart.cartitem_set.all().count()
+        cartitems = CartItem.objects.filter(cart=cart)
+        cartitems = cartitems.annotate(
+            price=Case(
+                When(product__productsale__start_date__lte=timezone.now(), 
+                    product__productsale__end_date__gte=timezone.now(),
+                    then=F('product__productsale__price')),
+                default=F('product__price'),
+                output_field=FloatField()
+            ),
+            total_price=ExpressionWrapper(F('price') * F('quantity'), output_field=FloatField())
+        )
         context = {
-            'cart': cart
+            'cart': cart,
+            'cartitems': cartitems
         }
         return render(request, 'customer/cart.html', context = context)
     
@@ -233,23 +301,28 @@ def add_to_cart(request):
             request.session['cart_id'] = cart.cart_id
         
         cart_item = CartItem.objects.filter(cart=cart, product=product, color=color, size=size).first()
+        product_detail = ProductDetail.objects.filter(product=product, color=color, size=size).first()
         if cart_item:
-            cart_item.quantity += quantity
+            if cart_item.quantity + quantity > product_detail.quantity:
+                return JsonResponse({'status': 'error', 'message': 'Số lượng sản phẩm không đủ, trong giỏ hàng đã có ' + str(cart_item.quantity) + ' sản phẩm'})
         else:
             cart_item = CartItem.objects.create(cart=cart, product=product, color=color, size=size, quantity=quantity)
         cart_item.save()
 
-        return Response('Thêm giỏ hàng thành công', status=status.HTTP_200_OK)
+        return JsonResponse({'status': 'success', 'message': 'Thêm vào giỏ hàng thành công'})
 
 def edit_cart_item(request):
     cart_item_id = request.POST.get('cart_item_id')
     quantity = request.POST.get('quantity')
     cart_item = CartItem.objects.get(pk=cart_item_id)
+    product_detail = ProductDetail.objects.filter(product=cart_item.product, color=cart_item.color, size=cart_item.size).first()
+    if int(quantity) > product_detail.quantity:
+        return JsonResponse({'status': 'error', 'message': 'Số lượng sản phẩm không đủ'})
     cart_item.quantity = int(quantity)
     cart_item.save()
     if int(quantity) == 0:
         cart_item.delete()
-    return JsonResponse({'success': 'Cập nhật thành công'})
+    return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công'})
 
 def delete_cart_item(request):
     cart_item_id = request.POST.get('cart_item_id')
@@ -261,7 +334,7 @@ def delete_cart_item(request):
 @api_view(['GET'])
 def check_coupon(request):
     coupon_code = request.GET.get('coupon')
-    coupon = Coupon.objects.filter(code=coupon_code).first()
+    coupon = Coupon.objects.filter(code=coupon_code).order_by('-start_date').first()
     if not coupon:
         return JsonResponse({'status': 'error', 'message': 'Mã giảm giá không hợp lệ'})
     
@@ -281,14 +354,18 @@ def check_coupon(request):
 
 
 def checkout(request):
-    cart_items = request.POST.get('cart_item')
-    cart_items = [int(cart_item) for cart_item in cart_items.split(',')]
-    total = request.POST.get('total-money')
+    if request.method == 'GET':
+        return render(request, 'customer/checkout.html')
+    
+    cart_items = request.POST.getlist('cart_item')
+    cart_items = [int(cart_item) for cart_item in cart_items]
+    total = request.POST.get('total_money')
     coupon = request.POST.get('coupon')
     discount = request.POST.get('discount')
 
     cart_items = CartItem.objects.filter(pk__in=cart_items)
-
+    locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
+    total = locale.format_string('%dđ', int(total), grouping=True).replace(',', '.')
     context = {
         'cart_items': cart_items,
         'total': total,
@@ -297,72 +374,223 @@ def checkout(request):
     }
     return render(request, 'customer/checkout.html', context)
     
-def address_shing(request):
+def add_address(request):
     if request.method == 'POST':
-        receiver = request.POST.get('receiver')
-        phone = request.POST.get('phone')
-        address = request.POST.get('address')
-
-        address_shipping = AddressShipping(receiver=receiver, phone=phone, address=address)
+        user = request.user
+        form = AddressShippingForm(request.POST)
+        if not form.is_valid():
+            return JsonResponse({'status': 'error', 'message': 'Thông tin không hợp lệ'})
+        receiver = form.cleaned_data['receiver']
+        phone = form.cleaned_data['phone']
+        address = form.cleaned_data['address']
+        address_shipping = AddressShipping(receiver=receiver, phone=phone, address=address, customer=user)
         address_shipping.save()
-        return redirect('checkout')
+        data = {
+            'status': 'success',
+            'result': {
+                'id': address_shipping.address_shipping_id,
+                'receiver': receiver,
+                'phone': phone,
+                'address': address
+            }
+        }
+        return JsonResponse(data)
 
 
-def payment(request):
+def order(request):
     if request.method == 'POST':
-        cart_items = request.POST.getlist('cart_item')
-        total = request.POST.get('total')
-        quantity = request.POST.get('quantity')
+        coupon = request.POST.get('coupon')
         discount = request.POST.get('discount')
-        payment_method = request.POST.get('payment_method')
-        shipping_method = request.POST.get('shipping_method')
-        shipping_price = request.POST.get('shipping_price')
-        note = request.POST.get('note')
-        address_shipping_id = request.POST.get('address_shipping')
-        address_shipping = AddressShipping.objects.get(pk=address_shipping_id)
-
-        order = Order.objects.create(
-            total=total,
-            discount=discount,
-            payment_method=payment_method,
-            note=note,
-            customer=request.user,
-            shipping=shipping_price,
-            address_shipping=address_shipping
-        )
-        order.save()
-
+        cart_items = request.POST.getlist('cart_item')
         cart_items = CartItem.objects.filter(pk__in=cart_items)
-        for cart_item in cart_items:
-            order_item = OrderItem.objects.create(
-                size=cart_item.size,
-                color=cart_item.color,
-                quantity=cart_item.quantity,
-                price=cart_item.product.price,
-                customer=request.user,
-                order=order,
-                product=cart_item.product
-            )
-            order_item.save()
-            cart_item.delete()
+        order_form = OrderForm(request.POST)
+
+        if order_form.is_valid():
+            order = order_form.save(commit=False)
+            order.customer = request.user
+            status =  OrderStatus.objects.get(name='Chờ xác nhận')
+            order.status = status
+            order.save()
+            tracking = Tracking.objects.create(order_status=status, order=order)
+            tracking.save()
+            coupon = Coupon.objects.filter(code=coupon).order_by('-start_date').first()
+            
+            if coupon:
+                coupon.quantity -= 1
+                coupon.save()
+            for cart_item in cart_items:
+                order_item = OrderItem.objects.create(
+                    size=cart_item.size,
+                    color=cart_item.color,
+                    quantity=cart_item.quantity,
+                    price=cart_item.product.price,
+                    order=order,
+                    product=cart_item.product
+                )
+                order_item.save()
+
+                product = cart_item.product
+                product.total_sold += cart_item.quantity
+                product.save()
+
+                product_detail = ProductDetail.objects.filter(product=product, color=cart_item.color, size=cart_item.size).first()
+                if product_detail.quantity < cart_item.quantity:
+                    raise ValidationError('Sản phẩm đã hết hàng')
+                product_detail.quantity -= cart_item.quantity
+                product_detail.save()
+                
+                cart_item.delete()
+            return render(request, 'customer/success-order.html')
+        else:
+            context = {
+                'cart_items': cart_items,
+                'coupon': coupon,
+                'discount': discount,
+                'order_form': order_form,   
+            }
+            return render(request, 'customer/checkout.html', context)
     return redirect('home')
 
 
-def get_order_list(request):
+def get_order(request):
     orders = Order.objects.filter(customer=request.user).order_by('-date')
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'orders': orders
+        'page_obj': page_obj,
+        'orders' : page_obj.object_list
     }
-    return render(request, 'order_list.html', context)
+    return render(request, 'customer/orders.html', context)
 
 
-def get_order_detail(request, id):
-    order = get_object_or_404(Order, pk=id)
+def get_order_detail(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    order_tracking = Tracking.objects.filter(order=order).annotate(
+                            null_date=Case(
+                            When(date__isnull=True, then=Value(1)),
+                            default=Value(0),
+                            output_field=models.IntegerField(),
+                        )
+                        ).order_by('null_date', 'date')
     context = {
-        'order': order
+        'order': order,
+        'order_tracking': order_tracking
     }
-    return render(request, 'order_detail.html', context)
+    return render(request, 'customer/order_detail.html', context)
 
+def cancel_order(request):
+    order_id = request.GET.get('order_id')
+    order = Order.objects.get(pk=order_id)
+    order.status = OrderStatus.objects.get(name='Hủy đơn')
+    order.save()
+    context = {
+        'order': order,
+    }
+    return render(request, 'customer/order_detail.html', context)
+
+
+def handleFeedback(request):
+    if request.method == 'GET':
+        order_id = request.GET.get('order_id')
+        order = Order.objects.get(pk=order_id)
+        context = {
+            'order': order
+        }
+         
+    if request.method == 'POST':
+        orderitem_id = request.POST.get('order_item_id')
+        orderitem = OrderItem.objects.get(pk=orderitem_id)
+        product = orderitem.product
+        comment = request.POST.get('comment')
+        rating = request.POST.get('rating')
+        images = request.FILES.getlist('images')
+        feedback = Feedback.objects.create(
+            comment=comment,
+            rating=rating,
+            product=product,
+            customer=request.user
+        )
+        feedback.save()
+        for image in images:
+            feedback_image = FeedbackImage(name=image, feedback=feedback)
+            feedback_image.save()
+        orderitem.feedback = feedback
+        orderitem.save()
+
+        order = orderitem.order
+        context = {
+            'order': order
+        }
+
+    return render(request, 'customer/feedback.html', context)
+
+def getFeedback(request):
+    feedbacks = Feedback.objects.filter(customer=request.user).order_by('-date')
+    paginator = Paginator(feedbacks, 10)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'feedbacks' : page_obj.object_list
+    }
+    return render(request, 'customer/list-feedback.html', context)
+
+
+@api_view(['GET'])
+def getFeedbackByProduct(request):
+    product_id = request.GET.get('product_id')
+    product = Product.objects.get(pk=product_id)
+    feedbacks = Feedback.objects.filter(product=product).order_by('-date')
+    paginator = PageNumberPagination()
+    paginator.page_query_param = 'page'
+    paginator.page_size = 5
+    result_page = paginator.paginate_queryset(feedbacks, request)
+    serializer = FeedbackSerializer(result_page, many=True,context={'request': request})
+
+    respone = paginator.get_paginated_response(serializer.data)
+    respone.data['current_page'] = paginator.page.number
+    respone.data['total_page'] = paginator.page.paginator.num_pages
+    return respone
+    
+def getCoupon(request):
+    coupons = Coupon.objects.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now()).order_by('-start_date')
+    paginator = Paginator(coupons, 10)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'page_obj': page_obj,
+        'coupons' : page_obj.object_list
+    }
+    return render(request, 'customer/list-coupon.html', context)
+
+def profile(request):
+    if request.method == 'GET':
+        user = request.user
+        last_order =  Order.objects.filter(customer=user).last()
+        day_last_order = timezone.now() - last_order.date
+        day_last_order = day_last_order.days
+        total_order = Order.objects.filter(customer=user).count()
+        total_money = Order.objects.filter(customer=user, status__name='Giao hàng thành công').aggregate(total_money=Sum('total'))['total_money']
+        context = {
+            'user': user,
+            'day_last_order': day_last_order,
+            'total_order': total_order,
+            'total_money': total_money
+        }
+        return render(request, 'customer/profile.html', context)
+    else:
+        form = UserForm(request.POST, instance=request.user)
+        if not form.is_valid():
+            return JsonResponse({'status': 'error', 'message': 'Thông tin không hợp lệ'})
+        user = form.save()
+        return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công'})
+    
+
+def notification(request):
+    return render(request, 'customer/notification.html')    
 
 # @login_required(login_url='/login/')
 def addProduct(request):

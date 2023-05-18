@@ -1,6 +1,8 @@
 {% extends 'customer/base.html' %}
 {% load humanize %}
-
+{% load i18n %}
+{% load l10n %}
+{% load my_filters %}
 {% block content %}
 <section class="py-5">
     <div class="container ">
@@ -25,14 +27,14 @@
                         </thead>
                         <tbody>
 
-                            {% for item in cart.cartitem_set.all %}
+                            {% for item in cartitems %}
                             <tr class="cart-table-row" data-cart-item-id='{{ item.cart_item_id }}'>
                                 <!-- viết một hàng dữ liệu sản phẩm trong giỏ hàng -->
                                 <th scope="row">
                                     <input class="cart-table__select-item form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                 </th>
                                 <td>
-                                    <div class="d-flex ">
+                                    <div class="d-flex align-items-center">
                                         <img src="{{ item.product.productimage_set.first.name.url }}" alt="" class="cart-product-img" style="width: 64px;" />
                                         <div class="cart-product-name text-container ms-2">{{ item.product.name}}</div>
                                     </div>
@@ -44,21 +46,26 @@
                                     <div class="cart-product-size">{{ item.size }}</div>
                                 </td>
                                 <td>
-                                    <div class="d-flex">
-                                        <button class="btn btn-quantity btn-minus">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </button>
-                                        <input type="number" class="form-control input-quantity" min="1" value="{{ item.quantity }}">
-                                        <button class="btn btn-quantity btn-add">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
+                                    <div class="d-flex flex-column position-relative">
+                                        <div class='d-flex'>
+                                            <button class="btn btn-quantity btn-minus">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </button>
+                                            <input type="number" class="form-control input-quantity" min="1" value="{{ item.quantity }}">
+                                            <button class="btn btn-quantity btn-add">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="message color-red position-absolute">
+                                            Số lượng không đủ
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="cart-product-price"></div>
+                                    <div class="cart-product-price">{{item.price|floatformat:0|intcomma_dot}}</div>
                                 </td>
                                 <td>
-                                    <div class="cart-product-total-price"></div>
+                                    <div class="cart-product-total-price">{{item.total_price|floatformat:0|intcomma_dot}}</div>
                                 </td>
                                 <td>
                                     <div class="cart-product-action">
@@ -113,6 +120,9 @@
                             <button class="btn btn-primary w-100" style="height: 40px;">Thanh toán</button>
                             <div class="payment-alert"></div>
                         </div>
+                        <div class="form-checkout">
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,7 +132,7 @@
 
 <script>
     $(document).ready(function() {
-        {% if cart.cartitem_set.all %}
+        {% comment %} {% if cart.cartitem_set.all %}
         
         {% for item in cart.cartitem_set.all %}
 
@@ -135,7 +145,7 @@
         $('.cart-product-total-price').text(totalPrice + 'đ');
 
         {% endfor %}
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         $(".cart-table__select-all").click(function() {
             var checkAllState = $(this).prop('checked');
@@ -227,30 +237,50 @@
                 var cartItemId = $(this).closest('tr').data('cart-item-id');
                 cartItemIds.push(cartItemId);
             });
-            var data = {
-                'cart_item': cartItemIds.join(','),
-                'total_money': total_money,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            }
+
             var coupon = $('.coupon').val();
             var discount = parseFloat($('.voucher-price').text().replace('.', ''));
+            var form = $('<form></form>')
+            form.attr("method", "post");
+            form.attr("action", '{% url "check-out" %}');
+
+            cartItemIds.forEach(function(cartItemId) {
+                var field = $('<input></input>');
+                field.attr("type", "hidden");
+                field.attr("name", 'cart_item');
+                field.attr("value", cartItemId);
+                form.append(field);
+            })
+
+            var field = $('<input></input>');
+            field.attr("type", "hidden");
+            field.attr("name", 'total_money');
+            field.attr("value", total_money);
+            form.append(field);
+
             if (coupon != '' && discount != undefined) {
-                data['coupon'] = coupon;
-                data['discount'] = discount;
+                var field = $('<input></input>');
+                field.attr("type", "hidden");
+                field.attr("name", 'coupon');
+                field.attr("value", coupon);
+                form.append(field);
+
+                var field = $('<input></input>');
+                field.attr("type", "hidden");
+                field.attr("name", 'discount');
+                field.attr("value", discount);
+                form.append(field);
             }
-            console.log(data);
-            $.ajax({
-                data: data,
-                url: '{% url "check-out" %}',
-                type: 'POST',
-                success: function(response) {
-                    console.log('hello')
-                    document.write(response);
-                },
-                error: function(error) {
-                    alert('Có lỗi xảy ra');
-                }
-            });
+
+            var field = $('<input></input>');
+            field.attr("type", "hidden");
+            field.attr("name", 'csrfmiddlewaretoken');
+            field.attr("value", '{{ csrf_token }}');
+            form.append(field);
+            $('.form-checkout').html(form)
+            form.submit();
+            console.log(form);
+
         }
         )
 
@@ -263,13 +293,7 @@
         var quantity = parseInt(inputQuantity.val());
         quantity = operation == 'add' ? quantity + 1 : quantity - 1;
         
-        inputQuantity.val(quantity);
-        $(this).closest('tr').find('.cart-product-total-price').text(price * quantity + 'đ');
-        calMoney();
-        if (quantity == 0) {
-            $(this).closest('.cart-table-row').remove();    
-            checkNumOfItems();
-        }
+        
 
         var cartItemId = $(this).closest('tr').data('cart-item-id');
         data = {
@@ -282,7 +306,22 @@
             type: 'POST',
             data: data,
             success: function(response) {
-                console.log('Cập nhật thành công');
+                if (response.status == 'success') {
+                    inputQuantity.val(quantity);
+                    inputQuantity.closest('tr').find('.cart-product-total-price').text(price * quantity + 'đ');
+                    calMoney();
+                    if (quantity == 0) {
+                    inputQuantity.closest('.cart-table-row').remove();
+                    checkNumOfItems();
+                    }
+                    inputQuantity.parent().siblings('.message').hide();
+
+                } else {
+                    inputQuantity.parent().siblings('.message').show();
+                    setTimeout(function() {
+                        inputQuantity.siblings('.message').hide();
+                    }, 2000);
+                }
             },
             error: function(error) {
                 console.log('Có lỗi xảy ra');
