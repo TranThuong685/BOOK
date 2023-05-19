@@ -810,7 +810,7 @@ def getProductDetailAdmin(request, product_id):
 @login_required(login_url='/login')
 def customerManager(request):
     keyword = request.GET.get('keyword', '')
-    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=6).annotate(
+    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=7).annotate(
         total_orders=Count('order'),
         total_amount=Coalesce(Sum('order__total'), Value(0.0)),
         type_customer=Case(
@@ -837,7 +837,7 @@ def orderManager(request):
     states = OrderStatus.objects.all()
     keyword = request.GET.get('keyword', '')
     orders = Order.objects.filter(customer__name__contains=keyword).select_related('customer', 'status').order_by(
-        'order_id')
+        '-order_id')
     if request.method == "POST":
         status = request.POST.get('status', '')
         start_date = request.POST.get('start_date', '')
@@ -869,7 +869,6 @@ def getOrderDetail(request, order_id):
                              product__productsale__end_date__gte=timezone.now(),
                              then=F('product__productsale__price')), default=F('product__price')),
         total=F('curr_price') * F('quantity'))
-    states = OrderStatus.objects.filter(order_status_id__gte=order.status_id).order_by("order_status_id")
     if request.method == "POST":
         status = request.POST.get('status')
         status = OrderStatus.objects.get(order_status_id=status)
@@ -877,6 +876,7 @@ def getOrderDetail(request, order_id):
         order.save()
         tracking = Tracking(order=order, order_status=status)
         tracking.save()
+    states = OrderStatus.objects.filter(order_status_id__gte=order.status_id).order_by("order_status_id")
     return render(request, 'admin_shop/order-detail.html',
                   {'order': order, 'order_items': order_items, 'states': states, 'total_price': total_price})
 
