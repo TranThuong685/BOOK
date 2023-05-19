@@ -948,19 +948,26 @@ def viewProfile(request, user_id):
         user = User.objects.get(id=user_id)
         diff = date.today() - user.date_joined.date()
         time = convert_diff(diff)
-        last_order =  Order.objects.filter(customer=user).last()
-        day_last_order = timezone.now() - last_order.date
-        day_last_order = convert_diff(day_last_order)
 
-        total_order = Order.objects.filter(customer=user).count()
-        total_money = Order.objects.filter(customer=user, status__name='Giao hàng thành công').aggregate(total_money=Sum('total'))['total_money']
-        context = {
-            'user': user,
-            'day_last_order': day_last_order,
-            'total_order': total_order,
-            'total_money': total_money,
-            'time': time
-        }
+        if user_id != 1:
+            last_order = Order.objects.filter(customer=user).last()
+            day_last_order = timezone.now() - last_order.date
+            day_last_order = convert_diff(day_last_order)
+
+            total_order = Order.objects.filter(customer=user).count()
+            total_money = Order.objects.filter(customer=user, status__name='Giao hàng thành công').aggregate(total_money=Sum('total'))['total_money']
+            context = {
+                'user': user,
+                'day_last_order': day_last_order,
+                'total_order': total_order,
+                'total_money': total_money,
+                'time': time
+            }
+        else:
+            context = {
+                'user': user,
+                'time': time
+            }
     else:
         return redirect('/home')
     return render(request, 'admin_shop/profile.html', context=context)
