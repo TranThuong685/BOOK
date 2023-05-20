@@ -47,7 +47,7 @@
                             <img class="header-img-user" src="{{user.avatar.url}}" alt="">
                             <p class="">{{ request.user.name }}</p>
                             <div class="header-user__list-option d-flex flex-column">
-                                <a class="header-user__option" href="/view_profile/{{ request.user.id }}">
+                                <a class="header-user__option" href="/view_profile?user_id={{ request.user.id }}">
                                     <p>Tài khoản của tôi</p>
                                 </a>
                             </div>

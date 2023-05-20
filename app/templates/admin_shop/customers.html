@@ -54,7 +54,7 @@
                             <tbody>
                                 {% for customer in page_obj %}
                                 <tr class="order-item">
-                                    <td><a href="/view_profile/{{ customer.id }}" class="color-blue">
+                                    <td><a href="/view_profile?user_id={{ customer.id }}" class="color-blue">
                                             <div class="d-flex align-items-center gap-1">
                                                 <img src="{{customer.avatar.url}}" alt="" class="order-user-img" />
                                                 <div class="order-user-name text-container ms-2 color-blue">{{ customer.name }}</div>

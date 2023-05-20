@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-8">
                 <div class="card p-4">
-                    <div class="fs-5">{{product.name}}</div>
+                    <div class="fs-5">{{ product.name }}</div>
                     <div class="d-flex gap-3 my-3">
                         <div class="rating d-flex gap-1">
                             <div class='rating'>
@@ -21,14 +21,16 @@
                             </div>
                             <span>5.0</span>
                         </div>
-                        <div class="total_sold">Đã bán: {{product.total_sold}}</div>
+                        <div class="total_sold">Đã bán: {{ product.total_sold }}</div>
                     </div>
 
                     <div class="d-flex gap-3 mt-3">
-                        <div class="price">Giá: {{product.price|floatformat:0|intcomma_dot}}đ</div>
+                        <div class="price">Giá: {{ product.price|floatformat:0|intcomma_dot }}đ</div>
                         {% if product.price != product.curr_price %}
 
-                        <div class="price color-red">Giá khuyến mãi: {{product.curr_price|floatformat:0|intcomma_dot}}đ</div>
+                        <div class="price color-red">Giá khuyến
+                            mãi: {{ product.curr_price|floatformat:0|intcomma_dot }}đ
+                        </div>
                         {% endif %}
 
                     </div>
@@ -36,29 +38,14 @@
                         <div class='mt-3 fs-5'>Ảnh sản phẩm</div>
                         {% for image in product.productimage_set.all %}
                         <div class='col-2'>
-                            <img class='product-detail-image' src="{{image.name.url}}" alt="" width="100">
+                            <img class='product-detail-image' src="{{ image.name.url }}" alt="" width="100">
                         </div>
                         {% endfor %}
                     </div>
                     <div>
                         <div class="description fs-5 mb-3">Mô tả</div>
                         <div class="container-text">
-                            <p class="text">👩 MÔ TẢ SẢN PHẨM
-                                - Áo thun nam nữ oversize sử dụng chất vải cotton 65/35 co giãn 4 chiều. Là loại vải có đặc điểm mềm mịn, độ co giãn cao, khả năng thấm hút tốt và được dệt hoàn toàn từ sợi cây bông tự nhiên. Chất vải cotton cực kỳ thân thiện với làn da.
-                                - Áo thun nam nữ form rộng cổ tròn thoải mái
-                                - Áo phông unisex form rộng dễ phối đồ. Bạn có thể phối với quần jean, chân váy, … kết hợp với một đôi sneaker cho bạn tự tin xuống phố
-
-                                📣 HƯỚNG DẪN BẢO QUẢN ÁO PHÔNG NAM NỮ OVERSIZE VENDER Shop
-                                - Lộn trái áo thun nam nữ tay ngắn khi giặt, không giặt chung áo thun unisex trắng với quần áo tối màu.
-                                - Sử dụng xà phòng trung tính, không sử dụng xà phòng có chất tẩy mạnh cho áo thun nam nữ oversize.
-                                - Không sử dụng chất tẩy, không ngâm áo phông unisex.
-                                - Phơi ngang, không treo móc khi áo thun unisex ướt, không phơi trực tiếp dưới ánh nắng mặt trời.
-
-                                ️🎯 Giao hàng đúng size, lỗi 1 đổi 1
-                                ️🎯 Giao COD toàn quốc
-                                ️🎯 Hỗ trợ đổi size và đổi màu trong vòng 7 ngày kể từ khi nhận hàng, sản phẩm đổi phải còn nguyên tem mac và chưa qua sử dụng.
-                                ⚠️ LƯU Ý: Khi mở sản phẩm, khách yêu vui lòng quay lại video quá trình mở sản phẩm để được đảm bảo 100% đổi lại sản phẩm mới nếu Áo thun VENDER giao bị lỗi.
-                            </p>
+                            <p class="text">{{product.description}}</p>
                             <button class="expanse-text btn btn-secondary">Xem thêm</button>
                         </div>
                     </div>
@@ -80,9 +67,9 @@
                             <tbody>
                                 {% for variant in product.productdetail_set.all %}
                                 <tr>
-                                    <td>{{variant.color}}</td>
-                                    <td>{{variant.size}}</td>
-                                    <td>{{variant.quantity}}</td>
+                                    <td>{{ variant.color }}</td>
+                                    <td>{{ variant.size }}</td>
+                                    <td>{{ variant.quantity }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -94,14 +81,15 @@
 
         <h5 class="my-4">Đánh giá sản phẩm</h5>
         {% if feedbacks %}
-        {% for feedback in feedbacks %}
-        <div class="feedback mt-4">
+        <div class="product-rating__list card px-3">
+            {% for feedback in feedbacks %}
+
             <div class="product-rating__item">
-                <div class="d-flex mt-4">
-                    <img class="user-image-rate" src="{{feedback.customer.avatar.url}}" alt="">
-                    <div class="d-flex flex-column ms-3">
-                        <div class="">{{feedback.customer.name}}</div>
-                        <div class="color-gray">{{feedback.date|date:"H:i d/m/Y"}}</div>
+                <div class="d-flex mt-4 w-100">
+                    <img class="user-image-rate" src="{{ feedback.customer.avatar.url }}" alt="">
+                    <div class="d-flex flex-column ms-3 flex-grow-1">
+                        <div class="">{{ feedback.customer.name }}</div>
+                        <div class="color-gray">{{ feedback.date|date:"H:i d/m/Y" }}</div>
                         <div class="mt-1">
                             {% for i in 5|times %}
                             {% if i <= feedback.rating %}
@@ -111,53 +99,100 @@
                             {% endif %}
                             {% endfor %}
                         </div>
+
+                        {% if feedback.feedbackimage_set.all %}
                         <div class=" image-feedback-list d-flex mt-3">
                             {% for image in feedback.feedbackimage_set.all %}
                             <div class="image-feedback-item">
-                                <img src="{{image.name.url}}" alt="">
+                                <img src="{{ image.name.url }}" alt="">
                             </div>
                             {% endfor %}
                         </div>
+                        {% endif %}
+
+                        {% if feedback.comment %}
                         <div class="mt-3">
-                            {{feedback.comment}}
+                            <span class='fw-bold me-2'>Bình luận: </span>
+                            {{ feedback.comment }}
                         </div>
+                        {% endif %}
+
                         <div class="d-flex align-items-center mt-3">
-                            <div class="btn active btn-like"> {{feedback.like}} <i class="fa-solid fa-thumbs-up "></i></div>
-                            <div class="btn ms-2  btn-dislike">{{feedback.dislike}} <i class="fa-solid fa-thumbs-down"></i></div>
+                            <div class="btn active btn-like"> {{ feedback.like }} <i class="fa-solid fa-thumbs-up "></i></div>
+                            <div class="btn ms-2  btn-dislike">{{ feedback.dislike }} <i class="fa-solid fa-thumbs-down"></i></div>
+
                         </div>
+                        {% if feedback.feedbackrespone_set.all %}
+                        <div class="response d-flex mt-3 align-items-start">
+                            <i class="fa-solid fa-reply fa-rotate-180"></i>
+                            <div class="ms-3">
+                                <h6 class="m-0">Phản hồi của người bán</h6>
+                                <div class="color-gray">{{feedback.feedbackrespone_set.first.date|date:'H:i d/m/Y'}}</div>
+                                <div class="mt-1">
+                                    {{ feedback.feedbackrespone_set.first.comment }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% else %}
+                        <div class="d-flex flex-column gap-3 mt-3">
+                            <div class='response-form' style='display: none'>
+                                <form id="respone-form" method="POST" action="/product-detail?product_id={{ product.product_id }}&feedback_id={{ feedback.feedback_id }}" name="feedback">
+                                    {% csrf_token %}
+
+                                    <div>
+                                        <label for="id_textfield" class="form-label fw-bold">Nhập phản hồi</label>
+                                        {{ response_form.textfield }}
+                                        <input type="hidden" name="feedback_id" value="{{ feedback.feedback_id }}">
+                                        <div class='d-flex gap-3 mt-2'>
+                                            <button type="submit" class="btn active btn-primary">Gửi phản hồi</button>
+                                            <div class="btn btn-secondary hide-response">
+                                                Đóng
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="btn active btn-primary show-response" style='width: 120px'>
+                                Phản hồi
+                                <i class="fa-solid fa-reply fa-rotate-180"></i>
+                            </div>
+
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="page-controller">
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %} ">
-                        <a class="page-link pre-page" href="/product-detail/{{product.product_id}}?page=1" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {% if page_obj.has_previous %}
-                    <li class="page-item" aria-current="page">
-                        <a class="page-link" href="/product-detail/{{product.product_id}}?page={{page_obj.previous_page_number}}">{{page_obj.previous_page_number}}</a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item active">
-                        <a class="page-link" href="#">{{page_obj.number}}</a>
-                    </li>
+            <div class="page-controller mt-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %} ">
+                            <a class="page-link pre-page" href="/product-detail/{{ product.product_id }}?page=1" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% if page_obj.has_previous %}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link" href="/product-detail/{{ product.product_id }}?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ page_obj.number }}</a>
+                        </li>
 
-                    {% if page_obj.has_next %}
-                    <li class="page-item" aria-current="page">
-                        <a class="page-link" href="/product-detail/{{product.product_id}}?page={{page_obj.next_page_number}}">{{page_obj.next_page_number}}</a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item">
-                        <a class="page-link next-page {% if page_obj.number == 1 %}disabled{% endif %}" href="/product-detail/{{product.product_id}}?page={{page_obj.paginator.num_pages}}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        {% if page_obj.has_next %}
+                        <li class="page-item" aria-current="page">
+                            <a class="page-link" href="/product-detail/{{ product.product_id }}?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                        </li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link next-page {% if page_obj.number == 1 %}disabled{% endif %}" href="/product-detail/{{ product.product_id }}?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
         {% endfor %}
         {% else %}
@@ -178,6 +213,15 @@
                 $('.expanse-text').text('Xem thêm');
             }
         })
-    });
+        $('.show-response').click(function() {
+            $('.response-form').show();
+            $(this).hide();
+        })
+        $('.hide-response').click(function() {
+            $('.response-form').hide();
+            $('.show-response').show();
+        })
+
+    })
 </script>
 {% endblock content %}

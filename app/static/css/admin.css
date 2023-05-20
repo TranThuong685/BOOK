@@ -507,8 +507,20 @@
 .image-feedback-item img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 
 .customers table tr td:first-child {
     text-align: left;
+}
+
+.product-rating__item {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.response {
+    padding: 8px;
+    border-radius: 4px;
+    background-color: var(--background-color);
 }

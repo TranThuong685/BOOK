@@ -1,5 +1,7 @@
 from django import forms
 from .models import *
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit
 
 
 class UserForm(forms.ModelForm):
@@ -79,3 +81,13 @@ class OrderStatusForm(forms.ModelForm):
     class Meta:
         model = OrderStatus
         fields = ['name', 'description']
+
+
+class ResponseForm(forms.Form):
+    textfield = forms.CharField(label="Nhập vào phản hồi cho bình luận", 
+                                 widget=forms.Textarea(attrs={'class': 'form-control', 'rows': '5', 'cols': '80'}))
+    
+
+    helper = FormHelper()
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Gửi phản hồi'))
