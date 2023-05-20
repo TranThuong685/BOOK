@@ -3,12 +3,14 @@
 {% block content %}
 <div class="py-4">
     <div class="container">
-        <h2 class="my-4">Đánh giá đơn hàng</h2>
+        <h4 class="mb-4">Đánh giá đơn hàng 
+            <a class='color-blue' href="order-detail/{{order.order_id}}">#{{order.order_id}}</a>
+        </h4>
 
         {% for item in order.orderitem_set.all %}
 
         {% if item.feedback %}
-        <div class="order-item card p-4 mb-5">
+        <div class="order-item card p-4 mb-4">
             <div class="d-flex align-items-center gap-3 mb-3 color-green">
                 <i class="fa-regular fa-circle-check"></i>
                 <div class="ms-3">Đã đánh giá</div>

@@ -154,6 +154,9 @@ a {
     border-color: #fff !important;
 }
 
+.btn-min-width {
+    min-width: 70px;
+}
 .page-link:hover {
     cursor: pointer;
 }
@@ -846,7 +849,7 @@ a {
 
 .size .btn,
 .color .btn {
-    width: 64px;
+    min-width: 64px;
 }
 
 .btn-quantity {
@@ -1111,6 +1114,31 @@ table tr td:first-child {
     padding: 16px;
     background-color: #fff;
     border-radius: 8px;
+}
+
+.orders-table .search-input {
+    border-radius: 8px;
+    width: 320px;
+    height: 36px;
+}
+
+.filter-list {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    background-color: white;
+}
+
+.filter-list, .filter-list:hover {
+    border: 1px solid var(--border);
+    background-color: white;
+}
+
+.filter-list::after {
+    position: absolute;
+    right: 12px;
+    top: 15px;
 }
 
 .order-item .badge {

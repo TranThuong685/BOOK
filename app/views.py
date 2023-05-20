@@ -548,14 +548,30 @@ def order(request):
 
 @login_required(login_url='/login')
 def get_order(request):
-    orders = Order.objects.filter(customer=request.user).order_by('-date')
+    keyword = request.GET.get('keyword', '')
+    status_choice = request.GET.get('status', '')
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+
+    orders = Order.objects.filter(customer=request.user).order_by('-order_id')
+    if keyword:
+        orders = orders.filter(order_id__icontains=keyword)
+    if status_choice:
+        orders = orders.filter(status__name=status_choice)
+    if start_date:
+        orders = orders.filter(date__gte=start_date)
+    if end_date:
+        orders = orders.filter(date__lte=end_date)
+
     paginator = Paginator(orders, 10)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
+    status = OrderStatus.objects.all()
 
     context = {
         'page_obj': page_obj,
-        'orders' : page_obj.object_list
+        'orders' : page_obj.object_list,
+        'states': status
     }
     return render(request, 'customer/orders.html', context)
 
@@ -573,6 +589,11 @@ def cancel_order(request):
     order_id = request.GET.get('order_id')
     order = Order.objects.get(pk=order_id)
     order.status = OrderStatus.objects.get(name='Hủy đơn')
+    order_item = order.orderitem_set.all()
+    for item in order_item:
+        product_detail = ProductDetail.objects.filter(product=item.product, color=item.color, size=item.size).first()
+        product_detail.quantity += item.quantity
+        product_detail.save()
     order.save()
     context = {
         'order': order,

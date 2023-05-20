@@ -29,7 +29,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Địa chỉ nhận hàng</h1>
-                                        <button class="btn btn-primary ms-2" data-bs-target="#modal-add-address" data-bs-toggle="modal">Thêm</button>
+                                        <button type='button' class="btn btn-primary ms-2" data-bs-target="#modal-add-address" data-bs-toggle="modal">Thêm</button>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body address-options">
@@ -62,7 +62,7 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button class='btn btn-primary btn-select-address'>Chọn</button>
+                                        <button type='button' class='btn btn-primary btn-select-address'>Chọn</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                                     </div>
                                 </div>
@@ -90,8 +90,8 @@
                                                 <input type="text" class="form-control" name="phone" id="" aria-describedby="helpId" placeholder="">
                                             </div>
                                             <div class='d-flex justify-content-end gap-2'>
-                                                <button class='btn btn-primary btn-add-address'>Thêm</button>
-                                                <button class="btn btn-secondary" data-bs-target="#modal-address" data-bs-toggle="modal">Quay lại</button>
+                                                <button type='button' class='btn btn-primary btn-add-address'>Thêm</button>
+                                                <button type='button' class="btn btn-secondary" data-bs-target="#modal-address" data-bs-toggle="modal">Quay lại</button>
                                             </div>
                                         </div>
                                     </div>
@@ -197,7 +197,7 @@
 
                                             <div class="input-group mb-3">
                                                 <input type="text" class="form-control coupon" placeholder="Voucher" name='coupon'>
-                                                <button class="btn btn-light btn-coupon" style="width: 100px;">Apply</button>
+                                                <button type='button' class="btn btn-light btn-coupon" style="width: 100px;">Apply</button>
                                             </div>
                                             <div class="voucher-result"></div>
                                         </div>
@@ -362,11 +362,7 @@
 
         calMoney();
 
-        $('.change-address, .btn-add-address, change-coupon').click(function() {
-            $('form').submit(function(event) {
-                event.preventDefault(); // Ngăn chặn form được submit
-            });
-        });
+
 
         $('.btn-select-address').click(function() {
             $('#modal-address').modal('hide');
@@ -445,15 +441,12 @@
         })
 
         $('.btn-coupon').click(function() {
-            $('form').submit(function(event) {
-                event.preventDefault(); // Ngăn chặn form được submit
-            });
             var coupon = $('.coupon').val();
             if (coupon == '') {
                 $('.voucher-result').html('<div class="text-danger">Vui lòng nhập mã giảm giá</div>');
                 return;
             }
-            var total_money = parseFloat($('.total-money').text().replace('.', ''));
+            var total_money = parseFloat($('.total-money').text().replaceAll('.', ''));
             $.ajax({
                 data: {
                     'coupon': coupon,
@@ -511,13 +504,13 @@
 
             $('input[name="phone"]').val(phone);
 
-            var discount = parseFloat($('.discount').text().replace('.', '').replace('đ', '')) || 0;
+            var discount = parseFloat($('.discount').text().replaceAll('.', '').replace('đ', '')) || 0;
             $('input[name="discount"]').val(discount);
 
-            var ship_price = parseFloat($('.ship-price').text().replace('.', '').replace('đ', ''));
+            var ship_price = parseFloat($('.ship-price').text().replaceAll('.', '').replace('đ', ''));
             $('input[name="shipping"]').val(ship_price);
 
-            var total = parseFloat($('.total').text().replace('.', '').replace('đ', '').trim());
+            var total = parseFloat($('.total').text().replaceAll('.', '').replace('đ', '').trim());
             $('input[name="total"]').val(total);
 
             $('input[name="coupon"]').val($('.coupon-code').text() || '');
@@ -533,7 +526,7 @@
         var totaMoney = 0;
         $('.order-item').each(function() {
             var quantity = parseInt($(this).find('.quantity').text().replace('x', ''));
-            var price = parseFloat($(this).find('.price-item').text().replace('.', '').replace('đ', ''));
+            var price = parseFloat($(this).find('.price-item').text().replaceAll('.', '').replace('đ', ''));
             $(this).find('.price-item').text(price.toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
@@ -546,8 +539,8 @@
         }).replace('₫', 'đ'));
 
 
-        voucher = parseFloat($('.order-infor-money .discount').text().replace('.', '')) || 0;
-        var ship_price = parseFloat($('.order-infor-money .ship-price').text().replace('.', '').replace('đ', ''));
+        voucher = parseFloat($('.order-infor-money .discount').text().replaceAll('.', '')) || 0;
+        var ship_price = parseFloat($('.order-infor-money .ship-price').text().replaceAll('.', '').replace('đ', ''));
 
         totaMoney = totalPrice + voucher + ship_price;
         $('.total').text(totaMoney.toLocaleString('vi-VN', {
