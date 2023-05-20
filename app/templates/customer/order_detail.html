@@ -4,9 +4,9 @@
 <!-- Content -->
 <div class="py-4">
     <div class="container">
-        <h2 class="mb-2">Trạng thái đơn hàng
+        <h4 class="mb-2">Trạng thái đơn hàng
             <span class="color-blue fw-normal">#{{ order.order_id }}</span>
-        </h2>
+        </h4>
 
         <hr class="mb-5">
         <div class="row">
@@ -111,10 +111,12 @@
                             {% for item in order.orderitem_set.all %}
                             <div class="row d-flex align-items-center my-2 order-item">
                                 <div class="col-4">
-                                    <div class="d-flex align-items-center">
-                                        <img src="{{item.product.productimage_set.first.name.url}}" alt="" style="width: 40px;height: 40px;">
-                                        <div class="order-item-name text-container ms-2">{{item.product.name}}</div>
-                                    </div>
+                                    <a href='/product/{{item.product.product_id}}'>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{item.product.productimage_set.first.name.url}}" alt="" style="width: 40px;height: 40px;">
+                                            <div class="order-item-name text-container ms-2">{{item.product.name}}</div>
+                                        </div>
+                                    </a>
                                 </div>
                                 <div class="col-4">Loại: {{item.color}}, {{item.size}}</div>
                                 <div class="col-1 d-flex justify-content-center quantity">x {{ item.quantity}}</div>
