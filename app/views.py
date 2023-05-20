@@ -226,8 +226,7 @@ def getListProduct(request):
     return respone
 
 
-def getProductDetail(request):
-    product_id = request.GET.get('product_id')
+def getProductDetail(request, product_id):
     product = Product.objects.filter(pk=product_id).annotate(
         curr_price=Case(
             When(productsale__start_date__lte=timezone.now(),
