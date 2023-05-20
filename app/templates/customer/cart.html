@@ -122,11 +122,33 @@
                             <p class="total-price">0đ</p>
                         </div>
 
-                        <div class="input-group my-4">
+                        <div class="input-group mt-4">
                             <input type="text" class="form-control coupon" placeholder="Voucher" name='coupon'>
-                            <button class="btn btn-light btn-coupon" style="width: 100px;">Apply</button>
+                            <button class="btn btn-light btn-coupon" style="width: 100px;">Sử dụng</button>
                         </div>
-
+                        <div class="voucher-wallet d-flex justify-content-end mt-2 pe-2 color-blue" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#list-voucher"
+                            style="cursor: pointer;"
+                        >
+                            Ví voucher
+                        </div>
+                        <div class="modal fade" id="list-voucher" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Mã voucher</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="d-flex justify-content-between voucher-result">
                         </div>
 

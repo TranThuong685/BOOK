@@ -294,9 +294,15 @@ def add_to_cart(request):
             ),
             total_price=Round(ExpressionWrapper(F('price') * F('quantity'), output_field=FloatField())
                               ))
+        voucher_wallet = VoucherWallet.objects.filter(customer=request.user).first()
+        if voucher_wallet:
+            voucher_wallet = VoucherWallet.objects.create(customer=request.user)
+            voucher_wallet.save()
+
         context = {
             'cart': cart,
-            'cartitems': cartitems
+            'cartitems': cartitems,
+            'voucher_wallet': voucher_wallet
         }
         return render(request, 'customer/cart.html', context=context)
 

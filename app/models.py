@@ -181,3 +181,8 @@ class Notification(models.Model):
     content = models.CharField(max_length=255, blank=False, null=False)
     create_at = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
+
+class VoucherWallet(models.Model):
+    voucher_wallet_id = models.AutoField(primary_key=True, blank=False, null=False)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, blank=False, null=True)
