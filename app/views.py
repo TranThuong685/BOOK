@@ -226,7 +226,8 @@ def getListProduct(request):
     return respone
 
 
-def getProductDetail(request, product_id):
+def getProductDetail(request):
+    product_id = request.GET.get('product_id')
     product = Product.objects.filter(pk=product_id).annotate(
         curr_price=Case(
             When(productsale__start_date__lte=timezone.now(),
@@ -895,13 +896,26 @@ def getOrderDetail(request):
                              then=F('product__productsale__price')), default=F('product__price')),
         total=F('curr_price') * F('quantity'))
     if request.method == "POST":
-        status = request.POST.get('status')
-        status = OrderStatus.objects.get(order_status_id=status)
-        order.status = status
-        order.save()
-        tracking = Tracking(order=order, order_status=status)
-        tracking.save()
-    states = OrderStatus.objects.filter(order_status_id__gte=order.status_id).order_by("order_status_id")
+        status = int(request.POST.get('status'))
+        if order.status.order_status_id != status:
+            status = OrderStatus.objects.get(order_status_id=status)
+            order.status = status
+            order.save()
+            tracking = Tracking(order=order, order_status=status)
+            tracking.save()
+        else:
+            pass
+    if order.status.order_status_id == 1:
+        status_ids = [1, 3, 6]
+    elif order.status.order_status_id < 5:
+        status_ids = [order.status.order_status_id, order.status.order_status_id + 1, 6]
+    elif order.status.order_status_id == 5:
+        status_ids = [5, 6, 7]
+    elif order.status.order_status_id == 6:
+        status_ids = [6]
+    else:
+        status_ids = [7]
+    states = OrderStatus.objects.filter(order_status_id__in=status_ids).order_by("order_status_id")
     return render(request, 'admin_shop/order-detail.html',
                   {'order': order, 'order_items': order_items, 'states': states, 'total_price': total_price, })
 
