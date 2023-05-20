@@ -11,7 +11,7 @@
                 </a>
             </div>
             <div class="mt-4">
-                <form action="/order/{{ order.order_id }}" method="post">
+                <form action="/order_detail?order_id={{ order.order_id }}" method="post">
                     {% csrf_token %}
                     <div class="my-3 d-flex align-items-center gap-3">
                         <label for="" class="form-label m-0">Trạng thái đơn hàng</label>
