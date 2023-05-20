@@ -75,9 +75,9 @@
                             <tbody>
                                 {% for order in page_obj %}
                                 <tr class="order-item">
-                                    <td><a href="/order/{{ order.order_id }}" class="color-blue">#{{ order.order_id }}</a></td>
+                                    <td><a href="/order_detail?order_id={{ order.order_id }}" class="color-blue">#{{ order.order_id }}</a></td>
                                     <td>
-                                        <a href="/view_profile/{{ order.customer.id }}" class="d-flex justify-content-center">
+                                        <a href="/view_profile?user_id={{ order.customer.id }}" class="d-flex justify-content-center">
                                             <div class="d-flex align-items-center">
                                                 <img src="{{order.customer.avatar.url}}" alt="" class="order-user-img" />
                                                 <div class="order-user-name text-container ms-2 color-blue">{{ order.customer.name }}</div>

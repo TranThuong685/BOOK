@@ -230,7 +230,7 @@
                             {% for product in related_products %}
                             
                             <div class="swiper-slide">
-                                <a class="product" href="/product/{{product.product_id}}">
+                                <a class="product" href="/product?product_id={{product.product_id}}">
                                     <div class="product-card">
                                         <div class="product-image">
                                             <img src="{{ product.productimage_set.first.name.url}}" alt="" class="product-img">
