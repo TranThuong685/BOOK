@@ -299,10 +299,13 @@ def add_to_cart(request):
             voucher_wallet = VoucherWallet.objects.create(customer=request.user)
             voucher_wallet.save()
 
+        coupons = Coupon.objects.filter(start_date__lte=timezone.now(),
+                                         end_date__gte=timezone.now()).order_by('discount')  
         context = {
             'cart': cart,
             'cartitems': cartitems,
-            'voucher_wallet': voucher_wallet
+            'voucher_wallet': voucher_wallet,
+            'coupons': coupons
         }
         return render(request, 'customer/cart.html', context=context)
 
@@ -374,7 +377,7 @@ def check_coupon(request):
         return JsonResponse(
             {'status': 'error', 'message': 'Chưa đủ điều kiện đơn hàng tối thiếu. Đơn hàng tối thiểu là ' + condition})
 
-    return JsonResponse({'status': 'success', 'discount': coupon.discount})
+    return JsonResponse({'status': 'success', 'discount': coupon.discount, 'condition': coupon.condition})
 
 
 def checkout(request):
@@ -399,11 +402,13 @@ def checkout(request):
     )
     locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
     total = locale.format_string('%dđ', int(total), grouping=True).replace(',', '.')
+    coupons = Coupon.objects.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now()).order_by('discount')
     context = {
         'cart_items': cart_items,
         'total': total,
         'coupon': coupon,
-        'discount': discount
+        'discount': discount,
+        'coupons': coupons
     }
     return render(request, 'customer/checkout.html', context)
 
@@ -436,12 +441,15 @@ def buy_now(request):
         total = product.curr_price * quantity
         locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
         total = locale.format_string('%dđ', int(total), grouping=True).replace(',', '.')
+        coupons = Coupon.objects.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now()).order_by('discount')
+
         context = {
             'product': product,
             'color': color,
             'size': size,
             'quantity': quantity,
-            'total': total
+            'total': total,
+            'coupons': coupons
         }
         return render(request, 'customer/checkout.html', context)
 

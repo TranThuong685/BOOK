@@ -157,6 +157,11 @@ a {
 .btn-min-width {
     min-width: 70px;
 }
+
+.fs-min {
+    font-size: 14px;
+}
+
 .page-link:hover {
     cursor: pointer;
 }
@@ -418,7 +423,7 @@ a {
 }
 
 .content {
-    min-height: 500px;
+    min-height: 700px;
 }
 /* Carousel */
 .slider {
@@ -1213,6 +1218,11 @@ table tr td:first-child {
     border-radius: 0;
     color: var(--blue);
     background-color: transparent;
+}
+
+.login {
+    border-radius: 20px;
+    padding: 6px 10px;
 }
 
 .login-btn,
