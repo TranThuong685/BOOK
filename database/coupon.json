@@ -1,0 +1,5 @@
+[{"coupon_id":1, "code":"salehe01", "discount":100000.0, "quantity":50, "condition":1000000.0, "start_date":"2023-05-05 00:00:00.000000", "end_date":"2023-05-26 00:00:00.000000"},
+ {"coupon_id":2, "code":"salehe02", "discount":250000.0, "quantity":50, "condition":2000000.0, "start_date":"2023-05-05 00:00:00.000000", "end_date":"2023-05-30 00:00:00.000000"},
+ {"coupon_id":3, "code":"salehe03", "discount":500000.0, "quantity":50, "condition":3000000.0, "start_date":"2023-05-05 00:00:00.000000", "end_date":"2023-05-30 00:00:00.000000"},
+ {"coupon_id":4, "code":"salehe04", "discount":1000000.0, "quantity":30, "condition":5000000.0, "start_date":"2023-05-05 00:00:00.000000", "end_date":"2023-05-30 00:00:00.000000"},
+ {"coupon_id":5, "code":"salehe05", "discount":2500000.0, "quantity":10, "condition":10000000.0, "start_date":"2023-05-05 00:00:00.000000", "end_date":"2023-05-30 00:00:00.000000"}]
