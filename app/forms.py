@@ -31,7 +31,8 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'category']
+        fields = ['name', 'description', 'price', 'category', 'sale', 'page', 'age', 'author', 'publisher', 'translator', 'year_of_publish',
+                  'size', 'weight']
 
         widgets = {
             'name': forms.TextInput(),
@@ -57,6 +58,11 @@ class ProductImageForm(forms.ModelForm):
     class Meta:
         model = ProductImage
         fields = ['name']
+
+    def __init__(self, *args, **kwargs):
+        # Tùy chọn này giúp trường 'name' không bắt buộc
+        super().__init__(*args, **kwargs)
+        self.fields['name'].required = False 
 
 
 class AddressShippingForm(forms.ModelForm):

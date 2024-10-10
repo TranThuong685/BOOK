@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="content">
-    <h4 class="my-4">Thêm sản phẩm</h4>
+    <h4 class="my-4">Cập nhật sản phẩm</h4>
     {% if error %}
         <div class="alert alert-danger">
             {{ error }}
@@ -14,81 +14,83 @@
         </div>
     {% endif %}
     <div class="content-body mb-5">
-        <form action="/add_product" method="post" id="myForm" enctype="multipart/form-data">
+        <form action="/edit_product?product_id={{ product_form.product_id }}" method="post" id="myForm" enctype="multipart/form-data">
             {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product_form.product_id }}">
             <div class="mb-3">
                 <label for="product-name" class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="name" id="product-name" placeholder="Tên sản phẩm ...">
+                <input type="text" class="form-control" name="name" id="product-name" placeholder="Tên sản phẩm ..." 
+                    value="{{ product_form.name }}"
+                >
             </div>
 
             <div class="mb-3">
                 <label for="product-description" class="form-label fw-bold">Mô tả sản phẩm<span class="text-danger">*</span></label>
-                <textarea class="form-control" name='description' id="description" rows="5" placeholder="Mô tả sản phẩm ..."></textarea>
+                <textarea class="form-control" name='description' id="description" rows="5" placeholder="Mô tả sản phẩm ...">{{ product_form.description }}</textarea>
             </div>
-
             <div class="mb-3">
                 <div class="d-flex align-items-center gap-3 mb-3">
                     <label for="" class="form-label m-0 fw-bold">Danh mục sản phẩm<span class="text-danger">*</span></label>
                 </div>
                 <select class="form-select" name="category" id="">
-                    {% for category in product_form.category.field.queryset %}
-                    <option value="{{ category.category_id }}">{{ category.name }}</option>
+                    {% for category in categories %}
+                    <option {% if product_form.category_id == category.category_id %}selected{% endif %} value="{{ category.category_id }}">{{ category.name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="mb-3">
                 <label for="product-author" class="form-label fw-bold">Tên tác giả<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="author" id="product-author" placeholder="Tên tác giả ...">
+                <input value="{{ product_form.author }}" type="text" class="form-control" name="author" id="product-author" placeholder="Tên tác giả ...">
             </div>
             <div class="mb-3">
                 <label for="product-publisher" class="form-label fw-bold">Tên NXB<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="publisher" id="product-publisher" placeholder="Tên NXB ...">
+                <input value="{{ product_form.publisher }}" type="text" class="form-control" name="publisher" id="product-publisher" placeholder="Tên NXB ...">
             </div>
             <div class="mb-3">
                 <label for="product-translator" class="form-label fw-bold">Người dịch<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="translator" id="product-translator" placeholder="Tên người dịch ...">
+                <input value="{{ product_form.translator }}" type="text" class="form-control" name="translator" id="product-translator" placeholder="Tên người dịch ...">
             </div>
             <div class="row">
                 <div class="col-6">
                     <div class="mb-3">
                         <label for="product-price-regular" class="form-label fw-bold">Giá thường (vnđ)<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="price" id="product-price-regular" >
+                        <input value="{{ product_form.price }}" type="number" class="form-control" name="price" id="product-price-regular" >
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="mb-3">
                         <label for="" class="form-label fw-bold">Giá giảm (vnđ)<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="sale" id="" >
+                        <input value="{{ product_form.sale }}" type="number" class="form-control" name="sale" id="" >
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="mb-3">
                         <label for="product-page" class="form-label fw-bold">Số trang<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="page" id="product-page" placeholder="">
+                        <input value="{{ product_form.page }}" type="number" class="form-control" name="page" id="product-page" placeholder="">
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="mb-3">
                         <label for="product-age" class="form-label fw-bold">Độ tuổi<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="age" id="product-age" >
+                        <input value="{{ product_form.age }}" type="number" class="form-control" name="age" id="product-age" >
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="mb-3">
                         <label for="product-size" class="form-label fw-bold">Kích thước bao bì (cm)<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="size" id="product-size" placeholder="dài x rộng x cao" >
+                        <input value="{{ product_form.size }}" type="text" class="form-control" name="size" id="product-size" placeholder="dài x rộng x cao" >
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="mb-3">
                         <label for="product-weight" class="form-label fw-bold">Trọng lượng (gr)<span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" name="weight" id="product-weight" >
+                        <input value="{{ product_form.weight }}" type="number" class="form-control" name="weight" id="product-weight" >
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="mb-3">
                         <label for="product-year" class="form-label fw-bold">Năm xuất bản<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="year_of_publish" id="yearPicker">
+                        <input value="{{ product_form.year_of_publish }}" type="text" class="form-control" name="year_of_publish" id="yearPicker">
                     </div>
                 </div>
                 <div class="product-variant my-4">
@@ -101,38 +103,46 @@
                             </div>
                         </div>
                     </div>
-                    <div class="product-variant-item row my-3 align-items-center">
-                        <div class="col-11">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label for="" class="form-label fw-bold">Loại sách<span class="text-danger">*</span></label>
-                                        <select class="form-select" name="type" id="type">
-                                                <option value="0">Sách mới</option>
-                                                <option value="1">Sách cũ</option>
-                                        </select>
+                    {% for product in product_detail %}
+                        <div class="product-variant-item row my-3 align-items-center">
+                            <div class="col-11">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label fw-bold">Loại sách<span class="text-danger">*</span></label>
+                                            <select class="form-select" name="type" id="type">
+                                                    <option {% if product.type == 0 %}selected{% endif %} value="0">Sách mới</option>
+                                                    <option {% if product.type == 1 %}selected{% endif %} value="1">Sách cũ</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <label for="" class="form-label fw-bold">Số lượng<span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" name="quantity" id="quantity" >
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label fw-bold">Số lượng<span class="text-danger">*</span></label>
+                                            <input value="{{ product.quantity }}" type="number" class="form-control" name="quantity" id="quantity" >
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <label for="" class="form-label fw-bold">Ảnh sản phẩm<span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" name="name" id="name" placeholder="Chọn ảnh sản phẩm" multiple>
+                            <div class="col-1 d-flex align-items-center gap-2 mt-3">
+                                <div class="delete-variant">
+                                    <i class="fa-solid fa-delete-left"></i>
+                                    Xóa
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label fw-bold">Ảnh sản phẩm<span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" name="product_images_old" id="product_images_old" placeholder="Chọn ảnh sản phẩm" multiple>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <div class="d-flex justify-content-end gap-3">
                     <button type="button" class="btn btn-min-width btn-back">Quay lại</button>
-                    <button class="btn btn-primary">Thêm sản phẩm</button>
+                    <button class="btn btn-primary">Cập nhật sản phẩm</button>
                 </div>
             </div>
         </form>
@@ -143,7 +153,7 @@
         $('.btn-back').on('click', function() {
             window.history.back();
         });
-        
+
         $("#yearPicker").flatpickr({
             plugins: [
                 new monthSelectPlugin({

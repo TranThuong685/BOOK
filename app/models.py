@@ -27,8 +27,16 @@ class Product(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField(max_length=5000, blank=False, null=False)
     price = models.FloatField(blank=False, null=False)
+    sale = models.FloatField(default=0.0, blank=False, null=False)
     time_created = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
-    rating = models.FloatField(default=0, blank=False, null=False)
+    page = models.IntegerField(default=0, blank=False, null=False)
+    age = models.IntegerField(default=0, blank=False, null=False)
+    author = models.CharField(default="", max_length=100, blank=False, null=False)
+    publisher = models.CharField(default="", max_length=100, blank=False, null=False)
+    translator = models.CharField(default="", max_length=100, blank=False, null=False)
+    year_of_publish = models.IntegerField(default=2024, blank=False, null=False)
+    size = models.CharField(default="", max_length=20, blank=False, null=False)
+    weight = models.FloatField(default=0.0, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=False, null=False)
     total_sold = models.IntegerField(default=0, blank=False, null=False)
 
@@ -47,13 +55,12 @@ class ProductImage(models.Model):
 
 class ProductDetail(models.Model):
     detail_id = models.AutoField(primary_key=True, blank=False, null=False)
-    color = models.CharField(max_length=20, blank=False, null=False)
-    size = models.CharField(max_length=20, blank=False, null=False)
+    type = models.IntegerField(default=0, blank=False, null=False)
     quantity = models.IntegerField(default=0, blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
 
     def __str__(self):
-        return f"{self.color} - {self.size} - {self.quantity}"
+        return f"{self.type} - {self.quantity}"
 
 
 class ProductSale(models.Model):

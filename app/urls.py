@@ -36,6 +36,7 @@ urlpatterns = [
     path('coupons', views.couponManager, name='coupons'),
     path('add_coupon', views.addCoupon, name='add_coupon'),
     path('add_product', views.addProduct, name='add_product'),
+    path('edit_product', views.editProduct, name='edit_product'),
     path('products', views.productManager, name='products'),
     path('product-detail', views.getProductDetailAdmin, name='product_detail_admin'),
 

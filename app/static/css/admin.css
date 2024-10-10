@@ -185,6 +185,7 @@
     width: 250px;
     top: 75px;
     position: fixed;
+    z-index: 99;
 }
 
 .navbar-nav {
@@ -523,4 +524,64 @@
     padding: 8px;
     border-radius: 4px;
     background-color: var(--background-color);
+}
+
+.btn-action {
+    padding: 8px;
+    border: 1px solid #afadad;
+    border-radius: 8px;
+    margin-right: 4px;
+}
+
+.btn-detail {
+    border-color: blue;
+}
+
+.btn-delete {
+    border-color: red;
+    background-color: #fff;
+}
+
+.btn-detail i {
+    color: blue;
+}
+
+.btn-edit {
+    border-color: green;
+}
+
+.btn-edit i {
+    color: green;
+}
+
+.btn-delete i {
+    color: red;
+}
+
+.error {
+    margin-top: 8px;
+    color: red;
+    text-wrap: wrap;
+}
+
+label {
+    white-space: wrap;
+}
+
+.cart-product-action {
+    flex-wrap: nowrap;
+    display: flex;
+}
+
+select#category {
+    margin: 0 8px;
+}
+
+.btn-search-product {
+    width: 120px;
+    padding: 7px;
+}
+
+.text-bold {
+    font-weight: 600;
 }

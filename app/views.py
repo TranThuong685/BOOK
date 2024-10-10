@@ -29,7 +29,7 @@ from django.utils import timezone
 from datetime import date
 import os
 from datetime import timedelta
-
+import logging
 
 def convert_diff(diff):
     days_in_month = 30
@@ -172,6 +172,7 @@ def getListProduct(request):
         )),
         quantity=Sum('productdetail__quantity')
     )
+    print(products)
     if search is not None and search != '':
         products = products.filter(name__icontains=search)
 
@@ -191,8 +192,8 @@ def getListProduct(request):
     if max_price:
         products = products.filter(price__lte=int(max_price))
 
-    if rating:
-        products = products.filter(rating__gte=rating)
+    # if rating:
+    #     products = products.filter(rating__gte=rating)
 
     if top_sale_products:
         products = products.order_by('-discount_percent')
@@ -207,8 +208,8 @@ def getListProduct(request):
             orderitem__order__date__year=now.year
         ).annotate(
             total_sold_month=Sum('orderitem__quantity')
-        ).order_by('-total_sold_month')
-                    )
+        ).order_by('-total_sold_month'))
+                    
     if sort == 'price_asc':
         products = products.order_by('curr_price')
     elif sort == 'price_desc':
@@ -740,29 +741,101 @@ def notification(request):
 
 @login_required(login_url='/login')
 def addProduct(request):
+    messages = '' 
     error = ''
+    print(request.POST)
     product_form = ProductForm(request.POST or None)
     product_sale_form = ProductSaleForm(request.POST or None)
-    colors = request.POST.getlist('color')
-    sizes = request.POST.getlist('size')
+    types = request.POST.getlist('type')
     quantities = request.POST.getlist('quantity')
     product_image_form = ProductImageForm(request.POST, request.FILES)
     if product_form.is_valid() and product_sale_form.is_valid() and product_image_form.is_valid():
         product = product_form.save()
         product_sale = ProductSale(price=product_sale_form.cleaned_data['price'], product=product)
         product_sale.save()
-        for i in range(len(colors)):
-            product_detail = ProductDetail(color=colors[i], size=sizes[i], quantity=quantities[i], product=product)
+        for i in range(len(types)):
+            product_detail = ProductDetail(type=types[i], quantity=quantities[i], product=product)
             product_detail.save()
             images = request.FILES.getlist('name')
             for image in images:
                 product_image = ProductImage(name=image, product=product)
                 product_image.save()
+        messages = "Thêm sản phẩm thành công"
     else:
-        error = 'Bạn cần nhập đầy đủ thông tin'
+        if request.method == 'POST':
+            error = 'Bạn cần nhập đầy đủ thông tin'
+        else:
+            error = ''
     return render(request, 'admin_shop/add-product.html',
                   {'product_form': product_form, 'product_sale_form': product_sale_form,
-                   'product_image_form': product_image_form, 'error': error})
+                   'product_image_form': product_image_form, 'error': error, 'messages' : messages})
+
+@login_required(login_url='/login')
+def editProduct(request):
+    messages = '' 
+    error = ''
+    categories = Category.objects.all()
+
+    if request.method == "POST":
+        print(request.FILES)
+        product_id = request.POST.get('product_id')
+
+        # Lấy sản phẩm để cập nhật
+        product = get_object_or_404(Product, product_id=product_id)
+        
+        # Khởi tạo form với dữ liệu POST
+        product_form = ProductForm(request.POST, instance=product)
+        product_sale_form = ProductSaleForm(request.POST)
+        types = request.POST.getlist('type')
+        quantities = request.POST.getlist('quantity')
+
+        # Kiểm tra nếu có file
+        if request.FILES:
+            product_image_form = ProductImageForm(request.POST, request.FILES)
+        else:
+            product_image_form = ProductImageForm(request.POST)  # Không có file
+
+        if product_form.is_valid() and product_sale_form.is_valid() and product_image_form.is_valid():
+            product = product_form.save()  # Cập nhật thông tin sản phẩm
+            product_sale = ProductSale(price=product_sale_form.cleaned_data['price'], product=product)
+            product_sale.save()
+
+            # Cập nhật chi tiết sản phẩm
+            ProductDetail.objects.filter(product=product).delete()
+            for i in range(len(types)):
+                product_detail = ProductDetail(type=types[i], quantity=quantities[i], product=product)
+                product_detail.save()
+
+            if request.FILES:
+                ProductImage.objects.filter(product=product).delete()
+            images = request.FILES.getlist('product_images')
+            for image in images:
+                product_image = ProductImage(name=image, product=product)
+                product_image.save()
+            imagesOld = request.FILES.getlist('product_images_old')
+            for image in imagesOld:
+                product_image = ProductImage(name=image, product=product)
+                product_image.save()
+
+            messages = "Cập nhật sản phẩm thành công"
+        else:
+            error = 'Bạn cần nhập đầy đủ thông tin'
+            print("Product Form Errors:", product_form.errors)
+            print("Product Sale Form Errors:", product_sale_form.errors)
+            print("Product Image Form Errors:", product_image_form.errors)
+    else:
+        product_id = int(request.GET.get('product_id'))
+    product_form = Product.objects.get(product_id=product_id)
+    product_detail = ProductDetail.objects.filter(product=product_form).all()
+    images = ProductImage.objects.filter(product_id=product_id).values('name')
+
+    return render(request, 'admin_shop/edit-product.html', {
+        'product_form': product_form,
+        'error': error,
+        'messages': messages,
+        'categories': categories,
+        'product_detail': product_detail,
+    })
 
 
 @login_required(login_url='/login')
@@ -809,7 +882,7 @@ def productManager(request):
     if request.method == "POST":
         keyword = request.POST.get('keyword', '')
         products = Product.objects.filter(name__contains=keyword).annotate(
-            total_quantity=Sum('productdetail__quantity'))
+            total_quantity=Sum('productdetail__quantity')).order_by('-product_id')
         category = request.POST.get('category')
         status = request.POST.get('status')
         if category:
@@ -822,7 +895,16 @@ def productManager(request):
     else:
         keyword = request.GET.get('keyword', '')
         products = Product.objects.filter(name__contains=keyword).annotate(
-            total_quantity=Sum('productdetail__quantity'))
+            total_quantity=Sum('productdetail__quantity')).order_by('-product_id')
+        category = request.GET.get('category')
+        status = request.GET.get('status')
+        if category:
+            products = products.filter(category__name=category)
+        if status:
+            if status == 'Còn hàng':
+                products = products.filter(total_quantity__gt=0)
+            else:
+                products = products.filter(total_quantity=0)
     paginator = Paginator(products, 15)
 
     page_number = request.GET.get("page", 1)
@@ -842,13 +924,13 @@ def getProductDetailAdmin(request):
 
     product_id = int(request.GET.get('product_id'))
     product = Product.objects.filter(pk=product_id).annotate(
-        curr_price=Case(
-            When(productsale__start_date__lte=timezone.now(),
-                 productsale__end_date__gte=timezone.now(),
-                 then=F('productsale__price')),
-            default=F('price'),
-            output_field=FloatField()
-        ),
+        # curr_price=Case(
+        #     When(productsale__start_date__lte=timezone.now(),
+        #          productsale__end_date__gte=timezone.now(),
+        #          then=F('productsale__price')),
+        #     default=F('price'),
+        #     output_field=FloatField()
+        # ),
     ).first()
 
     feedback = Feedback.objects.filter(product=product).order_by('-date')
@@ -863,14 +945,14 @@ def getProductDetailAdmin(request):
         'page_obj': page_obj,
         'response_form': response_form
     }
-
+    print(product.author, product, "xxxx")
     return render(request, 'admin_shop/product-detail.html', context)
 
 
 @login_required(login_url='/login')
 def customerManager(request):
     keyword = request.GET.get('keyword', '')
-    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=7).annotate(
+    customers = User.objects.filter(name__contains=keyword, is_superuser=0, order__status=6).annotate(
         total_orders=Count('order'),
         total_amount=Coalesce(Sum('order__total'), Value(0.0)),
         type_customer=Case(
@@ -941,15 +1023,17 @@ def getOrderDetail(request):
         else:
             pass
     if order.status.order_status_id == 1:
-        status_ids = [1, 3, 6]
-    elif order.status.order_status_id < 5:
-        status_ids = [order.status.order_status_id, order.status.order_status_id + 1, 6]
+        status_ids = [1, 2, 5]
+    elif order.status.order_status_id == 2:
+        status_ids = [2, 3, 5]
+    elif order.status.order_status_id == 3:
+        status_ids = [3, 4, 5]
+    elif order.status.order_status_id == 4:
+        status_ids = [4, 5, 6]
     elif order.status.order_status_id == 5:
-        status_ids = [5, 6, 7]
-    elif order.status.order_status_id == 6:
-        status_ids = [6]
+        status_ids = [5]
     else:
-        status_ids = [7]
+        status_ids = [6]
     states = OrderStatus.objects.filter(order_status_id__in=status_ids).order_by("order_status_id")
     return render(request, 'admin_shop/order-detail.html',
                   {'order': order, 'order_items': order_items, 'states': states, 'total_price': total_price, })
@@ -1006,7 +1090,8 @@ def deleteProduct(request):
     product = Product.objects.get(product_id=product_id)
     images = ProductImage.objects.filter(product=product).values('name')
     for image in images:
-        os.remove(f"app/media/{image['name']}")
+        if os.path.exists(f"app/media/{image['name']}"):
+            os.remove(f"app/media/{image['name']}")
     product.delete()
     products = Product.objects.all()
     categories = Category.objects.all()

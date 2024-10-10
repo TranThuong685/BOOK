@@ -204,7 +204,7 @@
 </div>
 
 <script>
-    $(function() {
+    $(document).ready(function() {
         function formatCurrency(amount) {
             if (amount >= 1000000) {
                 return (amount / 1000000).toLocaleString("en-US", {
@@ -296,7 +296,6 @@
 
         function loadDataProduct() {
             const data = getListProduct();
-            console.log(data);
             $.ajax({
                 url: 'http://127.0.0.1:8000/filter-product',
                 method: 'GET',
