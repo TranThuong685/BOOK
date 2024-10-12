@@ -743,7 +743,7 @@ def notification(request):
 def addProduct(request):
     messages = '' 
     error = ''
-    print(request.POST)
+    years = list(range(2025, 1899, -1))
     product_form = ProductForm(request.POST or None)
     product_sale_form = ProductSaleForm(request.POST or None)
     types = request.POST.getlist('type')
@@ -767,7 +767,7 @@ def addProduct(request):
         else:
             error = ''
     return render(request, 'admin_shop/product/add-product.html',
-                  {'product_form': product_form, 'product_sale_form': product_sale_form,
+                  {'product_form': product_form, 'product_sale_form': product_sale_form, 'years': years,
                    'product_image_form': product_image_form, 'error': error, 'messages' : messages})
 
 @login_required(login_url='/login')
@@ -775,7 +775,7 @@ def editProduct(request):
     messages = '' 
     error = ''
     categories = Category.objects.all()
-
+    years = list(range(2025, 1899, -1))
     if request.method == "POST":
         print(request.FILES)
         product_id = request.POST.get('product_id')
@@ -835,6 +835,7 @@ def editProduct(request):
         'messages': messages,
         'categories': categories,
         'product_detail': product_detail,
+        'years': years
     })
 
 
@@ -881,7 +882,7 @@ def productManager(request):
     categories = Category.objects.all()
     if request.method == "POST":
         keyword = request.POST.get('keyword', '')
-        products = Product.objects.filter(name__contains=keyword).annotate(
+        products = Product.objects.filter(name__icontains=keyword).annotate(
             total_quantity=Sum('productdetail__quantity')).order_by('-product_id')
         category = request.POST.get('category')
         status = request.POST.get('status')
@@ -894,7 +895,7 @@ def productManager(request):
                 products = products.filter(total_quantity=0)
     else:
         keyword = request.GET.get('keyword', '')
-        products = Product.objects.filter(name__contains=keyword).annotate(
+        products = Product.objects.filter(name__icontains=keyword).annotate(
             total_quantity=Sum('productdetail__quantity')).order_by('-product_id')
         category = request.GET.get('category')
         status = request.GET.get('status')
@@ -1137,7 +1138,7 @@ def viewProfile(request):
 @login_required(login_url='/login')
 def categoryManager(request):
     keyword = request.GET.get('keyword', '')
-    categories = Category.objects.filter(name__contains=keyword)
+    categories = Category.objects.filter(name__icontains=keyword)
     paginator = Paginator(categories, 15)
 
     page_number = request.GET.get("page", 1)
@@ -1190,10 +1191,19 @@ def editCategory(request):
 def deleteCategory(request):
     category_id = int(request.GET.get('category_id'))
     category = Category.objects.get(category_id=category_id)
-    category.delete()
-    categories = Category.objects.all()
-    paginator = Paginator(categories, 15)
+    if Product.objects.filter(category_id=category_id).exists():
+        return JsonResponse({
+            'success': False,
+            'message': "Danh mục không thể xóa do đã có sản phẩm"
+        })
+    else:
+        category.delete()
+        categories = Category.objects.all()
+        paginator = Paginator(categories, 15)
 
-    page_number = request.GET.get("page", 1)
-    page_obj = paginator.get_page(page_number)
-    return redirect('/categories', {'page_obj': page_obj})
+        page_number = request.GET.get("page", 1)
+        page_obj = paginator.get_page(page_number)
+        return JsonResponse({
+            'success': True,
+            'message': "Danh mục đã được xóa thành công"
+        })

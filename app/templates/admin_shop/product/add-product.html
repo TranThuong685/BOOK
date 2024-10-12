@@ -88,7 +88,12 @@
                 <div class="col-4">
                     <div class="mb-3">
                         <label for="product-year" class="form-label fw-bold">Năm xuất bản<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="year_of_publish" id="yearPicker">
+                        <!-- <input type="text" class="form-control" name="year_of_publish" id="yearPicker"> -->
+                        <select class="form-control" name="year_of_publish">
+                            {% for year in years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="product-variant my-4">
@@ -188,7 +193,7 @@
                 age: {required: true, number: true, min:0, max: 100},
                 size: {required: true},
                 weight: {required: true, number: true, min:0.0},
-                year_of_publish: {required: true, digits: true,  minlength: 4, maxlength: 4,},
+                year_of_publish: {required: true},
                 type: {required: true},
                 quantity: {required: true, number: true, min:0},
                 product_images: {required: true},
@@ -210,7 +215,7 @@
                 age: {required: "Độ tuổi không được để trống", number: "Độ tuổi phải là số", min: "Độ tuổi phải lớn hơn 0", max: "Độ tuổi phải nhỏ hơn 100"},
                 size: {required: "Kích thước không được để trống"},
                 weight: {required: "Trọng lượng không được để trống", number: "Trọng lượng phải là số", min: "Trọng lượng phải lớn hơn 0"},
-                year_of_publish: {required: "Năm xuất bản không được để trống", digits: "Năm xuất bản phải là số", min: "Năm xuất bản phải có 4 số", max: "Năm xuất bản phải có 4 số"},
+                year_of_publish: {required: "Năm xuất bản không được để trống"},
                 type: {required: "Loại sách không được để trống"},
                 quantity: {required: "Số lượng không được để trống", number: "Số lượng phải là số", min: "Số lượng phải lớn hơn 0"},
                 product_images: {required: "Ảnh sản phẩm không được để trống"},

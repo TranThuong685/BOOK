@@ -8,7 +8,7 @@
             <div class="row justify-content-between">
                 <div class="col-auto d-flex mb-2">
                     <div class="admin-search">
-                        <form action="/products" method="get" class="d-flex position-relative justify-content-center align-items-center">
+                        <form action="/products" method="get" id="filter-form" class="d-flex position-relative justify-content-center align-items-center">
                             <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Tên sản phẩm" name="keyword" value="{{ request.GET.keyword }}" />
                             <select class="ml-2 form-control" name="category" id="category">
                                 <option value="">Chọn danh mục</option>
@@ -94,13 +94,13 @@
             </div>
         </div>
 
-        <!-- Pagination -->
+      <!-- Pagination -->
         <div class="page-controller">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center mt-4">
                     {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link page-number" href="?page=1&keyword={{ keyword }}&category={{ category }}&status={{ status }}" data-url="?page=1&keyword={{ keyword }}&category={{ category }}&status={{ status }}" aria-label="Previous">
+                        <a class="page-link page-number" href="?page=1" data-url="?page=1" data-page="1" aria-label="Previous">
                             <span aria-hidden="true">«</span>
                         </a>
                     </li>
@@ -113,16 +113,16 @@
                     {% endif %}
                     {% for i in page_obj.paginator.page_range %}
                     {% if i == page_obj.number %}
-                    <li class="page-item active" aria-current="page"><a class="page-link page-number" href="#" data-url="?page={{ i }}&keyword={{ keyword }}&category={{ category }}&status={{ status }}">{{ i }}</a>
+                    <li class="page-item active" aria-current="page"><a class="page-link page-number" data-page="{{ i }}" href="#" data-url="?page={{ i }}">{{ i }}</a>
                     </li>
                     {% else %}
-                    <li class="page-item"><a class="page-link page-number" href="?page={{ i }}&keyword={{ keyword }}&category={{ category }}&status={{ status }}" data-url="?page={{ i }}&keyword={{ keyword }}&category={{ category }}&status={{ status }}">{{ i }}</a>
+                    <li class="page-item"><a class="page-link page-number" href="?page={{ i }}" data-page="{{ i }}" data-url="?page={{ i }}">{{ i }}</a>
                     </li>
                     {% endif %}
                     {% endfor %}
                     {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link page-number" href="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&category={{ category }}&status={{ status }}" data-url="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&category={{ category }}&status={{ status }}" aria-label="Next">
+                        <a class="page-link page-number" href="?page={{ page_obj.next_page_number }}" data-page="{{ page_obj.next_page_number }}" data-url="?page={{ page_obj.next_page_number }}" aria-label="Next">
                             <span aria-hidden="true">»</span>
                         </a>
                     </li>
@@ -142,8 +142,8 @@
             function updateTable(url) {
                 // Lấy các giá trị lọc từ form
                 var keyword = $("#filter-form input[name='keyword']").val();
-                var category = $("#filter-form input[name='category']").val();
-                var status = $("#filter-form input[name='status']").val();
+                var category = $("#filter-form #category").val();
+                var status = $("#filter-form #status").val();
                 // Thêm các giá trị lọc vào url
                 let params = "&keyword=" + keyword + "&category=" + category + "&status=" + status;
                 url = url + params;
@@ -151,26 +151,27 @@
                     url: url,
                     type: "GET",
                     success: function(data) {
-                        // Lấy nội dung HTML của bảng mới từ data
                         var newTable = $(data).find("#product-table").html();
-                        // Thay thế nội dung của bảng hiện tại bằng bảng mới
+                        var newPaginate = $(data).find(".page-controller").html();
                         $("#product-table").html(newTable);
+                        $(".page-controller").html(newPaginate);
                     }
                 });
             }
 
             // Bắt sự kiện click vào các thẻ a của phân trang
             $(".pagination a").click(function(e) {
-                // Ngăn chặn hành vi mặc định của thẻ a
                 e.preventDefault();
-                // Lấy đường dẫn đến trang tương ứng từ thuộc tính data-url
                 var url = $(this).data("url");
-                // Gọi hàm updateTable với url
+                var page = $(this).data("page");
+                let currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('page', page);
+                window.history.pushState({}, '', currentUrl);
                 updateTable(url);
             });
 
             $(document).ready(function() {
-                $(".btn-delete").click(function() {
+                $(document).on('click', ".btn-delete", function() {
                     var id = $(this).data('id');
                     Swal.fire({
                         title: 'Xác nhận xóa',
