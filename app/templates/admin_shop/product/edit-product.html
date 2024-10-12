@@ -53,8 +53,8 @@
             <div class="row">
                 <div class="col-6">
                     <div class="mb-3">
-                        <label for="product-price-regular" class="form-label fw-bold">Giá thường (vnđ)<span class="text-danger">*</span></label>
-                        <input value="{{ product_form.price }}" type="number" class="form-control" name="price" id="product-price-regular" >
+                        <label for="price" class="form-label fw-bold">Giá thường (vnđ)<span class="text-danger">*</span></label>
+                        <input value="{{ product_form.price }}" type="number" class="form-control" name="price" id="price" >
                     </div>
                 </div>
                 <div class="col-6">
@@ -151,7 +151,7 @@
 <script>
     $(document).ready(function() {
         $('.btn-back').on('click', function() {
-            window.history.back();
+            window.location.href = "{% url 'products' %}";
         });
 
         $("#yearPicker").flatpickr({
@@ -161,9 +161,25 @@
                     dateFormat: "Y",
                     altFormat: "Y"
                 })
-            ]
+            ],
+            onReady: function() {
+                $('.flatpickr-innerContainer').css({
+                    'display': 'none',
+                });
+                $('.flatpickr-months').css({
+                    'padding': '4px',
+                    'border': '1px solid #000',
+                    'border-radius': '8px',
+                });
+            }
         });
 
+        $.validator.addMethod("greaterThan", function(value, element, params) {
+            var price = parseFloat($(params).val());
+            var sale = parseFloat(value);
+            return this.optional(element) || sale < price;
+        }, "Giá giảm phải nhỏ hơn giá thường");
+ 
         $("#myForm").validate({
             rules: {
                 name: {
@@ -177,7 +193,7 @@
                 publisher: {required: true, maxlength: 100},
                 translator: {required: true, maxlength: 100},
                 price: {required: true, number: true, min:0.0},
-                sale: {required: true, number: true, min:0.0},
+                sale: {required: true, number: true, min:0.0, greaterThan: "#price"},
                 page: {required: true, number: true, min:0},
                 age: {required: true, number: true, min:0, max: 100},
                 size: {required: true},

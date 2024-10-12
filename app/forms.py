@@ -97,3 +97,18 @@ class ResponseForm(forms.Form):
     helper = FormHelper()
     helper.form_method = 'POST'
     helper.add_input(Submit('submit', 'Gửi phản hồi'))
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        category_id = self.instance.category_id  # Lấy ID của bản ghi hiện tại (nếu đang chỉnh sửa)
+        
+        # Kiểm tra nếu name đã tồn tại với các record khác, bỏ qua record hiện tại khi edit
+        if Category.objects.filter(name=name).exclude(category_id=category_id).exists():
+            raise forms.ValidationError("Tên danh mục đã tồn tại, vui lòng chọn tên khác.")
+        
+        return name

@@ -585,3 +585,11 @@ select#category {
 .text-bold {
     font-weight: 600;
 }
+
+.flatpickr-months {
+    padding: 10px;
+}
+
+.flatpickr-innerContainer {
+    display: none;
+}

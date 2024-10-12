@@ -81,7 +81,7 @@
                 </div>
             </div>
         </div>
-
+        <button type="button" class="btn btn-info mt-2 btn-min-width btn-back">Quay lại</button>
         <h5 class="my-4">Đánh giá sản phẩm</h5>
         {% if feedbacks %}
         <div class="product-rating__list card px-3">
@@ -224,7 +224,9 @@
             $('.response-form').hide();
             $('.show-response').show();
         })
-
+        $('.btn-back').on('click', function() {
+            window.location.href = "{% url 'products' %}";
+        });
     })
 </script>
 {% endblock content %}

@@ -766,7 +766,7 @@ def addProduct(request):
             error = 'Bạn cần nhập đầy đủ thông tin'
         else:
             error = ''
-    return render(request, 'admin_shop/add-product.html',
+    return render(request, 'admin_shop/product/add-product.html',
                   {'product_form': product_form, 'product_sale_form': product_sale_form,
                    'product_image_form': product_image_form, 'error': error, 'messages' : messages})
 
@@ -829,7 +829,7 @@ def editProduct(request):
     product_detail = ProductDetail.objects.filter(product=product_form).all()
     images = ProductImage.objects.filter(product_id=product_id).values('name')
 
-    return render(request, 'admin_shop/edit-product.html', {
+    return render(request, 'admin_shop/product/edit-product.html', {
         'product_form': product_form,
         'error': error,
         'messages': messages,
@@ -909,7 +909,7 @@ def productManager(request):
 
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
-    return render(request, 'admin_shop/products.html', {'page_obj': page_obj, 'categories': categories})
+    return render(request, 'admin_shop/product/products.html', {'page_obj': page_obj, 'categories': categories})
 
 
 @login_required(login_url='/login')
@@ -945,8 +945,7 @@ def getProductDetailAdmin(request):
         'page_obj': page_obj,
         'response_form': response_form
     }
-    print(product.author, product, "xxxx")
-    return render(request, 'admin_shop/product-detail.html', context)
+    return render(request, 'admin_shop/product/product-detail.html', context)
 
 
 @login_required(login_url='/login')
@@ -1134,3 +1133,67 @@ def viewProfile(request):
     else:
         return redirect('/home')
     return render(request, 'admin_shop/profile.html', context=context)
+
+@login_required(login_url='/login')
+def categoryManager(request):
+    keyword = request.GET.get('keyword', '')
+    categories = Category.objects.filter(name__contains=keyword)
+    paginator = Paginator(categories, 15)
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    print(page_obj.__dict__)
+    return render(request, 'admin_shop/category/index.html', {'page_obj': page_obj})
+
+@login_required(login_url='/login')
+def addCategory(request):
+    messages = '' 
+    error = ''
+    if request.method == 'POST':
+        form = CategoryForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages = "Thêm sản phẩm thành công"
+        else:
+            if request.method == 'POST':
+                error = 'Tên danh mục đã tồn tại'
+            else:
+                error = ''
+    else:
+        form = CategoryForm()
+    return render(request, 'admin_shop/category/add.html',
+                  {'form': form, 'error': error, 'messages' : messages})
+
+@login_required(login_url='/login')
+def editCategory(request):
+    messages = '' 
+    error = ''
+    if request.method == "POST":
+        category_id = request.POST.get('category_id')
+        category = get_object_or_404(Category, category_id=category_id)
+        print(category_id, category.__dict__)
+        form = CategoryForm(request.POST, instance=category)
+
+        if form.is_valid():
+            form.save()
+            messages = "Cập nhật danh mục thành công"
+        else:
+            error = 'Tên danh mục đã tồn tại'
+    else:
+        category_id = int(request.GET.get('category_id'))
+    form = Category.objects.get(category_id=category_id)
+
+    return render(request, 'admin_shop/category/edit.html',
+        {'form': form, 'error': error, 'messages' : messages})
+
+@login_required(login_url='/login')
+def deleteCategory(request):
+    category_id = int(request.GET.get('category_id'))
+    category = Category.objects.get(category_id=category_id)
+    category.delete()
+    categories = Category.objects.all()
+    paginator = Paginator(categories, 15)
+
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    return redirect('/categories', {'page_obj': page_obj})
