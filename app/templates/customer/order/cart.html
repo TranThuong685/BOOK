@@ -17,8 +17,7 @@
                             <tr>
                                 <th scope="col"><input class="cart-table__select-all form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
                                 <th scope="col" style="width: 250px;">Sản phẩm</th>
-                                <th scope="col">Màu sắc</th>
-                                <th scope="col">Kích cỡ</th>
+                                <th scope="col">Loại</th>
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Giá</th>
                                 <th scope="col">Thành tiền</th>
@@ -40,10 +39,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="cart-product-size">{{ item.color }}</div>
-                                </td>
-                                <td>
-                                    <div class="cart-product-size">{{ item.size }}</div>
+                                    <div class="cart-product-size">
+                                        {% if item.type == '0' %}
+                                            Sách mới
+                                        {% else %}
+                                            Sách cũ
+                                        {% endif %}
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column position-relative">
@@ -62,10 +64,10 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="cart-product-price">{{item.price|floatformat:0|intcomma_dot}}đ</div>
+                                    <div class="cart-product-price">{{item.price|floatformat:0|intcomma_dot}} đ</div>
                                 </td>
                                 <td>
-                                    <div class="cart-product-total-price">{{item.total_price|floatformat:0|intcomma_dot}}đ</div>
+                                    <div class="cart-product-total-price">{{item.total_price|floatformat:0|intcomma_dot}} đ</div>
                                 </td>
                                 <td>
                                     <div class="cart-product-action">
@@ -230,7 +232,6 @@
             {% comment %} if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?') == true) {
                 $(this).closest('.cart-table-row').remove();
                 checkNumOfItems();
-                
                 calMoney();
                 $.ajax({
                     data: {
@@ -397,8 +398,6 @@
         var price = parseFloat($(this).closest('tr').find('.cart-product-price').text().replaceAll('.', ''));
         var quantity = parseInt(inputQuantity.val());
         quantity = operation == 'add' ? quantity + 1 : quantity - 1;
-        
-        
 
         var cartItemId = $(this).closest('tr').data('cart-item-id');
         data = {
@@ -435,7 +434,6 @@
     }
 
     function calMoney() {
-
         var totalQuantity = 0;
         var totalPrice = 0;
         var voucher = 0;

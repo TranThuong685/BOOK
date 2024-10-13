@@ -8,55 +8,31 @@
                 <div class="row justify-content-between">
                     <div class="col-auto d-flex gap-2">
                         <div class="admin-search">
-                            <form action="/admin_orders" method="get" class="d-flex position-relative justify-content-center align-items-center" role="search">
-                                {% csrf_token %}
-                                <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Search" name="keyword" value="{{ request.GET.keyword }}" />
-                                <button class="search-btn" type="submit" style="background-color: transparent;border: none;">
-                                    <i class="fa fa-search"></i>
-                                </button>
+                            <form action="/admin_orders" method="get" class="d-flex position-relative justify-content-center align-items-center" role="search" id="filter-form">
+                                <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Tên khách hàng" name="keyword" value="{{ request.GET.keyword }}" />
+                                <div class='d-flex'>
+                                    <select class="ml-2 form-control group-search" name="status" id="status">
+                                        <option value="">Chọn trạng thái</option>
+                                        {% for status in states %}
+                                            <option value="{{ status.name }}" {% if request.GET.status == status.name %}selected{% endif %}>{{ status.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="d-flex align-items-center gap-2 group-search">
+                                        <label for="filter-start-date" class="form-label m-0">Từ</label>
+                                        <input type="date" class="form-control" name="start_date" id="filter-start-date" value="{{ request.GET.start_date }}">
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 group-search">
+                                        <label for="filter-end-date" class="form-label m-0">Đến</label>
+                                        <input type="date" class="form-control" name="end_date" id="filter-end-date" value="{{ request.GET.end_date }}">
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <button type="submit" class="btn btn-primary ms-2 btn-search-product">
+                                        <i class="fas fa-search"></i> Tìm kiếm
+                                    </button>
+                                </div>
                             </form>
                         </div>
-                        <form action="/admin_orders" method="post" id="filter-form">
-                            {% csrf_token %}
-                            <div class='d-flex'>
-                                <div class="dropdown" style="display: inline-block; margin-right:
-                                                         10px;">
-                                    <div class="btn dropdown-toggle filter-list" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <div class="filter-choice" id="status-choice">Trạng thái</div>
-                                    </div>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        {% for status in states %}
-                                        <li><a class="dropdown-item" onclick="selectOrder('{{ status.name }}')">{{ status.name }}</a>
-                                        </li> {% endfor %} </ul>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <label for="filter-start-date" class="form-label m-0">Từ</label>
-                                    <input type="date" class="form-control" name="start_date" id="filter-start-date" aria-describedby="helpId" placeholder="">
-                                </div>
-    
-                                <div class="d-flex align-items-center gap-2">
-                                    <label for="filter-end-date" class="form-label m-0">Đến</label>
-                                    <input type="date" class="form-control" name="end_date" id="filter-end-date" aria-describedby="helpId" placeholder="">
-                                </div>
-                                <button type="button" onclick="submitForm()" class="btn btn-primary ms-2 d-flex align-items-center px-3"><i class="fa-solid fa-filter me-2"></i>Lọc
-                                </button>
-                                <input type="hidden" name="status" id="status-input" value="{{ request.GET.status }}">
-                                <input type="hidden" name="keyword" id="keyword-input" value="{{ request.GET.keyword }}">
-                            </div>
-                        </form>
-
-
-
-                            <script>
-                                function selectOrder(name) {
-                                    document.getElementById("status-input").value = name;
-                                    document.getElementById("status-choice").textContent = name;
-                                }
-
-                                function submitForm() {
-                                    document.getElementById("filter-form").submit();
-                                }
-                            </script>
                     </div>
                 </div>
                 <div class="list">
@@ -79,8 +55,8 @@
                                     <td>
                                         <a href="/view_profile?user_id={{ order.customer.id }}" class="d-flex justify-content-center">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{order.customer.avatar.url}}" alt="" class="order-user-img" />
-                                                <div class="order-user-name text-container ms-2 color-blue">{{ order.customer.name }}</div>
+                                                <!-- <img src="{{order.customer.avatar.url}}" alt="" class="order-user-img" /> -->
+                                                <div class="order-user-name text-container ms-2 color-blue">{{ order.customer.username }}</div>
                                             </div>
                                         </a>
                                     </td>
@@ -126,7 +102,7 @@
                         <ul class="pagination justify-content-center mt-4">
                             {% if page_obj.has_previous %}
                             <li class="page-item">
-                                <a class="page-link page-number" href="?page=1&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}" data-url="?page=1&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}" aria-label="Previous">
+                                <a class="page-link page-number" data-page="{{ 1 }}" href="?page=1" data-url="?page=1" aria-label="Previous">
                                     <span aria-hidden="true">«</span>
                                 </a>
                             </li>
@@ -139,16 +115,18 @@
                             {% endif %}
                             {% for i in page_obj.paginator.page_range %}
                             {% if i == page_obj.number %}
-                            <li class="page-item active" aria-current="page"><a class="page-link page-number" href="#" data-url="?page={{ i }}&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}">{{ i }}</a>
+                            <li class="page-item active" aria-current="page">
+                                <a class="page-link page-number" data-page="{{ i }}" href="#" data-url="?page={{ i }}">{{ i }}</a>
                             </li>
                             {% else %}
-                            <li class="page-item"><a class="page-link page-number" href="?page={{ i }}&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}" data-url="?page={{ i }}&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}">{{ i }}</a>
+                            <li class="page-item">
+                                <a class="page-link page-number" data-page="{{ i }}" href="?page={{ i }}" data-url="?page={{ i }}">{{ i }}</a>
                             </li>
                             {% endif %}
                             {% endfor %}
                             {% if page_obj.has_next %}
                             <li class="page-item">
-                                <a class="page-link page-number" href="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}" data-url="?page={{ page_obj.next_page_number }}&keyword={{ keyword }}&start_date={{ start_date }}&end_date={{ end_date }}&status={{ status }}" aria-label="Next">
+                                <a class="page-link page-number" data-page="{{ page_obj.next_page_number }}" href="?page={{ page_obj.next_page_number }}" data-url="?page={{ page_obj.next_page_number }}" aria-label="Next">
                                     <span aria-hidden="true">»</span>
                                 </a>
                             </li>
@@ -168,31 +146,48 @@
                     function updateTable(url) {
                         // Lấy các giá trị lọc từ form
                         var keyword = $("#filter-form input[name='keyword']").val();
-                        var start_date = $("#filter-form input[name='start_date']").val();
-                        var end_date = $("#filter-form input[name='end_date']").val();
-                        var status = $("#filter-form input[name='status']").val();
+                        var start_date = $("#filter-start-date").val();
+                        var end_date = $("#filter-end-date").val();
+                        var status = $("#status").val();
                         // Thêm các giá trị lọc vào url
                         url = url + "&keyword=" + keyword + "&start_date=" + start_date + "&end_date=" + end_date + "&status=" + status;
                         $.ajax({
                             url: url,
                             type: "GET",
                             success: function(data) {
-                                // Lấy nội dung HTML của bảng mới từ data
                                 var newTable = $(data).find("#order-table").html();
-                                // Thay thế nội dung của bảng hiện tại bằng bảng mới
                                 $("#order-table").html(newTable);
+                                var newPaginate = $(data).find(".page-controller").html();
+                                $(".page-controller").html(newPaginate);
                             }
                         });
                     }
 
-                    // Bắt sự kiện click vào các thẻ a của phân trang
-                    $(".pagination a").click(function(e) {
-                        // Ngăn chặn hành vi mặc định của thẻ a
-                        e.preventDefault();
-                        // Lấy đường dẫn đến trang tương ứng từ thuộc tính data-url
-                        var url = $(this).data("url");
-                        // Gọi hàm updateTable với url
-                        updateTable(url);
+                    $(document).ready(function() {
+                        // Bắt sự kiện click vào các thẻ a của phân trang
+                        $(document).on('click', ".pagination a", function(e) {
+                            e.preventDefault();
+                            var url = $(this).data("url");
+                            var page = $(this).data("page");
+                            let currentUrl = new URL(window.location.href);
+                            currentUrl.searchParams.set('page', page);
+                            window.history.pushState({}, '', currentUrl);
+                            updateTable(url);
+                        });
+
+                        $(document).on("change", "#filter-start-date", function() {
+                            let startDate = $(this).val();
+                            let endDate = $("#filter-end-date").val();
+                            if (startDate && endDate) {
+                                var startDate2 = new Date($("#start-date").val());
+                                var endDate2 = new Date($("#end-date").val());
+                                if (endDate < startDate) {
+                                    $("#filter-end-date").val('');
+                                }
+                            }
+
+                            $("#filter-end-date").attr("min", startDate);
+                        });
                     });
                 </script>
             </div>

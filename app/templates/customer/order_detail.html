@@ -118,7 +118,13 @@
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-4">Loại: {{item.color}}, {{item.size}}</div>
+                                <div class="col-4">Loại:  
+                                    {% if item.type == '0' %}
+                                        Sách mới
+                                    {% else %}
+                                        Sách cũ
+                                    {% endif %}
+                                </div>
                                 <div class="col-1 d-flex justify-content-center quantity">x {{ item.quantity}}</div>
                                 <div class="col-3 d-flex flex-row-reverse price-item">{{ item.price|floatformat:0 }}</div>
                             </div>
@@ -136,7 +142,7 @@
                             </div>
                             <div class="row my-2">
                                 <div class="col-9">Phí vận chuyển</div>
-                                <div class="col-3 d-flex flex-row-reverse ship-price">-{{order.shipping|floatformat:0|intcomma_dot}}đ</div>
+                                <div class="col-3 d-flex flex-row-reverse ship-price">{{order.shipping|floatformat:0|intcomma_dot}}đ</div>
                             </div>
                         </div>
                         <div class="row my-2 fs-5">

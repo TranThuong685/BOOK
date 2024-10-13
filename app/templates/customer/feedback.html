@@ -24,7 +24,12 @@
                         <p>Tên sản phẩm: {{item.product.name}}</p>
                     </div>
                     <div class="variant d-flex">
-                        Phân loại: {{item.color}}, {{item.size}}
+                        Phân loại:  
+                        {% if item.type == '0' %}
+                            Sách mới
+                        {% else %}
+                            Sách cũ
+                        {% endif %}
                     </div>
                 </div>
             </div>

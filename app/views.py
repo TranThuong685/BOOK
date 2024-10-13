@@ -30,6 +30,7 @@ from datetime import date
 import os
 from datetime import timedelta
 import logging
+from django.db.models import Avg
 
 def convert_diff(diff):
     days_in_month = 30
@@ -152,7 +153,7 @@ def getListProduct(request):
 
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
-    rating = request.GET.get('rating')
+    # rating = request.GET.get('rating')
     sort = request.GET.get('sort')
     top_sale_products = request.GET.get('top_sale_products')
     top_selling_products = request.GET.get('top_selling_products')
@@ -240,8 +241,10 @@ def getProductDetail(request, product_id):
             Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
             output_field=FloatField()
         )),
-        quantity=Sum('productdetail__quantity')
+        quantity=Sum('productdetail__quantity'),
+        rating=Avg('feedback__rating')
     ).first()
+    product.rating = product.rating if product.rating is not None else 0
 
     sales = product.productsale_set.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now()).first()
     feedbacks = Feedback.objects.filter(product=product).order_by('-date')
@@ -294,55 +297,53 @@ def add_to_cart(request):
                 output_field=FloatField()
             ),
             total_price=Round(ExpressionWrapper(F('price') * F('quantity'), output_field=FloatField())
-                              ))
+                              )).distinct()
         voucher_wallet = VoucherWallet.objects.filter(customer=request.user).first()
         if voucher_wallet:
             voucher_wallet = VoucherWallet.objects.create(customer=request.user)
             voucher_wallet.save()
 
         coupons = Coupon.objects.filter(start_date__lte=timezone.now(),
-                                         end_date__gte=timezone.now()).order_by('discount')  
+                                         end_date__gte=timezone.now()).order_by('discount') 
+
         context = {
             'cart': cart,
             'cartitems': cartitems,
             'voucher_wallet': voucher_wallet,
             'coupons': coupons
         }
-        return render(request, 'customer/cart.html', context=context)
+        return render(request, 'customer/order/cart.html', context=context)
 
     if request.method == 'POST':
         id = request.POST.get('product_id')
         product = get_object_or_404(Product, pk=id)
 
-        color = request.POST.get('color')
-        size = request.POST.get('size')
+        type = request.POST.get('type')
         quantity = request.POST.get('quantity')
         quantity = int(quantity)
         cart = Cart.objects.filter(customer=request.user).last()
         if not cart:
             cart = Cart.objects.create(customer=request.user)
 
-        cart_item = CartItem.objects.filter(cart=cart, product=product, color=color, size=size).first()
-        product_detail = ProductDetail.objects.filter(product=product, color=color, size=size).first()
+        cart_item = CartItem.objects.filter(cart=cart, product=product, type=type).first()
+        product_detail = ProductDetail.objects.filter(product=product, type=type).first()
         if cart_item:
             if cart_item.quantity + quantity > product_detail.quantity:
                 return JsonResponse({'status': 'error',
                                      'message': 'Số lượng sản phẩm không đủ, trong giỏ hàng đã có ' + str(
                                          cart_item.quantity) + ' sản phẩm'})
         else:
-            cart_item = CartItem.objects.create(cart=cart, product=product, color=color, size=size, quantity=quantity)
+            cart_item = CartItem.objects.create(cart=cart, product=product, type=type, quantity=quantity)
         cart_item.save()
         num_cart_item = cart.cartitem_set.count()
         return JsonResponse(
             {'status': 'success', 'message': 'Thêm vào giỏ hàng thành công', 'num_cart_item': num_cart_item})
 
-
 def edit_cart_item(request):
     cart_item_id = request.POST.get('cart_item_id')
     quantity = request.POST.get('quantity')
     cart_item = CartItem.objects.get(pk=cart_item_id)
-    product_detail = ProductDetail.objects.filter(product=cart_item.product, color=cart_item.color,
-                                                  size=cart_item.size).first()
+    product_detail = ProductDetail.objects.filter(product=cart_item.product, type=cart_item.type).first()
     if int(quantity) > product_detail.quantity:
         return JsonResponse({'status': 'error', 'message': 'Số lượng sản phẩm không đủ'})
     cart_item.quantity = int(quantity)
@@ -383,7 +384,7 @@ def check_coupon(request):
 
 def checkout(request):
     if request.method == 'GET':
-        return render(request, 'customer/checkout.html')
+        return render(request, 'customer/order/checkout.html')
 
     cart_items = request.POST.getlist('cart_item')
     cart_items = [int(cart_item) for cart_item in cart_items]
@@ -400,7 +401,7 @@ def checkout(request):
             default=F('product__price'),
             output_field=FloatField()
         ),
-    )
+    ).distinct()
     locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
     total = locale.format_string('%dđ', int(total), grouping=True).replace(',', '.')
     coupons = Coupon.objects.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now()).order_by('discount')
@@ -411,7 +412,7 @@ def checkout(request):
         'discount': discount,
         'coupons': coupons
     }
-    return render(request, 'customer/checkout.html', context)
+    return render(request, 'customer/order/checkout.html', context)
 
 
 def buy_now(request):
@@ -429,14 +430,14 @@ def buy_now(request):
                 Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
                 output_field=FloatField()
             ), 0),
+            rating=Avg('feedback__rating'),
         ).first()
 
-        color = request.POST.get('color')
-        size = request.POST.get('size')
+        type = request.POST.get('type')
         quantity = request.POST.get('quantity')
         quantity = int(quantity)
 
-        product_detail = ProductDetail.objects.filter(product=product, color=color, size=size).first()
+        product_detail = ProductDetail.objects.filter(product=product, type=type).first()
         if quantity > product_detail.quantity:
             return JsonResponse({'status': 'error', 'message': 'Số lượng sản phẩm không đủ'})
         total = product.curr_price * quantity
@@ -446,13 +447,12 @@ def buy_now(request):
 
         context = {
             'product': product,
-            'color': color,
-            'size': size,
+            'type': type,
             'quantity': quantity,
             'total': total,
             'coupons': coupons
         }
-        return render(request, 'customer/checkout.html', context)
+        return render(request, 'customer/order/checkout.html', context)
 
 
 def add_address(request):
@@ -507,8 +507,7 @@ def order(request):
                 coupon.save()
             for cart_item in cart_items:
                 order_item = OrderItem.objects.create(
-                    size=cart_item.size,
-                    color=cart_item.color,
+                    type=cart_item.type,
                     quantity=cart_item.quantity,
                     price=cart_item.product.price,
                     order=order,
@@ -520,8 +519,7 @@ def order(request):
                 product.total_sold += cart_item.quantity
                 product.save()
 
-                product_detail = ProductDetail.objects.filter(product=product, color=cart_item.color,
-                                                              size=cart_item.size).first()
+                product_detail = ProductDetail.objects.filter(product=product, type=cart_item.type).first()
                 if product_detail.quantity < cart_item.quantity:
                     raise ValidationError('Sản phẩm đã hết hàng')
                 product_detail.quantity -= cart_item.quantity
@@ -563,7 +561,7 @@ def order(request):
                 'discount': discount,
                 'order_form': order_form,
             }
-            return render(request, 'customer/checkout.html', context)
+            return render(request, 'customer/order/checkout.html', context)
     return redirect('home')
 
 
@@ -614,7 +612,7 @@ def cancel_order(request):
     order.status = OrderStatus.objects.get(name='Hủy đơn')
     order_item = order.orderitem_set.all()
     for item in order_item:
-        product_detail = ProductDetail.objects.filter(product=item.product, color=item.color, size=item.size).first()
+        product_detail = ProductDetail.objects.filter(product=item.product, type=item.type).first()
         product_detail.quantity += item.quantity
         product_detail.save()
     order.save()
@@ -1015,40 +1013,39 @@ def customerManager(request):
 def orderManager(request):
     states = OrderStatus.objects.all()
     keyword = request.GET.get('keyword', '')
-    orders = Order.objects.filter(customer__name__icontains=keyword).select_related('customer', 'status').order_by(
-        '-order_id')
-    if request.method == "POST":
-        status = request.POST.get('status', '')
-        start_date = request.POST.get('start_date', '')
-        end_date = request.POST.get('end_date', '')
-        if status:
-            orders = orders.filter(status__name=status)
-        if start_date == '' and end_date == '':
-            orders = orders.all()
-        elif end_date == '':
-            orders = orders.filter(date__gte=start_date)
-        elif start_date == '':
-            orders = orders.filter(date__lte=end_date)
-        else:
-            orders = orders.filter(Q(date__gte=start_date) & Q(date__lte=end_date))
+    orders = Order.objects.filter(customer__username__icontains=keyword).select_related('customer', 'status').order_by('-order_id')
+    status = request.GET.get('status', '')
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+    print(status)
+    if status:
+        orders = orders.filter(status__name=status)
+    if start_date == '' and end_date == '':
+        orders = orders.all()
+    elif end_date == '':
+        orders = orders.filter(date__gte=start_date)
+    elif start_date == '':
+        orders = orders.filter(date__lte=end_date)
+    else:
+        orders = orders.filter(Q(date__gte=start_date) & Q(date__lte=end_date))
 
     paginator = Paginator(orders, 15)
 
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
-    return render(request, 'admin_shop/orders.html', {'page_obj': page_obj, 'states': states})
+    return render(request, 'admin_shop/order/orders.html', {'page_obj': page_obj, 'states': states})
 
 
 @login_required(login_url='/login')
 def getOrderDetail(request):
     order_id = int(request.GET.get("order_id"))
     order = Order.objects.filter(order_id=order_id).select_related('customer', 'status').first()
-    total_price = order.total - order.discount + order.shipping
+    price_order = order.total - order.discount - order.shipping
     order_items = OrderItem.objects.filter(order_id=order_id).annotate(
         curr_price=Case(When(product__productsale__start_date__lte=timezone.now(),
                              product__productsale__end_date__gte=timezone.now(),
                              then=F('product__productsale__price')), default=F('product__price')),
-        total=F('curr_price') * F('quantity'))
+        total=F('curr_price') * F('quantity')).distinct()
     if request.method == "POST":
         status = int(request.POST.get('status'))
         if order.status.order_status_id != status:
@@ -1064,7 +1061,7 @@ def getOrderDetail(request):
     elif order.status.order_status_id == 2:
         status_ids = [2, 3, 5]
     elif order.status.order_status_id == 3:
-        status_ids = [3, 4, 5]
+        status_ids = [3, 4]
     elif order.status.order_status_id == 4:
         status_ids = [4, 5, 6]
     elif order.status.order_status_id == 5:
@@ -1072,8 +1069,8 @@ def getOrderDetail(request):
     else:
         status_ids = [6]
     states = OrderStatus.objects.filter(order_status_id__in=status_ids).order_by("order_status_id")
-    return render(request, 'admin_shop/order-detail.html',
-                  {'order': order, 'order_items': order_items, 'states': states, 'total_price': total_price, })
+    return render(request, 'admin_shop/order/order-detail.html',
+                  {'order': order, 'order_items': order_items, 'states': states, 'price_order': price_order, })
 
 
 @login_required(login_url='/login')

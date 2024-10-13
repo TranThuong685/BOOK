@@ -86,25 +86,12 @@
                             Hết hàng
                         </p>
                         {% endif %}
-                        <div class="color my-2">
+                        <div class="typeBook my-2">
                             <div class="row">
-                                <div class="col-2 d-flex align-items-center">Màu sắc</div>
-                                <div class="col-10 color-option">
-                                    <button class="btn" data-color="trắng">Trắng</button>
-                                    <button class="btn" data-color="đen">Đen</button>
-                                    <button class="btn" data-color="xám">Xám</button>
-                                    <button class="btn" data-color="vàng">Vàng</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="size my-2">
-                            <div class="row">
-                                <div class="col-2 d-flex align-items-center">Kích cỡ</div>
-                                <div class="col-10 size-option">
-                                    <button class="btn" data-size="s">S</button>
-                                    <button class="btn  " data-size="m">M</button>
-                                    <button class="btn" data-size="l">L</button>
-                                    <button class="btn" data-size="xl">XL</button>
+                                <div class="col-2 d-flex align-items-center">Loại sách</div>
+                                <div class="col-10 type-option">
+                                    <button class="btn" data-type="0">Mới</button>
+                                    <button class="btn" data-type="1">Cũ</button>
                                 </div>
                             </div>
                         </div>
@@ -134,13 +121,9 @@
                             <form action='/buynow' method='post'>
                                 {% csrf_token %}
                                 <input type="hidden" name='product_id' value='{{ product.product_id }}'>
-                                <input type="hidden" name='color' value=''>
-                                <input type="hidden" name='size' value=''>
+                                <input type="hidden" name='type' value=''>
                                 <input type="hidden" name='quantity' value=''>
                             </form>
-                        </div>
-                        <div class='message'>
-
                         </div>
                         {% endif %}
                     </div>
@@ -281,8 +264,6 @@
 
 <script>
     $(document).ready(() => {
-
-
         var mySwiper = new Swiper('.swiper-1', {
             slidesPerView: 4,
             slidePerGroup: 1,
@@ -314,8 +295,7 @@
             },
         });
 
-        // var rating = {{ product.rating }};
-        var rating = 0;
+        var rating = {{ product.rating }};
         var rating_html = '';
         for(var i = 1; i<= 5; i++) {
             if (i <= rating) {
@@ -331,256 +311,100 @@
         var variantProducts = []
         {% for variant in product.productdetail_set.all %}
         variantProducts.push({
-            color: "{{ variant.color|title }}",
-            size: "{{ variant.size|upper }}",
+            type: "{{ variant.type }}",
             quantity: parseInt("{{ variant.quantity }}")
         })
         {% endfor %}
-        console.log( variantProducts)
+        console.log("variantProducts", variantProducts)
 
-        var colors = {};
-        var sizes = {};
+        var types = {};
 
         for (var i = 0; i < variantProducts.length; i++) {
             var product = variantProducts[i];
-            var color = product.color;
-            var size = product.size;
+            var type = product.type;
             var quantity = product.quantity;
-            if (!colors[color]) {
-                colors[color] = quantity;
+            if (!types[type]) {
+                types[type] = quantity;
             } else {
-                colors[color] += quantity;
-            }
-            if (!sizes[size]) {
-                sizes[size] = quantity;
-            } else {
-                sizes[size] += quantity;
+                types[type] += quantity;
             }
         }
 
-        var color_option = []
-        for (var color in colors) {
-            color_option.push(`<button class="btn me-2" data-color="${color}">${color}</button>`)
+        var type_option = []
+        for (var type in types) { 
+            type_option.push(`<button class="btn me-2" data-type="${type}">${type == 0 ? 'Mới' : 'Cũ'}</button>`)
         }
-        $('.color-option').html(color_option.join(''));
+        $('.type-option').html(type_option.join(''));
 
-        var size_option = []
-        for (var size in sizes) {
-            size_option.push(`<button class="btn me-2" data-size="${size}">${size}</button>`)
-        }
-        $('.size-option').html(size_option.join(''));
-
-
-        var outOfStockColor = []
-        var outOfStockSize = []
-        for (var color in colors) {
-            if (colors[color] === 0) {
-                outOfStockColor.push(color);
+        var outOfStockType = []
+        for (var type in types) {
+            if (types[type] === 0) {
+                outOfStockType.push(type);
             }
         }
-        for (var size in sizes) {
-            if (sizes[size] === 0) {
-                outOfStockSize.push(size);
-            }
-        }
-        console.log(outOfStockColor);
-        console.log(outOfStockSize);
-
 
         function removeOutOfStock() {
-            $('.color .btn').each(function() {
-                color = $(this).attr('data-color');
-                if (outOfStockColor.includes(color)) {
-                    $(this).addClass('disable');
-                }
-            })
-            $('.size .btn').each(function() {
-                size = $(this).attr('data-size');
-                if (outOfStockSize.includes(size)) {
+            $('.typeBook .btn').each(function() {
+                type = $(this).data('type');
+                if (outOfStockType.includes(type)) {
                     $(this).addClass('disable');
                 }
             })
         }
 
         function removeVariation() {
-            $('.color .btn').each(function() {
-                color = $(this).attr('data-color');
-                var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
+            $('.typeBook .btn').each(function() {
+                type = $(this).data('type');
+                var result = variantProducts.find(product => product.type == type && product.quantity > 0)
                 if (!result) $(this).addClass('disable');
             })
         }
 
         removeOutOfStock();
 
-
-        $('.color .btn').click(function() {
+        $(document).on('click', '.typeBook .btn', function() {
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
-                $('.color .btn').removeClass('disable')
+                $('.typeBook .btn').removeClass('disable')
                 $('.btn-plus, .btn-minus').addClass('disable')
                 
-                if ($('.size .btn').hasClass('active')) {
-                    $('.size .btn').removeClass('disable');
-                    $('.size .btn').each(function() {
-                        size = $(this).attr('data-size');
-                        if (outOfStockSize.includes(size)) {
-                            $(this).addClass('disable');
-                        }
-                    })
-                    size = $('.size .btn.active').attr('data-size');
-                    const totalProducts = variantProducts.reduce((total, product) => {
-                        if (product.size === size) {
-                            return total + product.quantity;
-                        }
-                        return total;
-                    }, 0);
-                    $('.color .btn').each(function() {
-                        color = $(this).attr('data-color');
-                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
-                        if (!result) $(this).addClass('disable');
-                    })
-                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
-                    if(totalProducts < parseInt(inputQuantity.val())) {
-                        $('.btn-plus').addClass('disable')
-                        inputQuantity.val(totalProducts)
-                    }
-                    
-                } else {
-                    $('.size .btn').removeClass('disable');
-                    $('.color .btn').removeClass('disable');
+                type = $('.typeBook .btn.active').data('type');
 
-                    removeOutOfStock();
+                const totalProducts = variantProducts.reduce((total, product) => {
+                    if (product.type == type) {
+                        return total + product.quantity;
+                    }
+                    return total;
+                }, 0);
+
+                $('.typeBook .btn').each(function() {
+                    type = $(this).data('type');
+                    var result = variantProducts.find(product => product.type == type && product.quantity > 0)
+                    if (!result) $(this).addClass('disable');
+                })
+                $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                if(totalProducts < parseInt(inputQuantity.val())) {
+                    $('.btn-plus').addClass('disable')
+                    inputQuantity.val(totalProducts)
                 }
             } else {
-                anyColorSelected = $('.color .btn').hasClass('active');
-
-                $('.color .btn').removeClass('active');
+                $('.typeBook .btn').removeClass('active');
                 $(this).addClass('active');
-                $('.size .btn').removeClass('disable')
-                if ($('.size .btn').hasClass('active')) {
-                    color = $(this).attr('data-color');
-                    console.log(color);
-                    size = $('.size .btn.active').attr('data-size');
-                    console.log(size);
-                    const totalProducts = variantProducts.reduce((total, product) => {
-                        if (product.color === color && product.size === size) {
-                            return total + product.quantity;
-                        }
-                        return total;
-                    }, 0);
-                    $('.size .btn').each(function() {
-                        size = $(this).attr('data-size');
-                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
-                        if (!result) $(this).addClass('disable');
-                    })
-                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
-                    $('.btn-plus, .btn-minus').removeClass('disable')
-                    if(totalProducts < parseInt(inputQuantity.val())) {
-                        $('.btn-plus').addClass('disable')
-                        inputQuantity.val(totalProducts)
+
+                type = $(this).data('type');
+
+                const totalProducts = variantProducts.reduce((total, product) => {
+                    if (product.type == type) {
+                        return total + product.quantity;
                     }
-                    console.log(totalProducts);
-                } else {
-                    $('.size .btn').removeClass('disable');
-                    color = $(this).attr('data-color');
-                    $('.size .btn').each(function() {
-                        size = $(this).attr('data-size');
-                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
-                        if (!result) $(this).addClass('disable');
-                    })
-                    const totalProducts = variantProducts.reduce((total, product) => {
-                        if (product.color === color) {
-                            return total + product.quantity;
-                        }
-                        return total;
-                    }, 0);
-                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
-                    console.log(totalProducts)
-                }
-            }
-        })
+                    return total;
+                }, 0);
 
-        $('.size .btn').click(function() {
-            if ($(this).hasClass('active')) {
-                $(this).removeClass('active');
-                $('.size .btn').removeClass('disable');
-                $('.btn-plus, .btn-minus').addClass('disable');
-
-                if ($('.color .btn').hasClass('active')) {
-                    $('.color .btn').removeClass('disable');
-                    $('.color .btn').each(function() {
-                        color = $(this).attr('data-color');
-                        if (outOfStockColor.includes(color)) {
-                            $(this).addClass('disable');
-                        }
-                    })
-                    color = $('.color .btn.active').attr('data-color');
-
-                    console.log(color);
-                    const totalProducts = variantProducts.reduce((total, product) => {
-                        if (product.color === color) {
-                            return total + product.quantity;
-                        }
-                        return total;
-                    }, 0);
-                    $('.size .btn').each(function() {
-                        size = $(this).attr('data-size');
-                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
-                        if (!result) $(this).addClass('disable');
-                    })
-                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
-                    if(totalProducts < parseInt(inputQuantity.val())) {
-                        $('.btn-plus').addClass('disable')
-                        inputQuantity.val(totalProducts)
-                    }
-                } else {
-                    $('.color .btn').removeClass('disable');
-                    $('.size .btn').removeClass('disable');
-                    removeOutOfStock();
-                }
-            } else {
-                anySizeSelected = $('.size .btn').hasClass('active');
-
-                $('.size .btn').removeClass('active');
-                $(this).addClass('active');
-                $('.color .btn').removeClass('disable')
-                if ($('.color .btn').hasClass('active')) {
-                    size = $(this).attr('data-size');
-                    color = $('.color .btn.active').attr('data-color');
-
-                    const totalProducts = variantProducts.reduce((total, product) => {
-                        if (product.color === color && product.size === size) {
-                            return total + product.quantity;
-                        }
-                        return total;
-                    }, 0);
-                    $('.color .btn').each(function() {
-                        color = $(this).attr('data-color');
-                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
-                        if (!result) $(this).addClass('disable');
-                    })
-                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
-                    $('.btn-plus, .btn-minus').removeClass('disable')
-                    if(totalProducts < parseInt(inputQuantity.val())) {
-                        $('.btn-plus').addClass('disable')
-                        inputQuantity.val(totalProducts)
-                    }
-                    console.log(totalProducts);
-                } else {
-                    $('.color .btn').removeClass('disable')
-                    size = $(this).attr('data-size');
-                    $('.color .btn').each(function() {
-                        color = $(this).attr('data-color');
-                        var result = variantProducts.find(product => product.color === color && product.size === size && product.quantity > 0)
-                        if (!result) $(this).addClass('disable');
-                    })
-                    const totalProducts = variantProducts.reduce((total, product) => {
-                        if (product.size === size) {
-                            return total + product.quantity;
-                        }
-                        return total;
-                    }, 0);
-                    $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                $(".quantity-available").text(totalProducts + " sản phẩm có sẵn");
+                $('.btn-plus, .btn-minus').removeClass('disable')
+                if(totalProducts < parseInt(inputQuantity.val())) {
+                    $('.btn-plus').addClass('disable')
+                    inputQuantity.val(totalProducts)
                 }
             }
         })
@@ -613,14 +437,16 @@
 
         // Add to cart
         $('.add-cart').click(function() {
-        // Lấy giá trị của màu sắc và kích cỡ
-            var color = $('.color-option button.active').data('color');
-            var size = $('.size-option button.active').data('size');
+            var type = $('.type-option button.active').data('type');
             var quantity = parseInt(inputQuantity.val());
-            // Kiểm tra xem màu sắc và kích cỡ đã được chọn hay chưa
-            if (color == undefined || size == undefined) {
+
+            if (type == undefined) {
             // Hiển thị thông báo cho người dùng
-                alert('Vui lòng chọn màu sắc và kích cỡ!');
+                Swal.fire(
+                    'Xác nhận!',
+                    'Vui lòng chọn loại sản phẩm!',
+                    'warning'
+                )
                 return false;
             }
 
@@ -628,7 +454,7 @@
                 window.location.href = '/login';
                 return false;
             {% endif %}
-            console.log(color, size, quantity);
+
             var url = '';
             var action = $(this).data('action');
                 if (action == 'add-cart') {
@@ -636,10 +462,10 @@
                 } else if (action == 'buy-now') {
                 url = '{% url "check-out" %}';
             }
+
             var data = {
                 'product_id': {{ product.product_id}},
-                'color': color,
-                'size': size,
+                'type': type,
                 'quantity': quantity,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             }
@@ -650,16 +476,20 @@
                 data: data,
                 success: function(response) {
                     if(response.status == 'success'){
-                        $('.message').addClass('color-green')
-                        $('.message').removeClass('color-red')
                         $('.cart').text(response.num_cart_item)
+                        Swal.fire(
+                            'Thành công!',
+                            response.message,
+                            'success'
+                        )
                     }
                     else {
-                        $('.message').removeClass('color-green')
-                        $('.message').addClass('color-red')
+                        Swal.fire(
+                            'Thất bại!',
+                            'Thêm sản phảm vào giỏ hàng thất bại!',
+                            'Error'
+                        )
                     }
-                    $('.message').html(response.message)
-                    console.log(response);
                 },
                 error: function(error) {
                     console.log(error);
@@ -668,14 +498,16 @@
         });
 
         $('.buy-now').click(function() {
-            var color = $('.color-option button.active').data('color');
-            var size = $('.size-option button.active').data('size');
+            var type = $('.type-option button.active').data('type');
             var quantity = parseInt(inputQuantity.val());
-            // Kiểm tra xem màu sắc và kích cỡ đã được chọn hay chưa
-            if (color == undefined || size == undefined) {
-            // Hiển thị thông báo cho người dùng
-            alert('Vui lòng chọn màu sắc và kích cỡ!');
-            return false;
+
+            if (type == undefined) {
+                Swal.fire(
+                    'Xác nhận!',
+                    'Vui lòng chọn loại sản phẩm!',
+                    'warning'
+                )
+                return false;
             }
 
             {% if not user.is_authenticated %}
@@ -684,8 +516,7 @@
             {% endif %}
             
             var form = $('form')
-            form.find("input[name='color']").val(color);
-            form.find("input[name='size']").val(size);
+            form.find("input[name='type']").val(type);
             form.find("input[name='quantity']").val(quantity);
             form.submit();
         })

@@ -597,3 +597,7 @@ select#category {
 .search-date {
     margin-left: 1rem;
 }
+
+.group-search {
+    margin-left: 8px;
+}

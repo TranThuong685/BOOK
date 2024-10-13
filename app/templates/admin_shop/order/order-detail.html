@@ -7,7 +7,7 @@
             <div class="">
                 Người đặt hàng:
                 <a href="/view_profile/{{ order.customer.id }}">
-                    <span class="color-blue">{{ order.customer.name }}</span>
+                    <span class="color-blue">{{ order.customer.username }}</span>
                 </a>
             </div>
             <div class="mt-4">
@@ -20,9 +20,7 @@
                             <option value="{{ status.order_status_id }}">{{ status.name }}</option>
                             {% endfor %}
                         </select>
-                        <button class="btn btn-primary" type="submit">Cập
-                            nhật
-                        </button>
+                        <button class="btn btn-primary" type="submit">Cập nhật</button>
                     </div>
                 </form>
             </div>
@@ -74,8 +72,8 @@
                                 <h5>Đơn hàng</h5>
                                 <div class="order-infor-money">
                                     <div class="row my-2 pt-2">
-                                        <div class="col-9">Tổng giá</div>
-                                        <div class="col-3 d-flex flex-row-reverse">{{ order.total |floatformat:0|intcomma_dot }}đ</div>
+                                        <div class="col-9">Giá sản phẩm</div>
+                                        <div class="col-3 d-flex flex-row-reverse">{{ price_order |floatformat:0|intcomma_dot }}đ</div>
                                     </div>
                                     <div class="row my-2">
                                         <div class="col-9">Voucher</div>
@@ -90,7 +88,7 @@
                                 </div>
                                 <div class="row my-2 fs-5">
                                     <div class="col-9">Tổng tiền</div>
-                                    <div class="col-3 d-flex flex-row-reverse">{{ total_price | floatformat:0|intcomma_dot }}đ</div>
+                                    <div class="col-3 d-flex flex-row-reverse">{{ order.total | floatformat:0|intcomma_dot }}đ</div>
                                 </div>
                             </div>
                         </div>
@@ -106,8 +104,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 500px;">Sản phẩm</th>
-                                <th scope="col">Màu sắc</th>
-                                <th scope="col">Kích cỡ</th>
+                                <th scope="col">Loại</th>
                                 <th scope="col">Số lượng</th>
                                 <th scope="col">Giá</th>
                                 <th scope="col">Thành tiền</th>
@@ -126,10 +123,13 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <div class="order-product-size">{{ order_item.color }}</div>
-                                </td>
-                                <td>
-                                    <div class="order-product-size">{{ order_item.size }}</div>
+                                    <div class="order-product-size">
+                                        {% if item.type == '0' %}
+                                            Sách mới
+                                        {% else %}
+                                            Sách cũ
+                                        {% endif %}
+                                    </div>
                                 </td>
                                 <td>
                                     <div class="order-product-quantity">{{ order_item.quantity }}</div>

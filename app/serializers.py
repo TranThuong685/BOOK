@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-
+from django.db.models import Avg
         
 class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,6 +17,7 @@ class ProductSerializer(serializers.ModelSerializer):
     # productdetail_set = ProductDetailSerializer(many=True, read_only=True)
     curr_price = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -26,6 +27,10 @@ class ProductSerializer(serializers.ModelSerializer):
         now = timezone.now()
         productsale = obj.productsale_set.filter(start_date__lte=now, end_date__gte=now).first()
         return obj.price if productsale is None else productsale.price
+    
+    def get_rating(self, obj):
+        average_rating = Feedback.objects.filter(product=obj).aggregate(Avg('rating'))['rating__avg']
+        return average_rating if average_rating is not None else 0
     
     def get_images(self, obj):
         return [image.name.url for image in obj.productimage_set.all()]

@@ -143,8 +143,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order_item_id = models.AutoField(primary_key=True, blank=False, null=False)
-    size = models.CharField(max_length=20, blank=False, null=False)
-    color = models.CharField(max_length=20, blank=False, null=False)
+    type = models.IntegerField(default=0, blank=False, null=False)
     quantity = models.IntegerField(default=1, blank=False, null=False)
     price = models.FloatField(blank=False, null=False)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=False, null=False)
@@ -166,8 +165,7 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart_item_id = models.AutoField(primary_key=True, blank=False, null=False)
-    color = models.CharField(max_length=20, blank=False, null=False)
-    size = models.CharField(max_length=20, blank=False, null=False)
+    type = models.IntegerField(default=0, blank=False, null=False)
     quantity = models.IntegerField(default=1, blank=False, null=False)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, blank=False, null=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
