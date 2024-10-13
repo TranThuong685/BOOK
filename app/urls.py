@@ -32,9 +32,11 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('notification', views.notification, name='notification'),
 
-
+    #coupon
     path('coupons', views.couponManager, name='coupons'),
     path('add_coupon', views.addCoupon, name='add_coupon'),
+    path('edit_coupon', views.editCoupon, name='edit_coupon'),
+    path('delete_coupon', views.deleteCoupon, name='delete_coupon'),
 
     # product
     path('products', views.productManager, name='products'),

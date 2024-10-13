@@ -25,6 +25,15 @@ class CouponForm(forms.ModelForm):
             'end_date': forms.DateInput(),
         }
 
+    def clean_code(self):
+        code = self.cleaned_data.get('code')
+        coupon_id = self.instance.coupon_id  # Lấy ID của bản ghi hiện tại (nếu đang chỉnh sửa)
+        
+        # Kiểm tra nếu code đã tồn tại với các record khác, bỏ qua record hiện tại khi edit
+        if Coupon.objects.filter(code=code).exclude(coupon_id=coupon_id).exists():
+            raise forms.ValidationError("Tên mã đã tồn tại, vui lòng chọn tên khác.")
+        
+        return code
 
 class ProductForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all())

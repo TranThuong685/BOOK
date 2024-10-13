@@ -593,3 +593,7 @@ select#category {
 .flatpickr-innerContainer {
     display: none;
 }
+
+.search-date {
+    margin-left: 1rem;
+}

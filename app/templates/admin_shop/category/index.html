@@ -118,18 +118,17 @@
                 });
             }
 
-            // Bắt sự kiện click vào các thẻ a của phân trang
-            $(".pagination a").click(function(e) {
-                e.preventDefault();
-                var url = $(this).data("url");
-                var page = $(this).data("page");
-                let currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.set('page', page);
-                window.history.pushState({}, '', currentUrl);
-                updateTable(url);
-            });
-
             $(document).ready(function() {
+                $(document).on('click', ".pagination a", function(e) {
+                    e.preventDefault();
+                    var url = $(this).data("url");
+                    var page = $(this).data("page");
+                    let currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('page', page);
+                    window.history.pushState({}, '', currentUrl);
+                    updateTable(url);
+                });
+
                 $(document).on('click', ".btn-delete", function() {
                     var id = $(this).data('id');
                     Swal.fire({
