@@ -106,7 +106,7 @@ def home(request):
             Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
             output_field=FloatField()
         ), 0),
-    )
+    ).distinct()
 
     top_selling_products = products.order_by('-total_sold')[:10]
 
@@ -486,8 +486,7 @@ def order(request):
         cart_items = CartItem.objects.filter(pk__in=cart_items)
         order_form = OrderForm(request.POST)
         product_id = request.POST.get('product_id')
-        size = request.POST.get('size')
-        color = request.POST.get('color')
+        type = request.POST.get('type')
         quantity = request.POST.get('quantity')
         if quantity:
             quantity = int(request.POST.get('quantity'))
@@ -536,7 +535,7 @@ def order(request):
                         output_field=FloatField()
                     ),
                 ).first()
-                product_detail = ProductDetail.objects.filter(product=product, color=color, size=size).first()
+                product_detail = ProductDetail.objects.filter(product=product, type=type).first()
                 if product_detail.quantity < quantity:
                     raise ValidationError('Sản phẩm đã hết hàng')
                 product_detail.quantity -= quantity
@@ -545,8 +544,7 @@ def order(request):
                 product.total_sold += quantity
                 product.save()
                 order_item = OrderItem.objects.create(
-                    size=size,
-                    color=color,
+                    type=type,
                     quantity=quantity,
                     price=product.curr_price,
                     order=order,
