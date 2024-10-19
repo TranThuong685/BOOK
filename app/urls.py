@@ -16,23 +16,19 @@ urlpatterns = [
     path('get-order', views.get_order, name='get_order'),
     path('order-detail', views.get_order_detail, name='order-detail'),
     path('cancel-order', views.cancel_order, name='cancel-order'),
-    path('customers', views.customerManager, name='customers'),
-    path('admin_orders', views.orderManager, name='admin_orders'),
     # API
     path('filter-product', views.getListProduct, name='list-product'),
     path('add-address', views.add_address, name='add-address'),
     path('register', views.register, name='register'),
     path('order', views.order, name='order'),
-
     path('feedback', views.handleFeedback, name='feedback'),
     path('list-feedback', views.getFeedback, name='list-feedback'),
     path('get-feedback', views.getFeedbackByProduct, name='get-feedback'),
-
     path('list-coupon', views.getCoupon, name='list-coupon'),
     path('profile', views.profile, name='profile'),
     path('notification', views.notification, name='notification'),
 
-    #coupon
+    # coupon
     path('coupons', views.couponManager, name='coupons'),
     path('add_coupon', views.addCoupon, name='add_coupon'),
     path('edit_coupon', views.editCoupon, name='edit_coupon'),
@@ -51,7 +47,15 @@ urlpatterns = [
     path('edit_category', views.editCategory, name='edit_category'),
     path('delete_category', views.deleteCategory, name='delete_category'),
 
+    # order
+    path('admin_orders', views.orderManager, name='admin_orders'),
     path('order_detail', views.getOrderDetail, name='order_datail'),
-    path('report', views.report, name='report'),
+
+    # customer
+    path('customers', views.customerManager, name='customers'),
     path('view_profile', views.viewProfile, name='view_profile'),
+    path('update_status', views.updateStatus, name='update_status'),
+
+    # dashboard
+    path('report', views.report, name='report'),
 ]

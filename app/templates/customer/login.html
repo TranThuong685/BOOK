@@ -35,7 +35,7 @@
         <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
             <div class="row gx-lg-5 pe-0 align-items-center mb-5">
                 <div class="col-lg-6 mb-5 mb-lg-0 p-0" style="z-index: 10">
-                    <div class="login-image w-100 "style="height: 460px;">
+                    <div class="login-image w-100 "style="height: 790px;">
                         <img src="app/media/images/login.jpg" alt="" class="img-fluid w-100 h-100">
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
                     <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
 
-                    <div class="card login-card bg-glass" style="height: 460px;">
+                    <div class="card login-card bg-glass" style="height: 790px;">
                         <div class="card-body px-4 pt-4 pb-4 px-md-5">
                             <nav>
                                 <div class="nav nav-pills bg-transparent d-flex justify-content-center p-0 pb-4" id="nav-tab" role="tablist">
@@ -56,6 +56,16 @@
                                 </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
+                                {% if messages %}
+                                    <div class="alert alert-success">
+                                        {{ messages }}
+                                    </div>
+                                {% endif %}
+                                {% if error %}
+                                    <div class="alert alert-danger">
+                                        {{ error }}
+                                    </div>
+                                {% endif %}
                                 <div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
                                     <form class="login-form needs-validation" action='/login' method='post' novalidate>
                                         {% csrf_token %}
@@ -112,22 +122,43 @@
                                     <form class="register-form needs-validation" action='/register' method='post' novalidate>
                                         {% csrf_token %}
                                         <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="" placeholder="name" name='name' required>
+                                            <label for="">Họ và tên</label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền họ và tên
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id="" placeholder="username" name="username" required>
-                                            <label for="">Tên đăng nhập</label>
+                                            <label for="">Tên đăng nhập<span class="text-danger">*</span></label>
                                             <div class="invalid-feedback">
                                                 Vui lòng điền tên đăng nhập
                                             </div>
                                         </div>
                                         <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="" placeholder="email" name="email" required>
+                                            <label for="">Email<span class="text-danger">*</span></label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền đúng định dạng email
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="" placeholder="phone" pattern="^\[0-9]{10}$" name="phone" required>
+                                            <label for="">Số điện thoại<span class="text-danger">*</span></label>
+                                            <div class="invalid-feedback">
+                                                Vui lòng điền đúng định dạng số điện thoại (10 số)
+                                            </div>
+                                        </div>
+                                        <div class="form-floating mb-3">
                                             <input type="password" class="form-control" id="" placeholder="password" name="password" required>
-                                            <label for="">Mật khẩu</label>
+                                            <label for="">Mật khẩu<span class="text-danger">*</span></label>
                                             <div class="invalid-feedback">
                                                 Vui lòng điền mật khẩu
                                             </div>
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input type="password" class="form-control" id="" placeholder="password" name="repassword"required>
-                                            <label for="">Nhập lại mật khẩu</label>
+                                            <label for="">Nhập lại mật khẩu<span class="text-danger">*</span></label>
                                             <div class="invalid-feedback">
                                                 Vui lòng điền mật khẩu
                                             </div>

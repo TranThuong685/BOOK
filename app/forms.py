@@ -5,11 +5,24 @@ from crispy_forms.layout import Layout, Submit
 
 
 class UserForm(forms.ModelForm):
-
     class Meta:
         model = User
         fields = ['name', 'dob', 'gender', 'phone', 'email']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        phone = cleaned_data.get('phone')
+        email = cleaned_data.get('email')
+
+        # Kiểm tra phone: Số điện thoại phải là duy nhất ngoại trừ người dùng hiện tại
+        if phone and User.objects.filter(phone=phone).exclude(id=self.instance.id).exists():
+            self.add_error('phone', 'Số điện thoại đã được đăng ký.')
+
+        # Kiểm tra email: Email phải là duy nhất ngoại trừ người dùng hiện tại
+        if email and User.objects.filter(email=email).exclude(id=self.instance.id).exists():
+            self.add_error('email', 'Email đã được đăng ký.')
+
+        return cleaned_data
 
 class CouponForm(forms.ModelForm):
     class Meta:

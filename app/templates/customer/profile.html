@@ -6,17 +6,27 @@
             <div class="row">
                 <div class="col-8">
                     <div class="card profile-infor">
+                        {% if messages %}
+                            <div class="alert alert-success">
+                                {{ messages }}
+                            </div>
+                        {% endif %}
+                        {% if error %}
+                            <div class="alert alert-danger">
+                                {{ error }}
+                            </div>
+                        {% endif %}
                         <div class="card-body">
                             <div class="profile-infor-generation d-flex align-items-center">
                                 <img src=".{{user.avatar.url}}" alt="" class="profile-image">
                                 <div class="d-flex flex-column ms-4">
                                     <h3>{{user.name}}</h3>
                                     <p>Tham gia từ {{day_created}}</p>
-                                    <div class="d-flex gap-2">
+                                    <!-- <div class="d-flex gap-2">
                                         <a href=""><i class="fa-brands fa-facebook"></i></a>
                                         <a href=""><i class="fa-brands fa-instagram"></i></a>
                                         <a href=""></a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 
@@ -39,13 +49,13 @@
                                                     </div>
                                                     <div class="modal-body change-infor">
                                                         <div class="mb-3">
-                                                            <label for="" class="form-label">Tên</label>
+                                                            <label for="" class="form-label">Họ và tên</label>
                                                             <input type="text" class="form-control" name="name" id="" aria-describedby="helpId" placeholder="" value="{{user.name}}">
-                                                            <div class="invalid-feedback">Vui lòng điền tên</div>
+                                                            <div class="invalid-feedback">Vui lòng điền họ và tên</div>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="" class="form-label">Ngày sinh</label>
-                                                            <input type="date" class="form-control" name="dob" id="" aria-describedby="helpId" placeholder="" value="{{user.dob|date:'Y-m-d'}}">
+                                                            <input type="date" class="form-control" name="dob" max="{{ today|date:'Y-m-d' }}" id="" aria-describedby="helpId" placeholder="" value="{{user.dob|date:'Y-m-d'}}">
                                                             <div class="invalid-feedback">Vui lòng chọn ngày sinh</div>
                                                         </div>
                                                         <div class="mb-3 d-flex">
@@ -84,8 +94,12 @@
                                     </div>
                                 </div>
                                 <div class="row mt-4 mb-2">
-                                    <div class="col-4">Tên</div>
+                                    <div class="col-4">Họ và tên</div>
                                     <div class="col-4">{{user.name|default:"Chưa điền thông tin"}}</div>
+                                </div>
+                                <div class="row my-2">
+                                    <div class="col-4">Tên đăng nhập</div>
+                                    <div class="col-4">{{user.username|default:"Chưa điền thông tin"}}</div>
                                 </div>
                                 <div class="row my-2">
                                     <div class="col-4">Ngày sinh</div>
@@ -113,15 +127,40 @@
                             <h4>Thông tin mua hàng</h4>
                             <div class="row my-3">
                                 <div class="col-6">Đơn hàng gần nhất</div>
-                                <div class="col-6 text-end">{{day_last_order}}</div>
+                                <div class="col-6 text-end">{{day_last_order}} trước</div>
+                            </div>
+                            <div class="row my-3 text-info">
+                                <div class="col-6">Số đơn mới</div>
+                                <div class="col-6 text-end">{{total_order_new}}</div>
                             </div>
                             <div class="row my-3">
+                                <div class="col-6">Số đơn đã xác nhận</div>
+                                <div class="col-6 text-end">{{total_order_confirmed}}</div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-6">Số đơn đang giao cho vận chuyển</div>
+                                <div class="col-6 text-end">{{total_order_preparing}}</div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-6">Số đơn đang giao</div>
+                                <div class="col-6 text-end">{{total_order_delivering}}</div>
+                            </div>
+                            <div class="row my-3 text-danger">
+                                <div class="col-6">Số đơn đã hủy</div>
+                                <div class="col-6 text-end">{{total_order_canceled}}</div>
+                            </div>
+                            <div class="row my-3 text-success">
+                                <div class="col-6">Số đơn đã thành công</div>
+                                <div class="col-6 text-end">{{total_order_success}} ({{total_money_success|floatformat:0|intcomma_dot}} đ)</div>
+                            </div>
+                            <hr>
+                            <div class="row my-3 text-bold">
                                 <div class="col-6">Tổng số đơn</div>
                                 <div class="col-6 text-end">{{total_order}}</div>
                             </div>
-                            <div class="row my-3">
+                            <div class="row my-3 text-bold">
                                 <div class="col-6">Tổng số tiền</div>
-                                <div class="col-6 text-end">{{total_money|floatformat:0|intcomma_dot}}đ</div>
+                                <div class="col-6 text-end">{{total_money|floatformat:0|intcomma_dot}} đ</div>
                             </div>
                         </div>
                     </div>
