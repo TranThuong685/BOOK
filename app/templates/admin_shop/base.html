@@ -91,7 +91,7 @@
                         <div class='d-flex justify-content-between align-items-center'>
                             <span class="nav-content">
                                 <i class="fas fa-bars"></i>
-                                Danh mục
+                                Danh mục sản phẩm
                             </span>
                             <i class="fa-solid fa-angle-right color-white"></i>
                         </div>
@@ -143,7 +143,28 @@
                         </div>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a href="/categories_post" class="nav-link pe-5 active">
+                        <div class='d-flex justify-content-between align-items-center'>
+                            <span class="nav-content">
+                                <i class="fas fa-bars"></i>
+                                Danh mục bài viết
+                            </span>
+                            <i class="fa-solid fa-angle-right color-white"></i>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/posts" class="nav-link pe-5 active">
+                        <div class='d-flex justify-content-between align-items-center'>
+                            <span class="nav-content">
+                                <i class="fas fa-newspaper"></i>
+                                Bài viết
+                            </span>
+                            <i class="fa-solid fa-angle-right color-white"></i>
+                        </div>
+                    </a>
+                </li>
                 <li class="nav-item .active">
                     <a href="/report" class="nav-link pe-5 ">
                         <div class='d-flex justify-content-between align-items-center'>
@@ -175,7 +196,13 @@
     
         {% block content %}{% endblock %}
 </div>
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript">
+    // Đảm bảo rằng CKEditor được áp dụng vào các trường textarea
+    CKEDITOR.replace('content');
 
+</script>
 </body>
 
 </html>

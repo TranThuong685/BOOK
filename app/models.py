@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
-
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 class User(AbstractUser):
@@ -191,3 +191,25 @@ class VoucherWallet(models.Model):
     voucher_wallet_id = models.AutoField(primary_key=True, blank=False, null=False)
     customer = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, blank=False, null=True)
+
+class CategoryPost(models.Model):
+    category_id = models.AutoField(primary_key=True, blank=False, null=False)
+    name = models.CharField(max_length=100, blank=False, null=False, unique=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+class Post(models.Model):
+    post_id = models.AutoField(primary_key=True, blank=False, null=False)
+    title = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    content = RichTextField()
+    category = models.ForeignKey(CategoryPost, on_delete=models.CASCADE, blank=False, null=False)
+    author_name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+    views = models.IntegerField(default=0)
+    time_created = models.DateTimeField(default=timezone.datetime.now(), blank=False, null=False)
+
+    def __str__(self):
+        return self.name

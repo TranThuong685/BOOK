@@ -1,5 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('login', views.log_in, name='login'),
@@ -25,6 +27,8 @@ urlpatterns = [
     path('list-feedback', views.getFeedback, name='list-feedback'),
     path('get-feedback', views.getFeedbackByProduct, name='get-feedback'),
     path('list-coupon', views.getCoupon, name='list-coupon'),
+    path('list-post', views.getPost, name='list-post'),
+    path('post/<int:post_id>', views.postDetail, name='post-detail'),
     path('profile', views.profile, name='profile'),
     path('notification', views.notification, name='notification'),
 
@@ -47,6 +51,18 @@ urlpatterns = [
     path('edit_category', views.editCategory, name='edit_category'),
     path('delete_category', views.deleteCategory, name='delete_category'),
 
+    # category_post
+    path('categories_post', views.categoryPostManager, name='categories_post'),
+    path('add_category_post', views.addCategoryPost, name='add_category_post'),
+    path('edit_category_post', views.editCategoryPost, name='edit_category_post'),
+    path('delete_category_post', views.deleteCategoryPost, name='delete_category_post'),
+
+    # category_post
+    path('posts', views.postManager, name='posts'),
+    path('add_post', views.addPost, name='add_post'),
+    path('edit_post', views.editPost, name='edit_post'),
+    path('delete_post', views.deletePost, name='delete_post'),
+
     # order
     path('admin_orders', views.orderManager, name='admin_orders'),
     path('order_detail', views.getOrderDetail, name='order_datail'),
@@ -58,4 +74,10 @@ urlpatterns = [
 
     # dashboard
     path('report', views.report, name='report'),
+
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,7 +3,6 @@ from .models import *
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 
-
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -134,3 +133,38 @@ class CategoryForm(forms.ModelForm):
             raise forms.ValidationError("Tên danh mục đã tồn tại, vui lòng chọn tên khác.")
         
         return name
+
+class CategoryPostForm(forms.ModelForm):
+    class Meta:
+        model = CategoryPost
+        fields = ['name', 'description', 'is_active']
+
+    def clean_is_active(self):
+        # Lấy giá trị từ POST, mặc định là False nếu không tồn tại hoặc là '0'
+        is_active = self.data.get('is_active', '0')
+        if is_active == '0':
+            return False
+        return True
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        category_id = self.instance.category_id  # Lấy ID của bản ghi hiện tại (nếu đang chỉnh sửa)
+        
+        # Kiểm tra nếu name đã tồn tại với các record khác, bỏ qua record hiện tại khi edit
+        if CategoryPost.objects.filter(name=name).exclude(category_id=category_id).exists():
+            raise forms.ValidationError("Tên danh mục đã tồn tại, vui lòng chọn tên khác.")
+        
+        return name
+
+class PostForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=CategoryPost.objects.all())
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'author_name', 'category', 'is_active']
+
+    def clean_is_active(self):
+        # Lấy giá trị từ POST, mặc định là False nếu không tồn tại hoặc là '0'
+        is_active = self.data.get('is_active', '0')
+        if is_active == '0':
+            return False
+        return True

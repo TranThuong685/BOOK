@@ -2,12 +2,12 @@
 {% block content %}
 <div class="content">
     <div class="my-4">
-        <h4 class="my-4">Danh mục sản phẩm</h4>
+        <h4 class="my-4">Danh mục bài viết</h4>
         <div class="my-4">
             <div class="row justify-content-between">
                 <div class="col-auto d-flex mb-2">
                     <div class="admin-search">
-                        <form action="/categories" method="get" class="d-flex position-relative justify-content-center align-items-center" id="filter-form">
+                        <form action="/categories_post" method="get" class="d-flex position-relative justify-content-center align-items-center" id="filter-form">
                             <input type="text" class="form-control shadow-none search-input" type="search" placeholder="Tên danh mục" name="keyword" value="{{ request.GET.keyword }}" />
                             <div style="display: flex; align-items: center;">
                                 <button type="submit" class="btn btn-primary ms-2 btn-search-product">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="col-auto">
-                    <a href="/add_category" class="">
+                    <a href="/add_category_post" class="">
                         <button class="btn btn-primary ">
                             <i class="fa-solid fa-plus"></i>
                             Thêm danh mục
@@ -29,22 +29,34 @@
         </div>
         <div class="list">
             <div class="cart-table table-responsive">
-                <table class="table" id="product-table">
+                <table class="table" id="catepost-table">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 80%; text-align: left;">Tên danh mục</th>
+                            <th scope="col">Tên danh mục</th>
+                            <th scope="col">mô tả</th>
+                            <th scope="col">Trạng thái</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for category in page_obj %}
                         <tr class="cart-table-row align-items-center">
-                            <td style="text-align: left;">
+                            <td>
                                 {{ category.name }}
                             </td>
                             <td>
+                                {{ category.description }}
+                            </td>
+                            <td>
+                                {% if category.is_active == 1 %}
+                                    <span class="badge badge-success">Kích hoạt</span>
+                                {% else %}
+                                    <span class="badge badge-danger">không kích hoạt</span>
+                                {% endif %}
+                            </td>
+                            <td>
                                 <div class="cart-product-action">
-                                    <a href="edit_category?category_id={{ category.category_id }}" class="btn-action btn-edit"><i class="fas fa-edit"></i></a>
+                                    <a href="edit_category_post?category_id={{ category.category_id }}" class="btn-action btn-edit"><i class="fas fa-edit"></i></a>
                                     <button class="btn-action btn-delete" data-id="{{ category.category_id }}"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </td>
@@ -110,9 +122,9 @@
                     url: url,
                     type: "GET",
                     success: function(data) {
-                        var newTable = $(data).find("#product-table").html();
+                        var newTable = $(data).find("#catepost-table").html();
                         var newPaginate = $(data).find(".page-controller").html();
-                        $("#product-table").html(newTable);
+                        $("#catepost-table").html(newTable);
                         $(".page-controller").html(newPaginate);
                     }
                 });
@@ -143,7 +155,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: '/delete_category?category_id=' + id,
+                                url: '/delete_category_post?category_id=' + id,
                                 type: "GET",
                                 success: function(data) {
                                     if (data.success) {
