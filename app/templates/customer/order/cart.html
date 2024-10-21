@@ -40,7 +40,7 @@
                                 </td>
                                 <td>
                                     <div class="cart-product-size">
-                                        {% if item.type == '0' %}
+                                        {% if item.type == 0 %}
                                             Sách mới
                                         {% else %}
                                             Sách cũ
@@ -130,7 +130,7 @@
                         </div>
                         <div class="voucher-wallet d-flex justify-content-end align-items-center mt-2 pe-2 color-blue">
                             <i class="fa-solid fa-wallet"></i>
-                            <span class="ms-2" data-bs-toggle="modal" data-bs-target="#list-voucher" style="cursor: pointer;">Voucher của tôi</span>
+                            <span class="ms-2 open-popup-voucher" data-bs-toggle="modal" data-bs-target="#list-voucher" style="cursor: pointer;">Voucher của tôi</span>
                         </div>
                         <div class="modal fade modal-coupon" id="list-voucher" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -153,8 +153,9 @@
                                                     data-condition="{{coupon.condition|floatformat:0}}" 
                                                     data-code="{{coupon.code}}"
                                                 >
-                                                    <button class="btn btn-secondary btn-not-eligible" data-id="{{coupon.id}}">Chưa đủ điều kiện</button>
-                                                    <button class="btn btn-primary btn-sm btn-apply" data-id="{{coupon.id}}" style="display:none">Áp dụng</button>
+                                                    <button class="btn btn-secondary btn-not-eligible" data-id="{{coupon.id}}" style=" cursor: not-allowed;">Chưa đủ điều kiện</button>
+                                                    <button class="btn btn-primary btn-sm btn-apply" data-id="{{coupon.id}}" style="display:none; cursor: pointer;">Áp dụng</button>
+                                                    <button type='button' class="btn btn-success btn-applied btn-sm" style="display:none; cursor: default;">Đã áp dụng</button>
                                                 </div>
                                             </div>
                                             <hr>
@@ -461,6 +462,31 @@
                 voucherResult.find('.voucher-error').remove();
             }
         }
+
+        $(document).on('click', '.open-popup-voucher', function () {
+            $('.coupon-action').each(function() {
+                var voucherCodeApplied = $('.coupon').val();
+                var discount = parseFloat($(this).data('discount'));
+                var code = $(this).data('code');
+                var condition = parseFloat($(this).data('condition'));
+
+                if (voucherCodeApplied == code) {
+                    $(this).find('.btn-applied').show();
+                    $(this).find('.btn-apply').hide();
+                    $(this).find('.btn-not-eligible').hide();
+                } else {
+                    if (totalPrice >= condition) {
+                        $(this).find('.btn-apply').show();
+                        $(this).find('.btn-not-eligible').hide();
+                        $(this).find('.btn-applied').hide();
+                    } else {
+                        $(this).find('.btn-apply').hide();
+                        $(this).find('.btn-not-eligible').show();
+                        $(this).find('.btn-applied').hide();
+                    }
+                }
+            })
+        });
 
         $('.coupon-action').each(function() {
             var discount = parseFloat($(this).data('discount'));

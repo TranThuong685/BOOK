@@ -31,6 +31,7 @@ import os
 from datetime import timedelta
 import logging
 from django.db.models import Avg
+from django.contrib import messages
 
 def convert_diff(diff):
     days_in_month = 30
@@ -520,6 +521,7 @@ def order(request):
             tracking = Tracking.objects.create(order_status=status, order=order)
             tracking.save()
             coupon = Coupon.objects.filter(code=coupon).order_by('-start_date').first()
+            messages.success(request, 'Đặt hàng thành công')
 
             if coupon:
                 coupon.quantity -= 1
@@ -571,7 +573,8 @@ def order(request):
                     product=product
                 )
                 order_item.save()
-            return render(request, 'customer/success-order.html')
+                
+            return redirect('/get-order')
         else:
             context = {
                 'cart_items': cart_items,
@@ -608,7 +611,8 @@ def get_order(request):
     context = {
         'page_obj': page_obj,
         'orders' : page_obj.object_list,
-        'states': status
+        'states': status,
+        'messages': messages.get_messages(request)
     }
     return render(request, 'customer/orders.html', context)
 
@@ -720,9 +724,9 @@ def getCoupon(request):
     return render(request, 'customer/list-coupon.html', context)
 
 def getPost(request):
-    categories = CategoryPost.objects.all()
+    categories = CategoryPost.objects.filter(is_active = 1)
     keyword = request.GET.get('keyword', '')
-    posts = Post.objects.filter(title__icontains=keyword).order_by('-post_id')
+    posts = Post.objects.filter(title__icontains=keyword, is_active = 1).order_by('-post_id')
     category = request.GET.get('category', '')
     if category:
         posts = posts.filter(category__name=category)

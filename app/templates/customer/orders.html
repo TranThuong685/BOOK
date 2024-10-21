@@ -6,8 +6,13 @@
     <div class="container">
         <h4 class="mb-2">Đơn hàng của bạn
         </h4>
-
-        
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert alert-success" style="list-style-type: none;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <div class="orders-table min-height mt-4">
         <div>
             <div class='d-flex mb-4 align-items-center'>
@@ -80,7 +85,7 @@
                             </span>
                         </td>
                         <td>{{order.payment_method}}</td>
-                        <td>{{order.date|date:"h:i, d/m/Y"}}</td>
+                        <td>{{order.date|date:"H:i:s  d/m/Y"}}</td>
                         <td>{{order.total|floatformat:0|intcomma_dot}}đ</td>
                     </tr>
                     {% endfor %}

@@ -85,7 +85,7 @@
         $.validator.addMethod("lessThan", function(value, element, params) {
             var endDate = new Date($(params).val());
             var startDate = new Date(value);
-            return this.optional(element) || startDate < endDate;
+            return this.optional(element) || startDate <= endDate;
         }, "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc");
 
         $("#myForm").validate({

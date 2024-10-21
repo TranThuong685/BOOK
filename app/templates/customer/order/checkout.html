@@ -78,15 +78,16 @@
                                         <div class="address-form">
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Người nhận</label>
-                                                <input type="text" class="form-control" name="receiver" id="" aria-describedby="helpId" placeholder="">
+                                                <input type="text" class="form-control" name="receiver" id="add-name" aria-describedby="helpId" placeholder="">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Địa chỉ</label>
-                                                <input type="text" class="form-control" name="address" id="" aria-describedby="helpId" placeholder="">
+                                                <input type="text" class="form-control" name="address" id="add-address" aria-describedby="helpId" placeholder="">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Số điện thoại</label>
-                                                <input type="text" class="form-control" name="phone" id="" aria-describedby="helpId" placeholder="">
+                                                <input type="text" class="form-control" name="phone" id="add-phone" aria-describedby="helpId" placeholder="Nhập số điện thoại" required>
+                                                <div id="error-phone" class="form-text text-danger d-none">Vui lòng nhập số điện thoại hợp lệ.</div>
                                             </div>
                                             <div class='d-flex justify-content-end gap-2'>
                                                 <button type='button' class='btn btn-primary btn-add-address'>Thêm</button>
@@ -94,7 +95,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -209,8 +209,9 @@
                                                     <div class="coupon-time text-secondary fs-min">HSD: {{ coupon.end_date|date:"d/m/Y" }}</div>
                                                 </div>
                                                 <div class="coupon-action" data-discount="{{coupon.discount|floatformat:0}}" data-condition="{{coupon.condition|floatformat:0}}" data-code="{{coupon.code}}">
-                                                    <button type='button' class="btn btn-secondary btn-not-eligible" data-id="{{coupon.id}}">Chưa đủ điều kiện</button>
-                                                    <button type='button' class="btn btn-primary btn-sm btn-apply" data-id="{{coupon.id}}" style="display:none">Áp dụng</button>
+                                                    <button type='button' class="btn btn-secondary btn-not-eligible" data-id="{{coupon.id}}" style=" cursor: not-allowed;">Chưa đủ điều kiện</button>
+                                                    <button type='button' class="btn btn-primary btn-sm btn-apply" data-id="{{coupon.id}}" style="display:none; cursor: pointer;">Áp dụng</button>
+                                                    <button type='button' class="btn btn-success btn-applied btn-sm" style="display:none; cursor: default;">Đã áp dụng</button>
                                                 </div>
                                             </div>
                                             <hr>
@@ -391,63 +392,79 @@
             })
         })
 
+        $('#add-phone').on('change', function() {
+            var phone = $(this).val();
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone)) {
+                $('#error-phone').removeClass('d-none');
+            } else {
+                $('#error-phone').addClass('d-none');
+            }
+        })
+
         $('.btn-add-address').click(function() {
             var receiver = $('.address-form input[name="receiver"]').val();
             var address = $('.address-form input[name="address"]').val();
             var phone = $('.address-form input[name="phone"]').val();
-
-            data = {
-                'receiver': receiver,
-                'address': address,
-                'phone': phone,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            }
-
-            $.ajax({
-                data: data,
-                url: '{% url "add-address" %}',
-                type: 'POST',
-                success: function(response) {
-                    console.log(response);
-
-                    if (response.status == 'success') {
-                        $('#modal-add-address').modal('hide');
-                        $('#modal-address').modal('show');
-                        var result = response.result;
-                        $('.address-options').append(`
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="address" id="address-${result.id}">
-                                <label class="form-check-label ms-3" style='width: 700px;' for="address-${result.id}">
-                                    <div class='row'>
-                                        <div class="d-flex align-items-center gap-3 col-3">
-                                            Tên
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone)) {
+                $('#error-phone').removeClass('d-none');
+            } else {
+                $('#error-phone').addClass('d-none');
+                data = {
+                    'receiver': receiver,
+                    'address': address,
+                    'phone': phone,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                }
+    
+                $.ajax({
+                    data: data,
+                    url: '{% url "add-address" %}',
+                    type: 'POST',
+                    success: function(response) {
+                        console.log(response);
+    
+                        if (response.status == 'success') {
+                            $('#modal-add-address').modal('hide');
+                            $('#modal-address').modal('show');
+                            var result = response.result;
+                            $('.address-options').append(`
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="address" id="address-${result.id}">
+                                    <label class="form-check-label ms-3" style='width: 700px;' for="address-${result.id}">
+                                        <div class='row'>
+                                            <div class="d-flex align-items-center gap-3 col-3">
+                                                Tên
+                                            </div>
+                                            <div class="d-flex col-8 receiver">${result.receiver}</div>
                                         </div>
-                                        <div class="d-flex col-8 receiver">${result.receiver}</div>
-                                    </div>
-                                    <div class='row'>
-                                        <div class="d-flex gap-3 col-3">
-                                            Địa chỉ
+                                        <div class='row'>
+                                            <div class="d-flex gap-3 col-3">
+                                                Địa chỉ
+                                            </div>
+                                            <div class="d-flex col-8 address">${result.address}</div>
                                         </div>
-                                        <div class="d-flex col-8 address">${result.address}</div>
-                                    </div>
-                                    <div class='row'>
-                                        <div class="d-flex gap-3 col-3">
-                                            Số điện thoại
+                                        <div class='row'>
+                                            <div class="d-flex gap-3 col-3">
+                                                Số điện thoại
+                                            </div>
+                                            <div class="d-flex col-8 phone">${result.phone}</div>
                                         </div>
-                                        <div class="d-flex col-8 phone">${result.phone}</div>
-                                    </div>
-                                </label>
-                                <hr>
-                            </div>
-                        `)
-                    } else {
+                                    </label>
+                                    <hr>
+                                </div>
+                            `)
+                        } else {
+                            alert('Có lỗi xảy ra');
+                        }
+                    },
+                    error: function(error) {
                         alert('Có lỗi xảy ra');
                     }
-                },
-                error: function(error) {
-                    alert('Có lỗi xảy ra');
-                }
-            });
+                });
+            }
+
         })
 
         $('.btn-coupon').click(function() {
@@ -586,6 +603,41 @@
             form.submit();
         })
 
+        $(document).on('click', '.change-coupon', function () {
+            
+
+            $('.coupon-action').each(function() {
+                var voucherCodeApplied = $('.coupon-code').text();
+                var discount = parseFloat($(this).data('discount'));
+                var code = $(this).data('code');
+                var condition = parseFloat($(this).data('condition'));
+                var totalPrice = parseFloat($('.total-money').text().replaceAll('.', '').replace('đ', ''));
+
+                if (voucherCodeApplied == code) {
+                    $(this).find('.btn-applied').show();
+                    $(this).find('.btn-apply').hide();
+                    $(this).find('.btn-not-eligible').hide();
+                } else {
+                    if (totalPrice >= condition) {
+                        $(this).find('.btn-apply').show();
+                        $(this).find('.btn-not-eligible').hide();
+                        $(this).find('.btn-applied').hide();
+                    } else {
+                        $(this).find('.btn-apply').hide();
+                        $(this).find('.btn-not-eligible').show();
+                        $(this).find('.btn-applied').hide();
+                    }
+                }
+            })
+        });
+
+        $('#exampleModal').on('hidden.bs.modal', function (e) {
+            $('.voucher-result').html('');
+        });
+
+        $('#modal-add-address').on('hidden.bs.modal', function (e) {
+            $(this).find('input[type="text"], input[type="number"], textarea').val('');
+        });
     });
 
     function calMoney() {

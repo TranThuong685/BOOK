@@ -219,6 +219,7 @@
             currency: 'VND'
         }).replace('₫', 'đ'));
         var icon = ['clipboard-check', 'box', 'truck-ramp-box', 'truck-fast', 'box-open'];
+        var status_name = ['Chờ xác nhận', 'Chuẩn bị hàng', 'Giao cho vận chuyển', 'Đang giao hàng', 'Giao hàng thành công'];
         var color = ['success', 'processing', 'pending'];
         var status = [];
         var description = ['Đơn hàng đã được xác nhận', 'Đơn hàng đang được chuẩn bị', 'Đơn hàng đã được giao cho đơn vị vận chuyển', 'Đơn hàng đang được vận chuyển', 'Đơn hàng đã được giao thành công'];
@@ -228,7 +229,7 @@
         {% for tracking in order_tracking %}
         status.push({
             'date': '{{ tracking.date|date:"d/m/Y"|default:"" }}',
-            'time': '{{ tracking.date|date:"h:i"|default:"" }}',
+            'time': '{{ tracking.date|date:"H:i"|default:"" }}',
             'name': '{{ tracking.order_status.name }}',
             'description': '{{ tracking.order_status.description }}',
         });
@@ -241,8 +242,6 @@
         timeline.empty();
         
         status.forEach((element, i) => {
-            console.log(i);
-            console.log(status.length);
             let color = i < status.length-1 ? 'success' : 'processing';
             color = i == icon.length-1 ? 'sucess' : color;
             console.log(color);
@@ -282,7 +281,7 @@
                         </div>
                     </div>
                     <div class="col-auto timeline-item-status">
-                        <h6>${pending}</h6>
+                        <h6>${status_name[i]}</h6>
                         <p></p>
                     </div>
                 </div>
