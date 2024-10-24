@@ -329,8 +329,8 @@
 
         $('.payment').click(function() {
             var total_money = parseFloat($('.total-money').text().replaceAll('.', ''));
-            if (total_money == 0) {
-                $('.payment-alert').html('<div class="text-danger mt-3">Vui lòng chọn sản phẩm</div>');
+            if (total_money < 0) {
+                $('.payment-alert').html('<div class="text-danger mt-3">Có lỗi xảy ra, giá tiền không được nhỏ hơn 0</div>');
                 return;
             }
             if($('.voucher-error').length){

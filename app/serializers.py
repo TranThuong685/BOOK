@@ -15,13 +15,12 @@ class ProductSaleSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     # productdetail_set = ProductDetailSerializer(many=True, read_only=True)
-    curr_price = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
-        fields = ('product_id', 'name', 'curr_price', 'price', 'images', 'total_sold', 'rating') 
+        fields = ('product_id', 'name', 'sale', 'price', 'images', 'total_sold', 'rating') 
 
     def get_curr_price(self, obj):
         now = timezone.now()

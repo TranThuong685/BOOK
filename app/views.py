@@ -115,23 +115,11 @@ def register(request):
 def home(request):
     now = timezone.now()
 
-    products = Product.objects.annotate(
-        curr_price=Case(
-            When(productsale__start_date__lte=now,
-                 productsale__end_date__gte=now,
-                 then=F('productsale__price')),
-            default=F('price'),
-            output_field=FloatField()
-        ),
-        discount_percent=Round(ExpressionWrapper(
-            Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
-            output_field=FloatField()
-        ), 0),
-    ).distinct()
+    products = Product.objects.distinct()
 
     top_selling_products = products.order_by('-total_sold')[:10]
 
-    top_sale_products = products.order_by('-discount_percent')[:10]
+    top_sale_products = products.order_by('-sale')[:10]
 
     hot_selling_product = (products.filter(orderitem__order__date__month=now.month,
                                            orderitem__order__date__year=now.year)
@@ -139,6 +127,7 @@ def home(request):
                            .order_by('-total_sold_month')
                            )[:10]
 
+    print(top_selling_products)
     context = {
         'top_selling_products': top_selling_products,
         'top_sale_products': top_sale_products,
@@ -181,17 +170,6 @@ def getListProduct(request):
     best_selling_product = request.GET.get('best_selling_product')
 
     products = Product.objects.annotate(
-        curr_price=Case(
-            When(productsale__start_date__lte=timezone.now(),
-                 productsale__end_date__gte=timezone.now(),
-                 then=F('productsale__price')),
-            default=F('price'),
-            output_field=FloatField()
-        ),
-        discount_percent=Round(ExpressionWrapper(
-            Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
-            output_field=FloatField()
-        )),
         quantity=Sum('productdetail__quantity')
     )
     print(products)
@@ -218,7 +196,7 @@ def getListProduct(request):
     #     products = products.filter(rating__gte=rating)
 
     if top_sale_products:
-        products = products.order_by('-discount_percent')
+        products = products.order_by('-sale')
 
     if top_selling_products:
         products = products.order_by('-total_sold')
@@ -233,9 +211,9 @@ def getListProduct(request):
         ).order_by('-total_sold_month'))
                     
     if sort == 'price_asc':
-        products = products.order_by('curr_price')
+        products = products.order_by('price')
     elif sort == 'price_desc':
-        products = products.order_by('-curr_price')
+        products = products.order_by('-price')
 
     paginator = PageNumberPagination()
     paginator.page_query_param = 'page'
@@ -251,17 +229,6 @@ def getListProduct(request):
 
 def getProductDetail(request, product_id):
     product = Product.objects.filter(pk=product_id).annotate(
-        curr_price=Case(
-            When(productsale__start_date__lte=timezone.now(),
-                 productsale__end_date__gte=timezone.now(),
-                 then=F('productsale__price')),
-            default=F('price'),
-            output_field=FloatField()
-        ),
-        discount_percent=Round(ExpressionWrapper(
-            Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
-            output_field=FloatField()
-        )),
         quantity=Sum('productdetail__quantity'),
         rating=Avg('feedback__rating')
     ).first()
@@ -277,19 +244,7 @@ def getProductDetail(request, product_id):
     related_products = (Product.objects
                         .filter(category=product.category)
                         .exclude(pk=product.pk)
-                        )[:10].annotate(
-        curr_price=Case(
-            When(productsale__start_date__lte=timezone.now(),
-                 productsale__end_date__gte=timezone.now(),
-                 then=F('productsale__price')),
-            default=F('price'),
-            output_field=FloatField()
-        ),
-        discount_percent=Round(ExpressionWrapper(
-            Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
-            output_field=FloatField()
-        ))
-    )
+                        )[:10].all()
 
     context = {
         'product': product,
@@ -311,9 +266,7 @@ def add_to_cart(request):
         cartitems = CartItem.objects.filter(cart=cart)
         cartitems = cartitems.annotate(
             price=Case(
-                When(product__productsale__start_date__lte=timezone.now(),
-                     product__productsale__end_date__gte=timezone.now(),
-                     then=F('product__productsale__price')),
+                When(product__sale__gte=0, then=F('product__sale')),
                 default=F('product__price'),
                 output_field=FloatField()
             ),
@@ -416,9 +369,7 @@ def checkout(request):
 
     cart_items = CartItem.objects.filter(pk__in=cart_items).annotate(
         price=Case(
-            When(product__productsale__start_date__lte=timezone.now(),
-                 product__productsale__end_date__gte=timezone.now(),
-                 then=F('product__productsale__price')),
+            When(product__sale__gte=0, then=F('product__sale')),
             default=F('product__price'),
             output_field=FloatField()
         ),
@@ -440,17 +391,8 @@ def buy_now(request):
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
         product = Product.objects.filter(pk=product_id).annotate(
-            curr_price=Case(
-                When(productsale__start_date__lte=timezone.now(),
-                     productsale__end_date__gte=timezone.now(),
-                     then=F('productsale__price')),
-                default=F('price'),
-                output_field=FloatField()
-            ),
-            discount_percent=Round(ExpressionWrapper(
-                Coalesce((1 - F('curr_price') / F('price')) * 100, 0),
-                output_field=FloatField()
-            ), 0),
+            curr_price=Case(When(sale__gte=0, then=F('sale')),
+                default=F('price')),
             rating=Avg('feedback__rating'),
         ).first()
 
@@ -527,10 +469,11 @@ def order(request):
                 coupon.quantity -= 1
                 coupon.save()
             for cart_item in cart_items:
+                print("yyy", cart_item.product.price)
                 order_item = OrderItem.objects.create(
                     type=cart_item.type,
                     quantity=cart_item.quantity,
-                    price=cart_item.product.price,
+                    price=cart_item.product.sale if cart_item.product.sale else cart_item.product.price,
                     order=order,
                     product=cart_item.product
                 )
@@ -550,13 +493,12 @@ def order(request):
             if product_id:
                 product = Product.objects.filter(pk=product_id).annotate(
                     curr_price=Case(
-                        When(productsale__start_date__lte=timezone.now(),
-                             productsale__end_date__gte=timezone.now(),
-                             then=F('productsale__price')),
+                        When(sale__gte=0, then=F('sale')),
                         default=F('price'),
                         output_field=FloatField()
                     ),
                 ).first()
+                print("xxxx", product.curr_price)
                 product_detail = ProductDetail.objects.filter(product=product, type=type).first()
                 if product_detail.quantity < quantity:
                     raise ValidationError('Sản phẩm đã hết hàng')
@@ -832,8 +774,8 @@ def addProduct(request):
     product_image_form = ProductImageForm(request.POST, request.FILES)
     if product_form.is_valid() and product_sale_form.is_valid() and product_image_form.is_valid():
         product = product_form.save()
-        product_sale = ProductSale(price=product_sale_form.cleaned_data['price'], product=product)
-        product_sale.save()
+        # product_sale = ProductSale(price=product_sale_form.cleaned_data['price'], product=product)
+        # product_sale.save()
         for i in range(len(types)):
             product_detail = ProductDetail(type=types[i], quantity=quantities[i], product=product)
             product_detail.save()
@@ -878,8 +820,8 @@ def editProduct(request):
 
         if product_form.is_valid() and product_sale_form.is_valid() and product_image_form.is_valid():
             product = product_form.save()  # Cập nhật thông tin sản phẩm
-            product_sale = ProductSale(price=product_sale_form.cleaned_data['price'], product=product)
-            product_sale.save()
+            # product_sale = ProductSale(price=product_sale_form.cleaned_data['price'], product=product)
+            # product_sale.save()
 
             # Cập nhật chi tiết sản phẩm
             ProductDetail.objects.filter(product=product).delete()
@@ -1127,9 +1069,8 @@ def getOrderDetail(request):
     order = Order.objects.filter(order_id=order_id).select_related('customer', 'status').first()
     price_order = order.total - order.discount - order.shipping
     order_items = OrderItem.objects.filter(order_id=order_id).annotate(
-        curr_price=Case(When(product__productsale__start_date__lte=timezone.now(),
-                             product__productsale__end_date__gte=timezone.now(),
-                             then=F('product__productsale__price')), default=F('product__price')),
+        curr_price=Case(When(product__sale__gte=0, then=F('product__sale')),
+                         default=F('product__price')),
         total=F('curr_price') * F('quantity')).distinct()
     if request.method == "POST":
         status = int(request.POST.get('status'))

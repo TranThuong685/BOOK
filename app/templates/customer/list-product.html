@@ -312,8 +312,7 @@
                         listProduct.forEach(function(product) {
     
                             let price = product.price;
-                            let salePrice = product.curr_price;
-                            let discount_percent = Math.round((price - salePrice) / price * 100);
+                            let salePrice = product.sale;
                             price = formatCurrency(price);
                             salePrice = formatCurrency(salePrice);
                             let rating = product.rating
@@ -332,13 +331,11 @@
                                             <div class="product-card">
                                                 <div class="product-image">
                                                     <img src="${product.images[0]}" alt="" class="product-img">
-                                                    ${discount_percent == 0 ? '' : '<div class="product-sale-percentage">' + discount_percent + '%</div>'}
-                                                    
                                                 </div>
                                                 <div class="product-name">${product.name}</div>
                                                 <div class="product-price d-flex align-items-center">
-                                                    ${discount_percent == 0 ? '' : '<div class="product-price-original">' + price + 'đ</div>'}
-                                                    <div class="product-price-sale color-red">${salePrice}đ</div>
+                                                    ${salePrice == 0 ? '' : '<div class="product-price-original">' + price + 'đ</div>'}
+                                                    <div class="product-price-sale color-red">${salePrice == 0 ? price : salePrice} đ</div>
                                                 </div>
                                                 <div class="product-rate d-flex align-items-center">
                                                     ${ratingHtml}

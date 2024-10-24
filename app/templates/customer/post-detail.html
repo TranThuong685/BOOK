@@ -27,7 +27,7 @@
                         <ul id="lightSlider">
                             {% for other_post in other_posts %}
                                 <li>
-                                    <a class="product" href="post/{{post.post_id}}">
+                                    <a class="product" href="{% url 'post-detail' other_post.post_id %}">
                                         <div class="product-card">
                                             <div class="product-image">
                                                 <img src="{% static 'img/news.png' %}" alt="" class="product-img">

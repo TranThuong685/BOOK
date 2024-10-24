@@ -65,15 +65,16 @@
                         </div>
                         {% load humanize %}
                         <div class="price d-flex align-items-center gx-2">
-                            {% if product.discount_percent == 0 %}
-                            <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
+                            {% if product.sale > 0 %}
+                                <div class="text-decoration-line-through">
+                                    {{product.price|floatformat:0|intcomma_dot}} đ
+                                </div>
+                            {% endif %}
+                            
+                            {% if product.sale > 0 %}
+                                <h2 class="sale-price m-0">{{product.sale|floatformat:0|intcomma_dot}} đ</h2>
                             {% else %}
-                            <div class="text-decoration-line-through">{{product.price|floatformat:0|intcomma_dot}}đ</div>
-                            <h2 class="sale-price m-0">{{ product.curr_price|floatformat:0|intcomma_dot }}đ</h2>
-                            <div class="sale-percent">
-                                {{product.discount_percent|floatformat:0}}% giảm
-                            </div>
-
+                                <h2 class="sale-price m-0">{{product.price|floatformat:0|intcomma_dot}} đ</h2>
                             {% endif %}
                         </div>
                         {% if product.quantity != 0 %}
@@ -217,17 +218,20 @@
                                     <div class="product-card">
                                         <div class="product-image">
                                             <img src="{{ product.productimage_set.first.name.url}}" alt="" class="product-img">
-                                            {% if product.discount_percent != 0 %}
-                                            <div class="product-sale-percentage">{{product.discount_percent|floatformat:0}}%</div>
-                                            {% endif %}
                                         </div>
                                         <div class="product-name">{{product.name}}</div>
                                         <div class="product-price d-flex align-items-center">
-                                            {% if product.discount_percent != 0 %}
-                                            <div class="product-price-original">{{product.price|floatformat:0|intcomma_dot}}đ</div>
+                                            {% if product.sale > 0 %}
+                                                <div class="product-price-original">{{product.price|floatformat:0|intcomma_dot}} đ</div>
                                             {% endif %}
-                                            <div class="product-price-sale color-red">{{product.curr_price|floatformat:0|intcomma_dot}}đ</div>
-
+                                            
+                                            <div class="product-price-sale color-red">
+                                                {% if product.sale > 0 %}
+                                                    {{product.sale|floatformat:0|intcomma_dot}} đ
+                                                {% else %}
+                                                    {{product.price|floatformat:0|intcomma_dot}} đ
+                                                {% endif %}
+                                            </div>
                                         </div>
                                         <div class="product-rate d-flex align-items-center">
                                     
